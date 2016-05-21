@@ -30,6 +30,12 @@
 #ifndef __QCAMERA3VENDORTAGS_H__
 #define __QCAMERA3VENDORTAGS_H__
 
+<<<<<<< HEAD
+=======
+// Camera dependencies
+#include "system/camera_metadata.h"
+
+>>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 namespace qcamera {
 
 enum qcamera3_ext_section {

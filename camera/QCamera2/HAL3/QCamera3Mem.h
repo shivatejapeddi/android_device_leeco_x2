@@ -32,6 +32,12 @@
 #include <hardware/camera3.h>
 #include <utils/Mutex.h>
 
+<<<<<<< HEAD
+=======
+// Camera dependencies
+#include "hardware/camera3.h"
+
+>>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 extern "C" {
 #include <sys/types.h>
 #include <linux/msm_ion.h>

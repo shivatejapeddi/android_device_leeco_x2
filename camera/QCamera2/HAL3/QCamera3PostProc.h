@@ -30,6 +30,15 @@
 #ifndef __QCamera3_POSTPROC_H__
 #define __QCamera3_POSTPROC_H__
 
+<<<<<<< HEAD
+=======
+// Camera dependencies
+#include "hardware/camera3.h"
+#include "QCamera3HALHeader.h"
+#include "QCameraCmdThread.h"
+#include "QCameraQueue.h"
+
+>>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 extern "C" {
 #include <mm_camera_interface.h>
 #include <mm_jpeg_interface.h>

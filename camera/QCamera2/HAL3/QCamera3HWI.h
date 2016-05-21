@@ -32,11 +32,17 @@
 
 #include <pthread.h>
 #include <utils/List.h>
+<<<<<<< HEAD
 #include <utils/KeyedVector.h>
 #include <hardware/camera3.h>
 #include <camera/CameraMetadata.h>
 #include "QCameraTrace.h"
 #include "QCamera3HALHeader.h"
+=======
+
+// Camera dependencies
+#include "hardware/camera3.h"
+>>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include "QCamera3Channel.h"
 #include "QCamera3CropRegionMapper.h"
 #include "QCameraPerf.h"

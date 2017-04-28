@@ -996,7 +996,7 @@ service ptt_ffbm /system/bin/ptt_socket_app -f -d
     oneshot
 
 service cnss_diag /system/bin/cnss_diag -q -f
-    class main
+    class late_start
     user root
     group root
     #ifdef VENDOR_EDIT

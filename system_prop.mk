@@ -218,6 +218,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opa.eligible_device=true
 
-# WiFi Calling
+# Volte
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.data.iwlan.enable=true
+persist.dbg.volte_avail_ovr=1 \
+persist.dbg.vt_avail_ovr=1
+
+# WIFI CALLING
+PRODUCT_PROPERTY_OVERRIDES += \
+persist.data.iwlan.enable=true \
+persist.dbg.wfc_avail_ovr=1

@@ -217,3 +217,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Google Assistant
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opa.eligible_device=true
+
+# WiFi Calling
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.data.iwlan.enable=true

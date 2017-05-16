@@ -15,10 +15,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     mm.enable.qcom_parser=4194303 \
     persist.mm.enable.prefetch=true
 
-# Enable AAC 5.1 output
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.aac_51_output_enabled=true
-
 # Additional i/p buffer in case of encoder DCVS
 PRODUCT_PROPERTY_OVERRIDES += \
     vidc.enc.dcvs.extra-buff-count=2
@@ -43,14 +39,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
     audio.offload.video=true \
     audio.offload.pcm.16bit.enable=true \
     audio.offload.pcm.24bit.enable=true \
-    audio.offload.track.enable=false \
+    audio.offload.track.enable=true \
     audio.deep_buffer.media=true \
     use.voice.path.for.pcm.voip=true \
     audio.offload.multiaac.enable=true \
     audio.offload.gapless.enabled=true \
     audio.safx.pbe.enabled=true \
     audio.parser.ip.buffer.size=262144 \
-    audio.dolby.ds2.enabled=false \
+    audio.dolby.ds2.enabled=true \
     audio.dolby.ds2.hardbypass=false \
     audio.offload.passthrough=false \
     audio.offload.multiple.enabled=true \
@@ -155,10 +151,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.rild.nitz_short_ons_3="" \
     ril.subscription.types=NV,RUIM \
     DEVICE_PROVISIONED=1 \
+    persist.radio.multisim.config=dsds \
     persist.volte_enalbed_by_hw=1 \
     persist.radio.data_ltd_sys_ind=1 \
-    ro.telephony.default_network=10,10 \
-    telephony.lteOnCdmaDevice=1 \
     ro.telephony.call_ring.multiple=false \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.custom_ecc=1 \

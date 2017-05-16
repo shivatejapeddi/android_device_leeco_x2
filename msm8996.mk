@@ -166,9 +166,6 @@ PRODUCT_PACKAGES += \
 # GPS
 PRODUCT_PACKAGES += \
     gps.msm8996 \
-    libloc_eng \
-    libloc_api_v02 \
-    libloc_ds_api \
     libcurl \
     libgnsspps
 

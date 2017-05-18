@@ -149,10 +149,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.rild.nitz_short_ons_1="" \
     persist.rild.nitz_short_ons_2="" \
     persist.rild.nitz_short_ons_3="" \
-    ril.subscription.types=NV,RUIM \
     DEVICE_PROVISIONED=1 \
     persist.radio.multisim.config=dsds \
     persist.volte_enalbed_by_hw=1 \
+    persist.multisim.config=dsds \
+    ro.telephony.default_network=22,22 \
     persist.radio.data_ltd_sys_ind=1 \
     ro.telephony.call_ring.multiple=false \
     persist.radio.apm_sim_not_pwdn=1 \
@@ -163,23 +164,27 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.oem.dump=0 \
     persist.radio.hw_mbn_update=0 \
     persist.radio.sw_mbn_update=0 \
-    persist.radio.start_ota_daemon=1
+    persist.radio.start_ota_daemon=1 \
+    ro.config.le_hardware_version=HW_1.0.0
+
+#ril.subscription.types=NV,RUIM
 
 #default SAR mode 0:off/1:on
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.sar_mode=1
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.cs_srv_type=1 \
-    persist.radio.calls.on.ims=0 \
-    persist.radio.jbims=0 \
+    persist.radio.cs_srv_type=0 \
+    persist.radio.calls.on.ims=true \
+    persist.radio.jbims=1 \
     persist.radio.csvt.enabled=false \
     persist.radio.rat_on=combine \
     persist.radio.mt_sms_ack=20 \
     persist.radio.ignore_dom_time=5 \
     persist.radio.force_on_dc=true \
     persist.radio.flexmap_type=none \
-    persist.radio.facnotsup_as_nonw=1
+    persist.radio.facnotsup_as_nonw=1 \
+    persist.radio.atfwd.start=false
 
 # RmNet Data
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -216,3 +221,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # WiFi Calling
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.iwlan.enable=true
+
+# IMS
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.dbg.volte_avail_ovr=1 \
+    persist.dbg.vt_avail_ovr=1 \
+    persist.radio.NO_STAPA=1 \
+    persist.radio.VT_HYBRID_ENABLE=1 \
+    net.lte.volte_call_capable=true \

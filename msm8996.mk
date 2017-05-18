@@ -102,6 +102,8 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
+    get_snd_dev_names \
+    acdb_extract \
     libvolumelistener \
     tinymix
 

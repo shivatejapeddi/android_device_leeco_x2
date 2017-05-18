@@ -137,117 +137,27 @@
     </bit_width_configs>
 
     <backend_names>
-    	<device name="SND_DEVICE_NONE" backend="" />
-	<device name="SND_DEVICE_OUT_HANDSET" backend="handset" />
-	<device name="SND_DEVICE_OUT_SPEAKER" backend="speaker" />
-	<device name="SND_DEVICE_OUT_SPEAKER_EXTERNAL_1" backend="speaker-ext-1" />
-	<device name="SND_DEVICE_OUT_SPEAKER_EXTERNAL_2" backend="speaker-ext-2" />
-	<device name="SND_DEVICE_OUT_SPEAKER_VBAT" backend="speaker-reverse" />
-	<device name="SND_DEVICE_OUT_SPEAKER_REVERSE" backend="speaker-vbat" />
-	<device name="SND_DEVICE_OUT_HEADPHONES" backend="line" />
-	<device name="SND_DEVICE_OUT_HEADPHONES_44_1" backend="headphones" />
-	<device name="SND_DEVICE_OUT_LINE" backend="headphones-44.1" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_HEADPHONES" backend="speaker-and-headphones" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_LINE" backend="speaker-and-line" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_HEADPHONES_EXTERNAL_1" backend="speaker-and-headphones-ext-1" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_HEADPHONES_EXTERNAL_2" backend="speaker-and-headphones-ext-2" />
-	<device name="SND_DEVICE_OUT_VOICE_HANDSET" backend="voice-handset" />
-	<device name="SND_DEVICE_OUT_VOICE_SPEAKER" backend="voice-speaker" />
-	<device name="SND_DEVICE_OUT_VOICE_SPEAKER_VBAT" backend="voice-speaker-vbat" />
-	<device name="SND_DEVICE_OUT_VOICE_HEADPHONES" backend="voice-headphones" />
-	<device name="SND_DEVICE_OUT_VOICE_LINE" backend="voice-line" />
-	<device name="SND_DEVICE_OUT_HDMI" backend="hdmi" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_HDMI" backend="speaker-and-hdmi" />
-	<device name="SND_DEVICE_OUT_BT_SCO" backend="bt-sco-headset" />
-	<device name="SND_DEVICE_OUT_BT_SCO_WB" backend="bt-sco-headset-wb" />
-	<device name="SND_DEVICE_OUT_BT_A2DP" backend="bt-a2dp" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_BT_A2DP" backend="speaker-and-bt-a2dp" />
-	<device name="SND_DEVICE_OUT_VOICE_TTY_FULL_HEADPHONES" backend="voice-tty-full-headphones" />
-	<device name="SND_DEVICE_OUT_VOICE_TTY_VCO_HEADPHONES" backend="voice-tty-vco-headphones" />
-	<device name="SND_DEVICE_OUT_VOICE_TTY_HCO_HANDSET" backend="voice-tty-hco-handset" />
-	<device name="SND_DEVICE_OUT_AFE_PROXY" backend="voice-tx" />
-	<device name="SND_DEVICE_OUT_USB_HEADSET" backend="afe-proxy" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_USB_HEADSET" backend="usb-headphones" />
-	<device name="SND_DEVICE_OUT_TRANSMISSION_FM" backend="speaker-and-usb-headphones" />
-	<device name="SND_DEVICE_OUT_ANC_HEADSET" backend="transmission-fm" />
-	<device name="SND_DEVICE_OUT_ANC_FB_HEADSET" backend="anc-headphones" />
-	<device name="SND_DEVICE_OUT_VOICE_ANC_HEADSET" backend="anc-fb-headphones" />
-	<device name="SND_DEVICE_OUT_VOICE_ANC_FB_HEADSET" backend="voice-anc-headphones" />
-	<device name="SND_DEVICE_OUT_SPEAKER_AND_ANC_HEADSET" backend="voice-anc-fb-headphones" />
-	<device name="SND_DEVICE_OUT_ANC_HANDSET" backend="speaker-and-anc-headphones" />
-	<device name="SND_DEVICE_OUT_SPEAKER_PROTECTED" backend="anc-handset" />
-	<device name="SND_DEVICE_OUT_VOICE_SPEAKER_PROTECTED" backend="speaker-protected" />
-	<device name="SND_DEVICE_OUT_SPEAKER_PROTECTED_VBAT" backend="voice-speaker-protected" />
-	<device name="SND_DEVICE_OUT_VOICE_SPEAKER_PROTECTED_VBAT" backend="speaker-protected-vbat" />
-	<device name="SND_DEVICE_IN_HANDSET_MIC" backend="voice-speaker-protected-vbat" />
-	<device name="SND_DEVICE_IN_HANDSET_MIC_EXTERNAL" backend="(null)" />
-	<device name="SND_DEVICE_IN_HANDSET_MIC_AEC" backend="(null)" />
-	<device name="SND_DEVICE_IN_HANDSET_MIC_NS" backend="ultrasound-handset" />
-	<device name="SND_DEVICE_IN_HANDSET_MIC_AEC_NS" backend="handset-mic" />
-	<device name="SND_DEVICE_IN_HANDSET_DMIC" backend="handset-mic-ext" />
-	<device name="SND_DEVICE_IN_HANDSET_DMIC_AEC" backend="handset-mic" />
-	<device name="SND_DEVICE_IN_HANDSET_DMIC_NS" backend="handset-mic" />
-	<device name="SND_DEVICE_IN_HANDSET_DMIC_AEC_NS" backend="handset-mic" />
-	<device name="SND_DEVICE_IN_SPEAKER_MIC" backend="dmic-endfire" />
-	<device name="SND_DEVICE_IN_SPEAKER_MIC_AEC" backend="dmic-endfire" />
-	<device name="SND_DEVICE_IN_SPEAKER_MIC_NS" backend="dmic-endfire" />
-	<device name="SND_DEVICE_IN_SPEAKER_MIC_AEC_NS" backend="dmic-endfire" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC" backend="speaker-mic" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC_AEC" backend="speaker-mic" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC_NS" backend="speaker-mic" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC_AEC_NS" backend="speaker-mic" />
-	<device name="SND_DEVICE_IN_HEADSET_MIC" backend="speaker-dmic-endfire" />
-	<device name="SND_DEVICE_IN_HEADSET_MIC_FLUENCE" backend="speaker-dmic-endfire" />
-	<device name="SND_DEVICE_IN_VOICE_SPEAKER_MIC" backend="speaker-dmic-endfire" />
-	<device name="SND_DEVICE_IN_VOICE_HEADSET_MIC" backend="speaker-dmic-endfire" />
-	<device name="SND_DEVICE_IN_HDMI_MIC" backend="headset-mic" />
-	<device name="SND_DEVICE_IN_BT_SCO_MIC" backend="headset-mic" />
-	<device name="SND_DEVICE_IN_BT_SCO_MIC_NREC" backend="voice-speaker-mic" />
-	<device name="SND_DEVICE_IN_BT_SCO_MIC_WB" backend="voice-headset-mic" />
-	<device name="SND_DEVICE_IN_BT_SCO_MIC_WB_NREC" backend="hdmi-mic" />
-	<device name="SND_DEVICE_IN_CAMCORDER_MIC" backend="bt-sco-mic" />
-	<device name="SND_DEVICE_IN_CAMCORDER_STEREO_DMIC" backend="bt-sco-mic" />
-	<device name="SND_DEVICE_IN_CAMCORDER_STEREO_DMIC_REVERSE" backend="bt-sco-mic-wb" />
-	<device name="SND_DEVICE_IN_VOICE_DMIC" backend="bt-sco-mic-wb" />
-	<device name="SND_DEVICE_IN_VOICE_SPEAKER_DMIC" backend="camcorder-mic" />
-	<device name="SND_DEVICE_IN_VOICE_SPEAKER_QMIC" backend="camcorder-stereo-dmic" />
-	<device name="SND_DEVICE_IN_VOICE_TTY_FULL_HEADSET_MIC" backend="camcorder-stereo-dmic-reverse" />
-	<device name="SND_DEVICE_IN_VOICE_TTY_VCO_HANDSET_MIC" backend="voice-dmic-ef" />
-	<device name="SND_DEVICE_IN_VOICE_TTY_HCO_HEADSET_MIC" backend="voice-speaker-dmic-ef" />
-	<device name="SND_DEVICE_IN_VOICE_REC_MIC" backend="voice-speaker-qmic" />
-	<device name="SND_DEVICE_IN_VOICE_REC_MIC_NS" backend="voice-tty-full-headset-mic" />
-	<device name="SND_DEVICE_IN_VOICE_REC_DMIC_STEREO" backend="voice-tty-vco-handset-mic" />
-	<device name="SND_DEVICE_IN_VOICE_REC_DMIC_FLUENCE" backend="voice-tty-hco-headset-mic" />
-	<device name="SND_DEVICE_IN_USB_HEADSET_MIC" backend="voice-rec-mic" />
-	<device name="SND_DEVICE_IN_CAPTURE_FM" backend="voice-rec-mic" />
-	<device name="SND_DEVICE_IN_AANC_HANDSET_MIC" backend="voice-rec-dmic-ef" />
-	<device name="SND_DEVICE_IN_VOICE_FLUENCE_DMIC_AANC" backend="voice-rec-dmic-ef-fluence" />
-	<device name="SND_DEVICE_IN_QUAD_MIC" backend="voice-rx" />
-	<device name="SND_DEVICE_IN_HANDSET_STEREO_DMIC" backend="usb-headset-mic" />
-	<device name="SND_DEVICE_IN_SPEAKER_STEREO_DMIC" backend="capture-fm" />
-	<device name="SND_DEVICE_IN_CAPTURE_VI_FEEDBACK" backend="aanc-handset-mic" />
-	<device name="SND_DEVICE_IN_VOICE_SPEAKER_DMIC_BROADSIDE" backend="quad-mic" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC_BROADSIDE" backend="handset-stereo-dmic-ef" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC_AEC_BROADSIDE" backend="speaker-stereo-dmic-ef" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC_NS_BROADSIDE" backend="vi-feedback" />
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC_AEC_NS_BROADSIDE" backend="voice-speaker-dmic-broadside" />
-	<device name="SND_DEVICE_IN_HANDSET_QMIC" backend="speaker-dmic-broadside" />
-	<device name="SND_DEVICE_IN_SPEAKER_QMIC_AEC" backend="speaker-dmic-broadside" />
-	<device name="SND_DEVICE_IN_SPEAKER_QMIC_NS" backend="speaker-dmic-broadside" />
-	<device name="SND_DEVICE_IN_SPEAKER_QMIC_AEC_NS" backend="speaker-dmic-broadside" />
-	<device name="SND_DEVICE_IN_VOICE_REC_QMIC_FLUENCE" backend="aanc-handset-mic" />
-	<device name="SND_DEVICE_IN_THREE_MIC" backend="quad-mic" />
-	<device name="SND_DEVICE_IN_HANDSET_TMIC" backend="quad-mic" />
-	<device name="SND_DEVICE_IN_UNPROCESSED_MIC" backend="quad-mic" />
-	<device name="SND_DEVICE_IN_UNPROCESSED_STEREO_MIC" backend="quad-mic" />
-	<device name="SND_DEVICE_IN_UNPROCESSED_THREE_MIC" backend="quad-mic" />
-	<device name="SND_DEVICE_IN_UNPROCESSED_QUAD_MIC" backend="three-mic" />
-	<device name="SND_DEVICE_IN_UNPROCESSED_HEADSET_MIC" backend="three-mic" />
+        <device name="SND_DEVICE_OUT_SPEAKER" backend="smartpa" />
+        <device name="SND_DEVICE_OUT_HANDSET" backend="smartpa-handset" />
+        <device name="SND_DEVICE_OUT_VOICE_HANDSET" backend="smartpa-handset" />
+        <device name="SND_DEVICE_OUT_VOICE_SPEAKER" backend="smartpa-handset" />
+        <device name="SND_DEVICE_OUT_SPEAKER_AND_HEADPHONES" backend="smartpa-and-headphones" />
+        <device name="SND_DEVICE_OUT_SPEAKER_AND_USB_HEADSET" backend="smartpa-and-usb-headphones" />
+        <device name="SND_DEVICE_OUT_SPEAKER_AND_HDMI" backend="smartpa-and-hdmi" />
     </backend_names>
+
+    <device_names>
+        <device name="SND_DEVICE_IN_HEADSET_MIC" alias="voice-headset-mic" />
+        <device name="SND_DEVICE_IN_VOICE_SPEAKER_MIC" alias="voice-speaker-dmic-ef-liquid" />
+        <device name="SND_DEVICE_OUT_VOICE_SPEAKER" alias="voice-speaker-stereo-brightness" />
+    </device_names>
 
     <config_params>
         <param key="spkr_1_tz_name" value="wsatz.11"/>
         <param key="spkr_2_tz_name" value="wsatz.12"/>
+        <param key="audio.nat.codec.enabled" value="false"/>
+        <param key="native_audio_mode" value="inv"/>
+        <param key="input_mic_max_count" value="2"/>
         <!-- In the below value string, first parameter indicates size -->
         <!-- followed by perf lock options                             -->
         <param key="perf_lock_opts" value="2, 0x101, 0x20F"/>

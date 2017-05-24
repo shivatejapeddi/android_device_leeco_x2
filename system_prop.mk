@@ -175,7 +175,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.cs_srv_type=0 \
-    persist.radio.calls.on.ims=true \
+    persist.radio.calls.on.ims=1 \
     persist.radio.jbims=true \
     persist.radio.csvt.enabled=false \
     persist.radio.rat_on=combine \

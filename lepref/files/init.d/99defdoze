@@ -1,9 +1,0 @@
-#!/system/bin/sh
-doze_mode=`getprop persist.doze.profile`
-
-case "$doze_mode" in
-        "")
-        settings put global device_idle_constants light_pre_idle_to=600000,light_after_inactive_to=300000,light_idle_maintenance_min_budget=60000,light_idle_maintenance_max_budget=300000,min_light_maintenance_time=5000,light_idle_to=300000,light_max_idle_to=900000,light_idle_factor=2.0,inactive_to=1800000,idle_to=3600000,idle_factor=2.0,max_idle_to=21600000,idle_pending_to=300000,max_idle_pending_to=600000,idle_pending_factor=2.0,min_deep_maintenance_time=30000,min_time_to_alarm=3600000,idle_after_inactive_to=1800000,motion_inactive_to=600000,sensing_to=60000,locating_to=15000,location_accuracy=20.0,max_temp_app_whitelist_duration=300000,mms_temp_app_whitelist_duration=60000,sms_temp_app_whitelist_duration=20000,notification_whitelist_duration=30000
-        setprop persist.doze.profile DefaultDoze.sh
-        ;;
-esac

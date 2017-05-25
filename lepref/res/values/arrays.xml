@@ -36,15 +36,4 @@
 		<item>PZ_balanced</item>
 		<item>PX_balanced</item>
 	</string-array>
-	<string-array name="doze_profiles">
-		<item>Default Doze</item>
-		<item>Power Save</item>
-		<item>Agressive</item>
-	</string-array>
-	<string-array name="doze_values">
-		<item>DefaultDoze.sh</item>
-		<item>PowerSave.sh</item>
-		<item>Agressive.sh</item>
-	</string-array>
-
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="akt_profiles">
-		<item>Return to Stock (need reboot)</item>
+		<item>恢复默认配置 (需要重启)</item>
 		<item>[BAT] Nameless Battery by @Senthil360</item>
 		<item>[BAT] FairPark by @Asiier</item>
 		<item>[BAT] Fusion Conservative by @patalao</item>
@@ -19,7 +19,7 @@
 		<item>[BAL] Project by X.A.N.A Balanced by @Asiier</item>
 	</string-array>
 	<string-array name="akt_values">
-		<item>Stock</item>
+		<item>默认配置</item>
 		<item>NLB_battery</item>
 		<item>FairPark</item>
 		<item>FusionC</item>
@@ -36,15 +36,4 @@
 		<item>PZ_balanced</item>
 		<item>PX_balanced</item>
 	</string-array>
-	<string-array name="doze_profiles">
-		<item>Default Doze</item>
-		<item>Power Save</item>
-		<item>Agressive</item>
-	</string-array>
-	<string-array name="doze_values">
-		<item>DefaultDoze.sh</item>
-		<item>PowerSave.sh</item>
-		<item>Agressive.sh</item>
-	</string-array>
-
 </resources>

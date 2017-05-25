@@ -31,6 +31,24 @@
 
 	</PreferenceCategory>
 	
+	
+    <PreferenceCategory
+        android:key="doze_profile"
+        android:title="@string/doze_profile_title" >
+
+		<ListPreference
+			android:key="doze"
+			android:title="@string/doze_title"
+			android:summary="@string/doze_summary"
+			android:defaultValue="1"
+			android:entries="@array/doze_profiles"
+			android:entryValues="@array/doze_values"
+			android:dialogTitle="@string/doze_dialogTitle" />
+
+	</PreferenceCategory>
+
+
+<!--	
     <PreferenceCategory
         android:key="camera_pref"
         android:title="@string/camera_pref_title" >
@@ -42,5 +60,5 @@
             android:summary="@string/hal3_summary" />
 
 	</PreferenceCategory>
-
+-->
 </PreferenceScreen>

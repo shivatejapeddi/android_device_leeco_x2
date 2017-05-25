@@ -105,6 +105,9 @@ PRODUCT_CHARACTERISTICS := nosdcard
 #    ro.sys.sdcardfs=true
 
 # Alipay / WeChat
+PRODUCT_PACKAGES += \
+    org.ifaa.android.manager
+
 PRODUCT_BOOT_JARS += \
     org.ifaa.android.manager
 

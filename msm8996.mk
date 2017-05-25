@@ -14,6 +14,14 @@
 # limitations under the License.
 #
 
+# Gapps
+#GAPPS_VARIANT := pico
+#GAPPS_FORCE_PACKAGE_OVERRIDES := true
+#DONT_DEXPREOPT_PREBUILTS := true
+
+# ViperFX + Dolby Atmos
+AUDIO_VIPDAX := true
+
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
@@ -66,9 +74,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml
 
 # Audio
+ifeq ($(AUDIO_VIPDAX),true)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/audio/vipdax/audio_policy.conf:system/etc/audio_policy.conf
+ADDITIONAL_DEFAULT_PROPERTIES += ro.musicfx.disabled=true
+else
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf
+endif
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt \
-    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/audio_output_policy.conf:system/vendor/etc/audio_output_policy.conf \
     $(LOCAL_PATH)/audio/audio_platform_info_i2s.xml:system/etc/audio_platform_info_i2s.xml \
     $(LOCAL_PATH)/audio/listen_platform_info.xml:system/etc/listen_platform_info.xml \
@@ -290,3 +306,12 @@ PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
     ro.product.model
 
 $(call inherit-product-if-exists, vendor/leeco/msm8996-common/msm8996-common-vendor.mk)
+
+# LeTVCamera + LeTVRemote
+$(call inherit-product-if-exists, vendor/leeco/addons/addons-vendor.mk)
+
+# ViperFX + Dolby Atmos
+$(call inherit-product-if-exists, vendor/leeco/vipdax/vipdax-vendor.mk)
+
+# OpenGapps
+#$(call inherit-product, vendor/google/build/opengapps-packages.mk)

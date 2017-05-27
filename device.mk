@@ -142,7 +142,9 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     Snap \
-    libstlport
+    libstlport \
+    camera.msm8996 \
+    libmm-qcamera
 
 # Shims
 PRODUCT_PACKAGES += \

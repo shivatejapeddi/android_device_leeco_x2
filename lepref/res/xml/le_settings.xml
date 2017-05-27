@@ -30,7 +30,7 @@
 			android:dialogTitle="@string/akt_dialogTitle" />
 
 	</PreferenceCategory>
-	
+<!--	
     <PreferenceCategory
         android:key="camera_pref"
         android:title="@string/camera_pref_title" >
@@ -42,5 +42,5 @@
             android:summary="@string/hal3_summary" />
 
 	</PreferenceCategory>
-
+-->
 </PreferenceScreen>

@@ -14,26 +14,28 @@
 # limitations under the License.
 #
 
-# Gapps
-#GAPPS_VARIANT := pico
-#GAPPS_FORCE_PACKAGE_OVERRIDES := true
-#DONT_DEXPREOPT_PREBUILTS := true
-
-# ViperFX + Dolby Atmos
-AUDIO_VIPDAX := true
-
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
-
-# System properties
--include $(LOCAL_PATH)/system_prop.mk
 
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
+$(call inherit-product, vendor/leeco/x2/x2-vendor.mk)
+
+# Overlays
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
+
+# Device uses high-density artwork where available
+PRODUCT_AAPT_CONFIG := normal
+PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
+
+# Boot animation
+TARGET_SCREEN_HEIGHT := 2560
+TARGET_SCREEN_WIDTH := 1440
+
 # Ramdisk
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,device/leeco/msm8996-common/rootdir/root,root)
+    $(call find-copy-subdir-files,*,device/leeco/x2/rootdir/root,root)
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -73,17 +75,12 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vulkan.version-1_0_3.xml:system/etc/permissions/android.hardware.vulkan.version.xml \
     frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml
 
-# Audio
-ifeq ($(AUDIO_VIPDAX),true)
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/vipdax/audio_policy.conf:system/etc/audio_policy.conf
-ADDITIONAL_DEFAULT_PROPERTIES += ro.musicfx.disabled=true
-else
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf
-endif
 
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml \
+    $(LOCAL_PATH)/audio/mixer_paths_tasha.xml:system/etc/mixer_paths_tasha.xml \
+    $(LOCAL_PATH)/audio/sound_trigger_mixer_paths.xml:system/etc/sound_trigger_mixer_paths.xml \
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt \
     $(LOCAL_PATH)/audio/audio_output_policy.conf:system/vendor/etc/audio_output_policy.conf \
     $(LOCAL_PATH)/audio/audio_platform_info_i2s.xml:system/etc/audio_platform_info_i2s.xml \
@@ -94,6 +91,8 @@ PRODUCT_COPY_FILES += \
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/keylayout/atmel_mxt_T100_touchscreen.kl:system/usr/keylayout/atmel_mxt_T100_touchscreen.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl \
     $(LOCAL_PATH)/keylayout/atmel_ts_key.kl:system/usr/keylayout/atmel_ts_key.kl \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/keylayout/qpnp_pon.kl:system/usr/keylayout/qpnp_pon.kl
@@ -156,12 +155,18 @@ PRODUCT_PACKAGES += \
     liboverlay \
     libtinyxml
 
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/FOSSConfig.xml:system/etc/FOSSConfig.xml
 
 # Display calibration
 PRODUCT_PACKAGES += \
     libjni_livedisplay
+
+PRODUCT_PACKAGES += \
+    qdcm_calib_data_le_x2_mdss_dsi_sharp_qhd_dualdsi_cmd.xml \
+    qdcm_calib_data_le_x2_mdss_dsi_truly_qhd_dualdsi_cmd_pvt.xml \
+    qdcm_calib_data_mdss_dsi_sharp_qhd_dualdsi_cmd.xml
 
 # Doze mode
 PRODUCT_PACKAGES += \
@@ -248,6 +253,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libjson
 
+PRODUCT_PACKAGES += \
+    dsi_config.xml \
+    netmgr_config.xml \
+    qmi_config.xml
+
 # RIL
 PRODUCT_PACKAGES += \
     librmnetctl \
@@ -259,13 +269,17 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     sensors.msm8996
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf \
+    $(LOCAL_PATH)/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
+
 # LePref settigs modules
 PRODUCT_PACKAGES += \
     LePref
 
 # LePref Files
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,device/leeco/msm8996-common/lepref/files,/system/etc)
+    $(call find-copy-subdir-files,*,device/leeco/x2/lepref/files,/system/etc)
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -304,14 +318,3 @@ endif
 # Model is set via init library
 PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
     ro.product.model
-
-$(call inherit-product-if-exists, vendor/leeco/msm8996-common/msm8996-common-vendor.mk)
-
-# LeTVCamera + LeTVRemote
-$(call inherit-product-if-exists, vendor/leeco/addons/addons-vendor.mk)
-
-# ViperFX + Dolby Atmos
-$(call inherit-product-if-exists, vendor/leeco/vipdax/vipdax-vendor.mk)
-
-# OpenGapps
-#$(call inherit-product, vendor/google/build/opengapps-packages.mk)

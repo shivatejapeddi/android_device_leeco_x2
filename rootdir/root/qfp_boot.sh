@@ -1,4 +1,4 @@
-/*
+#!/system/bin/sh
 # Copyright (c) 2016, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -25,19 +25,15 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+#
+#
 
-#include <private/android_filesystem_config.h>
+if [ ! -f /persist/qc_senseid/bge_upgrade_flag2 ]; then
+    rm -fR /persist/qc_senseid/bg_estimation
+    rm -fR /persist/qc_senseid/bg_estimation0
+    rm -fR /persist/qc_senseid/bg_estimation1
+    rm -fR /persist/qc_senseid/bg_estimation2
+	rm -fR /persist/qc_senseid/psf
+    touch /persist/qc_senseid/bge_upgrade_flag2
+fi
 
-#define NO_ANDROID_FILESYSTEM_CONFIG_DEVICE_DIRS
- const struct fs_path_config android_device_files[] = {
-      // { 00755, AID_UID,     AID_GID,     (1ULL << CAPABILITY), "PATH_TO_BINARY" },
-      { 00700, AID_RADIO,          AID_SHELL,          (1ULL << CAP_BLOCK_SUSPEND), "system/bin/qmuxd" },
-      { 00755, AID_SYSTEM,         AID_SYSTEM,         (1ULL << CAP_NET_BIND_SERVICE), "system/bin/pm-service"},
-      { 00755, AID_SYSTEM,         AID_SYSTEM,         (1ULL << CAP_NET_BIND_SERVICE), "system/bin/cnss-daemon"},
-      { 00755, AID_SYSTEM,         AID_SYSTEM,         (1ULL << CAP_NET_BIND_SERVICE), "system/bin/imsdatadaemon" },
-      { 00755, AID_SYSTEM,         AID_RADIO,          (1ULL << CAP_NET_BIND_SERVICE), "system/bin/ims_rtp_daemon" },
-#ifdef NO_ANDROID_FILESYSTEM_CONFIG_DEVICE_DIRS
-      { 00000, AID_ROOT,      AID_ROOT,      0, "system/etc/fs_config_dirs" },
-#endif
-};

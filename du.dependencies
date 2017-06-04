@@ -1,15 +1,11 @@
 [
  {
-   "repository": "LineageOS/android_kernel_leeco_msm8996",
+   "repository": "omnirom/android_kernel_leeco_msm8996",
    "target_path": "kernel/leeco/msm8996"
  },
  {
    "repository": "DirtyUnicorns/android_device_qcom_common",
    "target_path": "device/qcom/common"
- },
- {
-   "repository": "DirtyUnicorns/android_external_stlport",
-   "target_path": "external/stlport"
  },
  {
    "repository" : "DirtyUnicorns/android_system_qcom",

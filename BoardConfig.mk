@@ -14,10 +14,9 @@
 # limitations under the License.
 #
 
-PLATFORM_PATH := device/leeco/msm8996-common
-
-TARGET_SPECIFIC_HEADER_PATH += $(PLATFORM_PATH)/include
-
+TARGET_OTA_ASSERT_DEVICE := le_x2,LeMax2_CN,LeMax2_NA
+DEVICE_PATH := device/leeco/x2
+TARGET_SPECIFIC_HEADER_PATH += $(DEVICE_PATH)/include
 BOARD_VENDOR := leeco
 
 # Bootloader
@@ -50,6 +49,9 @@ TARGET_USES_QCOM_BSP := true
 TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 cma=32M@0-0xffffffff androidboot.selinux=permissive
+BOARD_KERNEL_TAGS_OFFSET := 0x02000000
+BOARD_RAMDISK_OFFSET     := 0x02200000
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
@@ -58,8 +60,9 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/leeco/msm8996
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
-
 TARGET_COMPILE_WITH_MSM_KERNEL := true
+
+TARGET_KERNEL_CONFIG := x2_defconfig
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
@@ -99,11 +102,12 @@ AUDIO_FEATURE_ENABLED_HIFI_AUDIO := true
 USE_CUSTOM_AUDIO_POLICY := 1
 
 # Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
 BOARD_HAS_QCA_BT_ROME := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_BTNV := true
-QCOM_BT_USE_SMD_TTY := true
+#QCOM_BT_USE_SMD_TTY := true
 
 # Camera
 BOARD_QTI_CAMERA_32BIT_ONLY := true
@@ -119,6 +123,8 @@ TARGET_INIT_VENDOR_LIB := libinit_leeco_msm8996
 TARGET_RECOVERY_DEVICE_MODULES := libinit_leeco_msm8996
 
 # Partitions
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3154116608
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 57436708864
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := f2fs
 BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
@@ -131,6 +137,9 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 # not really for recovery anymor... but healthd still uses it
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+
+# Enable real time lockscreen charging current values
+BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
 
 # power hal
 TARGET_PROVIDES_POWERHAL := true
@@ -214,7 +223,7 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 ifeq ($(RECOVERY_VARIANT),twrp)
-TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/recovery/twrp.fstab
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/recovery/twrp.fstab
 BOARD_HAS_NO_REAL_SDCARD := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/soc/6a00000.ssusb/6a00000.dwc3/gadget/lun0/file
 TW_THEME := portrait_hdpi
@@ -229,11 +238,11 @@ TW_INCLUDE_NTFS_3G := true
 #TWRP_EVENT_LOGGING := true
 else
 #USE_CLANG_PLATFORM_BUILD := true
-TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/root/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/root/fstab.qcom
 endif
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
-BOARD_SEPOLICY_DIRS += $(PLATFORM_PATH)/sepolicy
+BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
--include vendor/leeco/msm8996-common/BoardConfigVendor.mk
+-include vendor/leeco/x2/BoardConfigVendor.mk

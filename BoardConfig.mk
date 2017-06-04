@@ -245,4 +245,6 @@ endif
 include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
+BOARD_SECCOMP_POLICY += $(BOARD_PATH)/seccomp
+
 -include vendor/leeco/x2/BoardConfigVendor.mk

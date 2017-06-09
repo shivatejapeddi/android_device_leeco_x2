@@ -119,18 +119,6 @@
                 <device name="SND_DEVICE_IN_SPEAKER_DMIC_AEC_BROADSIDE" acdb_id="35"/>
                 <device name="SND_DEVICE_IN_SPEAKER_DMIC_NS_BROADSIDE" acdb_id="102"/>
                 <device name="SND_DEVICE_IN_SPEAKER_DMIC_AEC_NS_BROADSIDE" acdb_id="12"/>
-                <device name="SND_DEVICE_IN_HANDSET_QMIC" acdb_id="12"/>
-                <device name="SND_DEVICE_IN_SPEAKER_QMIC_AEC" acdb_id="119"/>
-                <device name="SND_DEVICE_IN_SPEAKER_QMIC_NS" acdb_id="121"/>
-                <device name="SND_DEVICE_IN_SPEAKER_QMIC_AEC_NS" acdb_id="120"/>
-                <device name="SND_DEVICE_IN_VOICE_REC_QMIC_FLUENCE" acdb_id="105"/>
-                <device name="SND_DEVICE_IN_THREE_MIC" acdb_id="125"/>
-                <device name="SND_DEVICE_IN_HANDSET_TMIC" acdb_id="126"/>
-                <device name="SND_DEVICE_IN_UNPROCESSED_MIC" acdb_id="127"/>
-                <device name="SND_DEVICE_IN_UNPROCESSED_STEREO_MIC" acdb_id="129"/>
-                <device name="SND_DEVICE_IN_UNPROCESSED_THREE_MIC" acdb_id="125"/>
-                <device name="SND_DEVICE_IN_UNPROCESSED_QUAD_MIC" acdb_id="46"/>
-                <device name="SND_DEVICE_IN_UNPROCESSED_HEADSET_MIC" acdb_id="125"/>
     </acdb_ids>
     <bit_width_configs>
         <device name="SND_DEVICE_OUT_SPEAKER" bit_width="24"/>
@@ -144,11 +132,6 @@
         <device name="SND_DEVICE_OUT_SPEAKER_AND_HDMI" backend="smartpa-and-hdmi" />
     </backend_names>
 
-    <device_names>
-        <device name="SND_DEVICE_IN_HEADSET_MIC" alias="voice-headset-mic" />
-        <device name="SND_DEVICE_IN_VOICE_SPEAKER_MIC" alias="voice-speaker-dmic-ef-liquid" />
-        <device name="SND_DEVICE_OUT_VOICE_SPEAKER" alias="voice-speaker-stereo-brightness" />
-    </device_names>
 
     <config_params>
         <param key="spkr_1_tz_name" value="wsatz.11"/>

@@ -14,8 +14,6 @@
 # limitations under the License.
 #
 
-$(call inherit-product, vendor/leeco/x2/x2-vendor.mk)
-
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
@@ -75,7 +73,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:system/etc/permissions/android.hardware.vulkan.level.xml \
     frameworks/native/data/etc/android.hardware.vulkan.version-1_0_3.xml:system/etc/permissions/android.hardware.vulkan.version.xml \
-    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml
+    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
 # Audio
 ifeq ($(AUDIO_VIPDAX),true)
@@ -140,13 +139,8 @@ PRODUCT_PACKAGES += \
 
 # Shims
 PRODUCT_PACKAGES += \
-<<<<<<< HEAD
-    qcamera-daemon_shim \
-    libwvm_shim \
-    libcamera_shim 
-=======
+    libcamera_shim \
     qcamera-daemon_shim
->>>>>>> parent of a74b03c... add libwvm shim
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
@@ -163,6 +157,7 @@ PRODUCT_PACKAGES += \
     liboverlay \
     libtinyxml
 
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/FOSSConfig.xml:system/etc/FOSSConfig.xml
 
@@ -174,16 +169,6 @@ PRODUCT_PACKAGES += \
     qdcm_calib_data_le_x2_mdss_dsi_sharp_qhd_dualdsi_cmd.xml \
     qdcm_calib_data_le_x2_mdss_dsi_truly_qhd_dualdsi_cmd_pvt.xml \
     qdcm_calib_data_mdss_dsi_sharp_qhd_dualdsi_cmd.xml
-
-# QMI
-PRODUCT_PACKAGES += \
-    dsi_config.xml \
-    netmgr_config.xml \
-    qmi_config.xml
-
-# Doze mode
-PRODUCT_PACKAGES += \
-    Doze
 
 # For android_filesystem_config.h
 PRODUCT_PACKAGES += \
@@ -264,7 +249,10 @@ PRODUCT_PACKAGES += \
 
 # QMI
 PRODUCT_PACKAGES += \
-    libjson
+    libjson \
+    dsi_config.xml \
+    netmgr_config.xml \
+    qmi_config.xml
 
 # RIL
 PRODUCT_PACKAGES += \
@@ -281,6 +269,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf \
     $(LOCAL_PATH)/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
 
+# Healthd
+PRODUCT_PACKAGES += \
+    libhealthd.msm8996
+
 # LePref settigs modules
 PRODUCT_PACKAGES += \
     LePref
@@ -288,6 +280,13 @@ PRODUCT_PACKAGES += \
 # LePref Files
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/leeco/x2/lepref/files,/system/etc)
+
+# QCom
+PRODUCT_PACKAGES += \
+    tcmiface
+
+PRODUCT_PACKAGES += \
+    libcommon_time_client
 
 # Wifi
 PRODUCT_PACKAGES += \

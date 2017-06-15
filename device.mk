@@ -140,9 +140,13 @@ PRODUCT_PACKAGES += \
 
 # Shims
 PRODUCT_PACKAGES += \
+<<<<<<< HEAD
     qcamera-daemon_shim \
     libwvm_shim \
     libcamera_shim 
+=======
+    qcamera-daemon_shim
+>>>>>>> parent of a74b03c... add libwvm shim
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \

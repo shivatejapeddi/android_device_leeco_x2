@@ -1,30 +1,36 @@
 [
- {
-   "repository": "omnirom/android_kernel_leeco_msm8996",
-   "target_path": "kernel/leeco/msm8996"
- },
- {
-   "repository": "DirtyUnicorns/android_device_qcom_common",
-   "target_path": "device/qcom/common"
- },
- {
-   "repository" : "DirtyUnicorns/android_system_qcom",
-   "target_path": "system/qcom",
-   "branch"     : "n7x-caf"
- },
- {
-   "repository" : "DirtyUnicorns/android_external_ant-wireless_ant_service",
-   "target_path": "external/ant-wireless/ant_service",
-   "branch"     : "n7x-caf"
- },
- {
-   "repository" : "DirtyUnicorns/android_external_ant-wireless_ant_native",
-   "target_path": "external/ant-wireless/ant_native",
-   "branch"     : "n7x-caf"
- },
- {
-   "repository" : "DirtyUnicorns/android_external_ant-wireless_antradio-library",
-   "target_path": "external/ant-wireless/antradio-library",
-   "branch"     : "n7x-caf"
- }
+  {
+    "repository": "omnirom/android_kernel_leeco_msm8996",
+    "target_path": "kernel/leeco/msm8996"
+  },
+  {
+    "repository": "DirtyUnicorns/android_device_qcom_common",
+    "target_path": "device/qcom/common"
+  },
+  {
+    "repository" : "DirtyUnicorns/android_system_qcom",
+    "target_path": "system/qcom",
+    "branch"     : "n7x-caf"
+  },
+  {
+    "repository" : "DirtyUnicorns/android_external_ant-wireless_ant_service",
+    "target_path": "external/ant-wireless/ant_service",
+    "branch"     : "n7x-caf"
+  },
+  {
+    "repository" : "DirtyUnicorns/android_external_ant-wireless_ant_native",
+    "target_path": "external/ant-wireless/ant_native",
+    "branch"     : "n7x-caf"
+  },
+  {
+    "repository" : "DirtyUnicorns/android_external_ant-wireless_antradio-library",
+    "target_path": "external/ant-wireless/antradio-library",
+    "branch"     : "n7x-caf"
+  },
+  {
+    "remote": "omnirom",
+    "repository": "android_packages_apps_SnapdragonCamera",
+    "target_path": "packages/apps/SnapdragonCamera",
+    "revision": "android-7.1"
+  }
 ]

@@ -1,7 +1,8 @@
 [
   {
     "repository": "omnirom/android_kernel_leeco_msm8996",
-    "target_path": "kernel/leeco/msm8996"
+    "target_path": "kernel/leeco/msm8996",
+    "branch"     : "android-7.1"
   },
   {
     "repository" : "DirtyUnicorns/android_system_qcom",
@@ -24,9 +25,8 @@
     "branch"     : "n7x-caf"
   },
   {
-    "remote": "omnirom",
-    "repository": "android_packages_apps_SnapdragonCamera",
+    "repository" : "omnirom/android_packages_apps_SnapdragonCamera",
     "target_path": "packages/apps/SnapdragonCamera",
-    "revision": "android-7.1"
+    "branch"     : "android-7.1"
   }
 ]

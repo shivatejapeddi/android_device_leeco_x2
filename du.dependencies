@@ -4,10 +4,6 @@
     "target_path": "kernel/leeco/msm8996"
   },
   {
-    "repository": "DirtyUnicorns/android_device_qcom_common",
-    "target_path": "device/qcom/common"
-  },
-  {
     "repository" : "DirtyUnicorns/android_system_qcom",
     "target_path": "system/qcom",
     "branch"     : "n7x-caf"

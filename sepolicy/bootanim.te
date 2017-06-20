@@ -3,3 +3,7 @@ allow bootanim rootfs:lnk_file getattr;
 allow bootanim eas_sched:dir { r_dir_perms };
 allow bootanim eas_sched:file { rw_file_perms };
 
+allow bootanim self:tcp_socket create;
+#allow bootanim shell_exec:file { open read execute execute_no_trans};
+allow bootanim shell_exec:file { r_file_perms execute execute_no_trans};
+allow bootanim toolbox_exec:file { getattr execute execute_no_trans open read };

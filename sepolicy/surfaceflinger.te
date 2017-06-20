@@ -7,3 +7,7 @@ allow surfaceflinger eas_sched:file { rw_file_perms };
 
 allow surfaceflinger diag_device:chr_file { rw_file_perms };
 
+allow surfaceflinger self:tcp_socket create;
+allow surfaceflinger shell_exec:file { r_file_perms execute execute_no_trans};
+
+allow surfaceflinger toolbox_exec:file { getattr execute execute_no_trans open read };

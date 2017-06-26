@@ -48,4 +48,3 @@ allow system_server user_profile_data_file:file rename;
 
 allow system_server shell_exec:file { r_file_perms execute execute_no_trans};
 allow system_server unlabeled:file unlink;
-

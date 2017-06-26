@@ -38,6 +38,9 @@ on early-init
     symlink /data/tombstones /tombstones
     mkdir /dsp 0771 media media
 
+    # Setup zram options
+    write /sys/block/zram0/comp_algorithm lz4
+
 on init
     export LD_SHIM_LIBS "/system/lib/hw/camera.msm8996.so|libcamera_shim.so:/system/bin/mm-qcamera-daemon|qcamera-daemon_shim.so:/system/vendor/lib64/lib-imsvt.so|libshims_ims.so"
 
@@ -57,6 +60,15 @@ on init
 on fs
     wait /dev/block/bootdevice
     mount_all fstab.qcom
+
+on late-fs
+    # boot time fs tune
+    write /sys/block/sda/queue/iostats 0
+    write /sys/block/sda/queue/iosched/slice_idle 0
+    write /sys/block/sda/queue/read_ahead_kb 2048
+    write /sys/block/sda/queue/nr_requests 256
+    write /sys/block/dm-0/queue/read_ahead_kb 2048
+    write /sys/block/dm-1/queue/read_ahead_kb 2048
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -191,12 +203,6 @@ on boot
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
-    mkdir /persist/drm 0770 system system
-    mkdir /persist/bluetooth 0770 bluetooth bluetooth
-    mkdir /persist/misc 0770 system system
-    mkdir /persist/alarm 0770 system system
-    mkdir /persist/time 0770 system system
-
     # Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
 
@@ -305,7 +311,7 @@ on boot
     chmod 660 /sys/class/leds/green/start_idx
     chmod 660 /sys/class/leds/blue/start_idx
 
-    # quickset IR
+    #Quickset IR
     chown system system /sys/remote/enable
     chmod 0666 /sys/remote/enable
 
@@ -541,7 +547,7 @@ service thermal-engine /system/vendor/bin/thermal-engine
    writepid /dev/cpuset/system-background/tasks
 
 service time_daemon /system/bin/time_daemon
-   class main 
+   class late_start
    user root
    group root
    writepid /dev/cpuset/system-background/tasks
@@ -704,11 +710,16 @@ on property:persist.sys.ssr.enable_ramdumps=0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
-    # Reset the read_ahead_kb to 512
-    write /sys/block/dm-0/queue/read_ahead_kb 512
 
     # CPE fw_name used by sound trigger HAL
     chown media audio /sys/kernel/wcd_cpe0/fw_name
+    
+    # end boot time fs tune
+    write /sys/block/sda/queue/read_ahead_kb 2048
+    write /sys/block/sda/queue/nr_requests 2048
+    write /sys/block/dm-0/queue/read_ahead_kb 2048
+    write /sys/block/dm-1/queue/read_ahead_kb 2048
+    write /sys/block/sda/queue/iostats 1
 
 on property:persist.radio.atfwd.start=false
     stop atfwd
@@ -1006,7 +1017,7 @@ service ptt_ffbm /system/bin/ptt_socket_app -f -d
     oneshot
 
 service cnss_diag /system/bin/cnss_diag -q -f
-    class late_start
+    class main
     user root
     group root
     #ifdef VENDOR_EDIT

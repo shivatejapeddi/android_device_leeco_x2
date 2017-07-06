@@ -1,6 +1,12 @@
 # Product
 ro.config.product=x2
 ro.internal.model=Le X820
+ro.product.model=Le X820
+ro.product.brand=LeEco
+ro.product.name=LeMax2
+ro.product.device=le_x2
+ro.product.board=msm8996
+ro.product.manufacturer=LeMobile
 ro.config.le_hardware_version=HW_1.0.0
 ro.le.mtpname=Le Max2
 persist.sys.le_fast_chrg_enable=1

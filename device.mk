@@ -293,6 +293,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libcommon_time_client
 
+# OTA
+PRODUCT_PACKAGES += \
+    OTAUpdates
+
 # Wifi
 PRODUCT_PACKAGES += \
     ipacm \

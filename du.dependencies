@@ -28,5 +28,10 @@
     "repository" : "omnirom/android_packages_apps_SnapdragonCamera",
     "target_path": "packages/apps/SnapdragonCamera",
     "branch"     : "android-7.1"
+  },
+  {
+    "repository" : "x2-devel/OTAUpdates",
+    "target_path": "packages/apps/OTAUpdates",
+    "branch"     : "du-n-caf"
   }
 ]

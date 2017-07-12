@@ -1,16 +1,9 @@
 on boot
-
-    # Ensure all cpu's are online
-    write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu2/online 1
-    write /sys/devices/system/cpu/cpu3/online 1
-
     # Update foreground and background cpusets
     write /dev/cpuset/foreground/cpus 0-3
     write /dev/cpuset/foreground/boost/cpus 0-3
     write /dev/cpuset/background/cpus 0-3
-    write /dev/cpuset/system-background/cpus 0-1
+    write /dev/cpuset/system-background/cpus 0-3
     write /dev/cpuset/top-app/cpus 0-3
 
     # add a cpuset for the camera daemon
@@ -72,12 +65,6 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif 1
     write /sys/devices/system/cpu/cpu2/cpufreq/interactive/enable_prediction 1
 
-    #Switch to blu_active
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "blu_active"
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "blu_active"
-    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "blu_active"
-    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor "blu_active"
-
     # Re-enable thermal and BCL hotplug
     write /sys/module/msm_thermal/core_control/enabled 1
     write /sys/devices/soc/soc:qcom,bcl/mode "disable"
@@ -127,11 +114,6 @@ on enable-low-power
 
     # Starting io prefetcher service
     start iop
-
-    # Disable input boost
-    write /sys/module/cpu_boost/parameters/input_boost_enabled 0
-    write /sys/module/cpu_boost/parameters/input_boost_ms 0
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:0 1:0 2:0 3:0"
 
 on charger
     write /sys/devices/system/cpu/cpu1/online 0

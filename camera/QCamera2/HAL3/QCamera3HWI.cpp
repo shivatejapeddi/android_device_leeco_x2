@@ -55,6 +55,7 @@
 #include "QCamera3VendorTags.h"
 #include "QCameraTrace.h"
 
+
 extern "C" {
 #include "mm_camera_dbg.h"
 }
@@ -7733,6 +7734,7 @@ int QCamera3HardwareInterface::getCamInfo(uint32_t cameraId,
     info->device_version = CAMERA_DEVICE_API_VERSION_3_3;
     info->static_camera_characteristics = gStaticMetadata[cameraId];
 
+<<<<<<< HEAD
     //For now assume both cameras can operate independently.
     info->conflicting_devices = NULL;
     info->conflicting_devices_length = 0;
@@ -7751,8 +7753,12 @@ int QCamera3HardwareInterface::getCamInfo(uint32_t cameraId,
             gCamCapability[cameraId]->active_array_size.height * max_fps /
             gCamCapability[cameraId]->max_pixel_bandwidth;
     info->resource_cost = 100 * MIN(1.0, ratio);
+    info->conflicting_devices = NULL;
+    info->conflicting_devices_length = 0;
     LOGI("camera %d resource cost is %d", cameraId,
             info->resource_cost);
+
+    pthread_mutex_unlock(&gCamLock);
 
     pthread_mutex_unlock(&gCamLock);
     return rc;

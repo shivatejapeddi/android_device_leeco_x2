@@ -44,8 +44,14 @@ extern "C" {
 
 #define STRING_LENGTH_OF_64_BIT_NUMBER 21
 
-#define FLASH_PATH_FIRST "/sys/class/leds/torch-light0/brightness"
-#define FLASH_PATH_SECOND "/sys/class/leds/torch-light1/brightness"
+#ifndef FLASHLIGHT_CONTROL_ID
+    #define FLASHLIGHT_CONTROL_ID -1
+#endif
+
+#ifndef FLASHLIGHT_CONTROL_PATH
+    #define FLASHLIGHT_CONTROL_PATH ""
+    #define FLASHLIGHT_CONTROL_ID -1
+#endif
 
 volatile uint32_t gCamHal3LogLevel = 4;
 
@@ -191,6 +197,29 @@ int32_t QCameraFlash::initFlash(const int camera_id)
             LOGE("Unable to open node '%s'",
                     FLASH_PATH_SECOND);
             retVal = -EBUSY;
+        } else {
+#ifndef FLASHLIGHT_CONTROL_VALUE
+            struct msm_flash_cfg_data_t cfg;
+            struct msm_flash_init_info_t init_info;
+            memset(&cfg, 0, sizeof(struct msm_flash_cfg_data_t));
+            memset(&init_info, 0, sizeof(struct msm_flash_init_info_t));
+            init_info.flash_driver_type = FLASH_DRIVER_DEFAULT;
+            cfg.cfg.flash_init_info = &init_info;
+            cfg.cfg_type = CFG_FLASH_INIT;
+            retVal = ioctl(m_flashFds[camera_id],
+                    VIDIOC_MSM_FLASH_CFG,
+                    &cfg);
+            if (retVal < 0) {
+                ALOGE("%s: Unable to init flash for camera id: %d",
+                        __func__,
+                        camera_id);
+                close(m_flashFds[camera_id]);
+                m_flashFds[camera_id] = -1;
+            }
+
+            /* wait for PMIC to init */
+            usleep(5000);
+#endif
         }
     }
 

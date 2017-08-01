@@ -34,6 +34,7 @@
 
 // System definitions
 #include <utils/Errors.h>
+#include "util/QCameraFlash.h"
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1856,6 +1857,7 @@ int QCamera2HardwareInterface::openCamera()
     rc = QCameraFlash::getInstance().reserveFlashForCamera(mCameraId);
     if (rc < 0) {
         LOGE("Failed to reserve flash for camera id: %d",
+                __func__,
                 mCameraId);
         return UNKNOWN_ERROR;
     }

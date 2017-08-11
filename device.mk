@@ -135,6 +135,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml
 
+# Device init scripts
+PRODUCT_PACKAGES += \
+    init.power.sh
+
 # Camera
 PRODUCT_PACKAGES += \
     Snap \

@@ -61,6 +61,15 @@ on fs
     wait /dev/block/bootdevice
     mount_all fstab.qcom
 
+on late-fs
+    # boot time fs tune
+    write /sys/block/sda/queue/iostats 0
+    write /sys/block/sda/queue/iosched/slice_idle 0
+    write /sys/block/sda/queue/read_ahead_kb 2048
+    write /sys/block/sda/queue/nr_requests 256
+    write /sys/block/dm-0/queue/read_ahead_kb 2048
+    write /sys/block/dm-1/queue/read_ahead_kb 2048
+
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
@@ -178,6 +187,9 @@ on boot
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
+    mkdir /persist/drm 0770 system system
+    mkdir /persist/bluetooth 0770 bluetooth bluetooth
+
     # Create NETMGR daemon socket area
     mkdir /dev/socket/netmgr 0750 radio radio
 
@@ -190,12 +202,6 @@ on boot
     chmod 2770 /dev/socket/qmux_bluetooth
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
-
-    mkdir /persist/drm 0770 system system
-    mkdir /persist/bluetooth 0770 bluetooth bluetooth
-    mkdir /persist/misc 0770 system system
-    mkdir /persist/alarm 0770 system system
-    mkdir /persist/time 0770 system system
 
     # Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
@@ -305,6 +311,10 @@ on boot
     chmod 660 /sys/class/leds/green/start_idx
     chmod 660 /sys/class/leds/blue/start_idx
 
+    #Quickset IR
+    chown system system /sys/remote/enable
+    chmod 0666 /sys/remote/enable
+
 on post-fs-data
     # msm specific files that need to be created on /data
     mkdir /data/tombstones 0771 system system
@@ -326,11 +336,13 @@ on post-fs-data
     mkdir /data/oemnvitems 0771 radio radio
 
     # Sensors
-    mkdir /persist/sensors 0775 system root
-    write /persist/sensors/sensors_settings 1
+    mkdir /data/misc/sensors
+    chmod 0775 /data/misc/sensors
+    chmod 0755 /persist/sensors
     chmod 0644 /persist/sensors/sensors_settings
+    chmod 0644 /persist/sensors/gyro_sensitity_cal
     chown system root /persist/sensors/sensors_settings
-    mkdir /data/misc/sensors 0775 system system
+    chown system root /persist/sensors/gyro_sensitity_cal
 
     # Create directories for Fingerprint
     mkdir /data/fpc_images 0770 system system
@@ -535,7 +547,7 @@ service thermal-engine /system/vendor/bin/thermal-engine
    writepid /dev/cpuset/system-background/tasks
 
 service time_daemon /system/bin/time_daemon
-   class main 
+   class late_start
    user root
    group root
    writepid /dev/cpuset/system-background/tasks
@@ -698,11 +710,16 @@ on property:persist.sys.ssr.enable_ramdumps=0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
-    # Reset the read_ahead_kb to 512
-    write /sys/block/dm-0/queue/read_ahead_kb 512
 
     # CPE fw_name used by sound trigger HAL
     chown media audio /sys/kernel/wcd_cpe0/fw_name
+    
+    # end boot time fs tune
+    write /sys/block/sda/queue/read_ahead_kb 2048
+    write /sys/block/sda/queue/nr_requests 2048
+    write /sys/block/dm-0/queue/read_ahead_kb 2048
+    write /sys/block/dm-1/queue/read_ahead_kb 2048
+    write /sys/block/sda/queue/iostats 1
 
 on property:persist.radio.atfwd.start=false
     stop atfwd
@@ -1000,7 +1017,7 @@ service ptt_ffbm /system/bin/ptt_socket_app -f -d
     oneshot
 
 service cnss_diag /system/bin/cnss_diag -q -f
-    class late_start
+    class main
     user root
     group root
     #ifdef VENDOR_EDIT

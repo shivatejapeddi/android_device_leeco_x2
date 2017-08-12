@@ -28,7 +28,9 @@ on enable-low-power
 
     # Enable Adaptive LMK
     write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
-    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 81250
+    write /sys/module/lowmemorykiller/parameters/adj "0,58,176,294,411,1000"
+    write /sys/module/lowmemorykiller/parameters/minfree "19352,29028,58056,135464,145140"
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 159375
 
     # Configure governor settings for little cluster
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
@@ -78,12 +80,14 @@ on enable-low-power
 
     # Setting b.L scheduler parameters
     write /proc/sys/kernel/sched_boost 0
-    write /proc/sys/kernel/sched_downmigrate 90
-    write /proc/sys/kernel/sched_upmigrate 95
+    write /proc/sys/kernel/sched_migration_fixup 1
+    write /proc/sys/kernel/sched_downmigrate 80
+    write /proc/sys/kernel/sched_upmigrate 90
     write /proc/sys/kernel/sched_freq_inc_notify 400000
     write /proc/sys/kernel/sched_freq_dec_notify 400000
-    write /proc/sys/kernel/sched_spill_nr_run 3
+    write /proc/sys/kernel/sched_spill_nr_run 6
     write /proc/sys/kernel/sched_init_task_load 100
+    write /proc/sys/kernel/sched_upmigrate_min_nice 9
 
     # Enable bus-dcvs
     write /sys/class/devfreq/soc:qcom,cpubw/governor "bw_hwmon"
@@ -115,6 +119,11 @@ on enable-low-power
     # Starting io prefetcher service
     start iop
 
+    # Disable input boost
+    write /sys/module/cpu_boost/parameters/input_boost_enabled 0
+    write /sys/module/cpu_boost/parameters/input_boost_ms 0
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:0 1:0 2:0 3:0"
+
 on charger
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
@@ -122,6 +131,8 @@ on charger
     write /sys/module/msm_thermal/core_control/cpus_offlined 14
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
+    wait /dev/block/bootdevice
+    start hvdcp_opti
 
 on class_start:late_start
     trigger enable-low-power
@@ -135,5 +146,22 @@ on property:dev.bootcomplete=1
     write /dev/cpuset/top-app/cpus 0-3
     write /dev/cpuset/foreground/boost/cpus 0-2
     write /dev/cpuset/foreground/cpus 0-2
-    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/background/cpus 0-1
     write /dev/cpuset/system-background/cpus 0-1
+
+# Kernel tuning
+    write /proc/sys/net/ipv4/tcp_congestion_control "westwood"
+
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/module/msm_thermal/parameters/enabled Y
+
+# VM
+    write /proc/sys/vm/dirty_background_ratio 85
+    write /proc/sys/vm/dirty_expire_centisecs 10
+    write /proc/sys/vm/swappiness 5
+    write /proc/sys/vm/vfs_cache_pressure 5
+    write /sys/block/zram0/disksize 283115520
+    mkswap /dev/block/zram0 > /dev/null 2>&1
+    swapon /dev/block/zram0 > /dev/null 2>&1
+    swapoff /dev/block/zram0 > /dev/null 2>&1
+    write /sys/block/zram0/reset 1

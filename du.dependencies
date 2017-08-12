@@ -33,5 +33,11 @@
     "repository" : "x2-devel/OTAUpdates",
     "target_path": "packages/apps/OTAUpdates",
     "branch"     : "du-n-caf"
+  },
+  {
+    "remote": "omnirom",
+    "repository": "android_external_json-c",
+    "target_path": "external/json-c",
+    "revision": "android-7.1"
   }
 ]

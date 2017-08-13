@@ -30,9 +30,8 @@
     "branch"     : "android-7.1"
   },
   {
-    "remote": "omnirom",
-    "repository": "android_external_json-c",
+    "repository": "omnirom/android_external_json-c",
     "target_path": "external/json-c",
-    "revision": "android-7.1"
+    "branch": "android-7.1"
   }
 ]

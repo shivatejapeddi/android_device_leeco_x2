@@ -298,6 +298,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     OTAUpdates
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.ota.version=$(shell date +%Y%m%d) \
+    ro.ota.romname=DU_X2-ANDR \
+    ro.ota.manifest=https://raw.githubusercontent.com/andr68rus/OTA/du-n-caf/ota.xml
+
 # Wifi
 PRODUCT_PACKAGES += \
     ipacm \

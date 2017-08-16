@@ -334,7 +334,11 @@ endif
 PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
     ro.product.model
 
-# ViperFX + Dolby Atmos Vendor
-ifeq ($(AUDIO_VIPDAX),true)
+$(call inherit-product-if-exists, vendor/leeco/msm8996-common/msm8996-common-vendor.mk)
+
+# LeTVCamera + LeTVRemote
+$(call inherit-product-if-exists, vendor/leeco/addons/addons-vendor.mk)
+
+# ViperFX + Dolby Atmos
 $(call inherit-product-if-exists, vendor/leeco/vipdax/vipdax-vendor.mk)
-endif
+

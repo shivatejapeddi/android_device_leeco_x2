@@ -23,8 +23,12 @@
 /dev/goodix_fp*     u:object_r:gx_fpd_device:s0
 /data/goodix(/.*)?  u:object_r:gx_fpd_data_file:s0
 # daizhiling add for goodix_fingerprint end
+
 # Init
 /system/bin/init\.power\.sh                                         u:object_r:init_power_exec:s0
+
+# CPU tunable for EAS
+/sys/devices/system/cpu/cpu[0-3]/cpufreq/schedutil(/.*)?            u:object_r:sysfs_devices_system_cpu:s0
 
 /sys/devices/soc/qpnp-smbcharger-[0-9a-f]+/power_supply/battery/capacity u:object_r:sysfs_batteryinfo:s0
 /sys/devices/soc/qpnp-smbcharger-[0-9a-f]+/power_supply/battery/current_now u:object_r:sysfs_batteryinfo:s0

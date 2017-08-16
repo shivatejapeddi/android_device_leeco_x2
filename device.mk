@@ -142,7 +142,6 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     Snap \
-    SnapdragonCamera \
     libstlport
 
 # Shims

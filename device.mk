@@ -20,7 +20,7 @@ $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk
 $(call inherit-product, vendor/leeco/x2/x2-vendor.mk)
 
 # ViperFX + Dolby Atmos
-AUDIO_VIPDAX := false
+AUDIO_VIPDAX := true
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay

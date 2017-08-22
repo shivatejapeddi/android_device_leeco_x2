@@ -54,6 +54,7 @@ LOCAL_CFLAGS += -DDEFAULT_DENOISE_MODE_ON -DHAL3 -DQCAMERA_REDEFINE_LOG
 
 LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/stack/common \
+        frameworks/native/include \
         $(LOCAL_PATH)/stack/mm-camera-interface/inc \
         frameworks/native/include/media/hardware \
         frameworks/native/include/media/openmax \
@@ -90,9 +91,11 @@ LOCAL_C_INCLUDES += \
         $(TARGET_OUT_HEADERS)/qcom/display
 LOCAL_C_INCLUDES += \
         hardware/qcom/display/libqservice
-LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl libsync libgui
+LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl libsync libgui libsensor
 LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface libui libcamera_metadata
 LOCAL_SHARED_LIBRARIES += libqdMetaData libqservice libbinder liblog
+LOCAL_SHARED_LIBRARIES += libhidltransport libsensor android.hidl.token@1.0-utils android.hardware.graphics.bufferqueue@1.0
+LOCAL_STATIC_LIBRARIES := libarect
 ifeq ($(TARGET_TS_MAKEUP),true)
 LOCAL_SHARED_LIBRARIES += libts_face_beautify_hal libts_detected_face_hal
 endif

@@ -36,6 +36,7 @@
 #include <cutils/properties.h>
 #include <hardware/camera.h>
 #include <hardware/camera3.h>
+#include <sensor/SensorManager.h>
 
 #include "HAL/QCamera2HWI.h"
 #include "HAL3/QCamera3HWI.h"

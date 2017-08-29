@@ -20,7 +20,7 @@ $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk
 $(call inherit-product, vendor/leeco/x2/x2-vendor.mk)
 
 # ViperFX + Dolby Atmos
-AUDIO_VIPDAX := false
+AUDIO_VIPDAX := true
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -83,7 +83,6 @@ PRODUCT_COPY_FILES += \
 ADDITIONAL_DEFAULT_PROPERTIES += ro.musicfx.disabled=true
 else
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf
 endif
 

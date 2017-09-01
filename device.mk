@@ -19,9 +19,6 @@ $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk
 
 $(call inherit-product, vendor/leeco/x2/x2-vendor.mk)
 
-# ViperFX + Dolby Atmos
-AUDIO_VIPDAX := true
-
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
@@ -190,8 +187,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/FOSSConfig.xml:system/etc/FOSSConfig.xml
 
 # Display calibration
-PRODUCT_PACKAGES += \
-    libjni_livedisplay
+#PRODUCT_PACKAGES += \
+#    libjni_livedisplay
 
 PRODUCT_PACKAGES += \
     qdcm_calib_data_le_x2_mdss_dsi_sharp_qhd_dualdsi_cmd.xml \
@@ -268,8 +265,8 @@ PRODUCT_PACKAGES += \
     lights.msm8996
 
 # LiveDisplay native
-PRODUCT_PACKAGES += \
-    libjni_livedisplay
+#PRODUCT_PACKAGES += \
+#    libjni_livedisplay
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -287,8 +284,8 @@ PRODUCT_PACKAGES += \
     netutils-wrapper-1.0
 
 # Nfc
-PRODUCT_PACKAGES += \
-    android.hardware.nfc@1.0-impl \
+#PRODUCT_PACKAGES += \
+#    android.hardware.nfc@1.0-impl \
 
 # OMX
 PRODUCT_PACKAGES += \

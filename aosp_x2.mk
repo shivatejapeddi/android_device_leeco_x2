@@ -29,7 +29,7 @@ TARGET_SCREEN_LENGTH := 2560
 TARGET_ARCH := arm64
 $(call inherit-product-if-exists, vendor/aosp/config.mk)
 
-PRODUCT_NAME := x2
+PRODUCT_NAME := aosp_x2
 PRODUCT_DEVICE := x2
 PRODUCT_MANUFACTURER := Leeco
 PRODUCT_BRAND := Letv

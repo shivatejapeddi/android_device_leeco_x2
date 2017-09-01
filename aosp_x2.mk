@@ -25,6 +25,10 @@ $(call inherit-product, device/leeco/x2/device.mk)
 TARGET_SCREEN_WIDTH := 1440
 TARGET_SCREEN_LENGTH := 2560
 
+# Vendor
+TARGET_ARCH := arm64
+$(call inherit-product-if-exists, vendor/aosp/config.mk)
+
 PRODUCT_NAME := x2
 PRODUCT_DEVICE := x2
 PRODUCT_MANUFACTURER := Leeco

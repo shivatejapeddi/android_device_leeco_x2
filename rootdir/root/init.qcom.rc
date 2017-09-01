@@ -1142,10 +1142,10 @@ service hcidump /system/bin/sh /system/etc/hcidump.sh
     disabled
     oneshot
 
-service charger /sbin/healthd -c
+service charger charger
     class charger
     group log
-    seclabel u:r:healthd:s0
+    #seclabel u:r:healthd:s0
     writepid /dev/cpuset/system-background/tasks
 
 service ssr_diag /system/bin/ssr_diag

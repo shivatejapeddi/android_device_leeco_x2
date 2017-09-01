@@ -155,13 +155,13 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
 BOARD_FLASH_BLOCK_SIZE := 262144
 
 # charger
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm8996
+#BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm8996
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 # not really for recovery anymor... but healthd still uses it
-BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+#BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 # Enable real time lockscreen charging current values
-BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
+#BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
 
 # Power
 TARGET_PROVIDES_POWERHAL := true
@@ -187,14 +187,8 @@ OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 
-# Enable dexpreopt to speed boot time
-ifeq ($(HOST_OS),linux)
-  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
-  endif
-endif
+# Dex-preoptimization
+WITH_DEXPREOPT := false
 
 # GPS
 TARGET_NO_RPC := true
@@ -264,8 +258,8 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/root/fstab.qcom
 endif
 
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
-BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
+#include device/qcom/sepolicy/sepolicy.mk
+#BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
 BOARD_SECCOMP_POLICY += $(BOARD_PATH)/seccomp
 

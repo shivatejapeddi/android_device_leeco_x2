@@ -77,7 +77,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
 # Audio
-ifeq ($(AUDIO_VIPDAX),true)
+ifeq ($(AUDIO_VIPDAX),false)
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/vipdax/audio_policy.conf:system/etc/audio_policy.conf
 ADDITIONAL_DEFAULT_PROPERTIES += ro.musicfx.disabled=true
@@ -279,8 +279,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
 
 # Healthd
-PRODUCT_PACKAGES += \
-    libhealthd.msm8996
+#PRODUCT_PACKAGES += \
+#    libhealthd.msm8996
 
 # LePref settigs modules
 PRODUCT_PACKAGES += \
@@ -342,7 +342,7 @@ PRODUCT_SYSTEM_PROPERTY_BLACKLIST := \
 $(call inherit-product-if-exists, vendor/leeco/msm8996-common/msm8996-common-vendor.mk)
 
 # LeTVCamera + LeTVRemote
-$(call inherit-product-if-exists, vendor/leeco/addons/addons-vendor.mk)
+#$(call inherit-product-if-exists, vendor/leeco/addons/addons-vendor.mk)
 
 # ViperFX + Dolby Atmos
-$(call inherit-product-if-exists, vendor/leeco/vipdax/vipdax-vendor.mk)
+#$(call inherit-product-if-exists, vendor/leeco/vipdax/vipdax-vendor.mk)

@@ -217,7 +217,6 @@ PRODUCT_PACKAGES += \
 
 # Libshims
 PRODUCT_PACKAGES += \
-    libshims_camera \
     libshims_ims
 
 # Lights

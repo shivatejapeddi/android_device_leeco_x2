@@ -356,7 +356,3 @@ ro.min_pointer_dur=1
 
 # 16bit Transparency
 persist.sys.use_16bpp_alpha=1
-
-# OTA Updates
-ro.ota.romname=DU_X2-ANDR
-ro.ota.manifest=https://raw.githubusercontent.com/andr68rus/OTA/du-n-caf/ota.xml

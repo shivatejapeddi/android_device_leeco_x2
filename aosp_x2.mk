@@ -42,3 +42,6 @@ PRODUCT_SYSTEM_PROPERTY_BLACKLIST += ro.product.model
 TARGET_VENDOR := leeco
 
 EXTENDED_BUILD_TYPE := OFFICIAL
+
+# Include Bootanimation configuration
+TARGET_BOOT_ANIMATION_RES := 1440

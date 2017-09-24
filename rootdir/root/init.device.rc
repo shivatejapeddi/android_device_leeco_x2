@@ -183,14 +183,3 @@ service wifi_mac /system/bin/logwrapper /system/bin/set_wifi_mac
 
 on property:init.svc.bootanim=running
     write /sys/class/leds/wled/brightness 4095
-
-#set nvm_service
-service nvm_service /system/bin/nvm_service
-    class core
-    disabled
-    oneshot
-    user root
-    group root
-
-on property:sys.boot_completed=1
-    start nvm_service

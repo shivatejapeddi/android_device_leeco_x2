@@ -267,6 +267,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     sensors.msm8996
 
+# Telephony
+PRODUCT_BOOT_JARS += qti-telephony-common
+
 # Healthd
 PRODUCT_PACKAGES += \
     libhealthd.msm8996

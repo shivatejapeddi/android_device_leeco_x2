@@ -37,6 +37,9 @@ TARGET_SCREEN_WIDTH := 1440
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/leeco/x2/rootdir/root,root)
 
+# QPerformance
+PRODUCT_BOOT_JARS += QPerformance
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \

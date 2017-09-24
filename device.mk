@@ -267,6 +267,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     sensors.msm8996
 
+PRODUCT_BOOT_JARS += \
+    qcnvitems \
+    qcrilhook
+
 # Telephony
 PRODUCT_BOOT_JARS += qti-telephony-common
 

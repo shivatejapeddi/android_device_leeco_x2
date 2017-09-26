@@ -197,8 +197,9 @@ ifeq ($(HOST_OS),linux)
 endif
 
 # GPS
-TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
+TARGET_NO_RPC := true
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := msm8996
 
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
 

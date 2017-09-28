@@ -607,6 +607,7 @@ service imsqmidaemon /system/bin/imsqmidaemon
     socket ims_qmid stream 0660 system radio
     group radio net_raw log diag
     writepid /dev/cpuset/system-background/tasks
+    disabled
 
 service imsdatadaemon /system/bin/imsdatadaemon
     class main
@@ -690,6 +691,12 @@ service fossctl /system/bin/ppd foss:on
 
 on property:sys.boot_completed=1
     start fossctl
+   # end boot time fs tune
+    write /sys/block/sda/queue/read_ahead_kb 128
+    write /sys/block/sda/queue/nr_requests 128
+    write /sys/block/dm-0/queue/read_ahead_kb 128
+    write /sys/block/dm-1/queue/read_ahead_kb 128
+    write /sys/block/sda/queue/iostats 1
 
 service tlocd /system/bin/tloc_daemon
     class late_start
@@ -852,6 +859,7 @@ service config_bt_addr /system/bin/btnvtool -O
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
     user root
+    seclabel u:r:bluetooth_loader:s0
     oneshot
 
 service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
@@ -860,6 +868,7 @@ service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
     group bluetooth net_bt_admin
     disabled
     oneshot
+    seclabel u:r:bluetooth_loader:s0
 
 on property:bluetooth.hciattach=true
     start hciattach

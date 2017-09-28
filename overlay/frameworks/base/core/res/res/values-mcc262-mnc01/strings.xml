@@ -17,16 +17,10 @@
 */
 -->
 
-<!-- These resources are around just to allow their values to be customized
-     for different hardware and product builds. -->
 <resources>
-    <!-- Values for GPS configuration (Reliance) -->
-    <string-array translatable="false" name="config_gpsParameters">
-        <item>LPP_PROFILE=2</item>
+    <string name="wfc_mode_wifi_preferred_summary">WLAN preferred</string>
+    <string-array name="wfcSpnFormats">
+        <item>%s</item>
+        <item>WLAN Call</item>
     </string-array>
-
-    <!-- RJIL specific settings -->
-
-    <!-- display for radio tech -->
-    <bool name="config_display_rat">false</bool>
 </resources>

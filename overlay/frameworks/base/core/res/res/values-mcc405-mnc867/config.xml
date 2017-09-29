@@ -25,8 +25,4 @@
         <item>LPP_PROFILE=2</item>
     </string-array>
 
-    <!-- RJIL specific settings -->
-
-    <!-- display for radio tech -->
-    <bool name="config_display_rat">false</bool>
 </resources>

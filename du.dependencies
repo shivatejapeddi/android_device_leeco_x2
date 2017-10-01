@@ -25,11 +25,6 @@
     "branch"     : "n7x-caf"
   },
   {
-    "repository" : "omnirom/android_packages_apps_SnapdragonCamera",
-    "target_path": "packages/apps/SnapdragonCamera",
-    "branch"     : "android-7.1"
-  },
-  {
     "repository": "omnirom/android_external_json-c",
     "target_path": "external/json-c",
     "branch": "android-7.1"

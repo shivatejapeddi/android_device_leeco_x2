@@ -559,12 +559,6 @@ typedef struct {
 } cam_sensitivity_range_t;
 
 typedef enum {
-    CAM_ISO_PRIORITY,
-    CAM_EXP_PRIORITY,
-    CAM_DEFAULT_OFF,
-} cam_priority_mode_t;
-
-typedef enum {
     CAM_HFR_MODE_OFF,
     CAM_HFR_MODE_60FPS,
     CAM_HFR_MODE_90FPS,

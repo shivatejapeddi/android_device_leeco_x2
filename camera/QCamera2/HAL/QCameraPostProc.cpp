@@ -1337,9 +1337,7 @@ int32_t QCameraPostProcessor::processPPData(mm_camera_super_buf_t *frame)
                 m_parent->mParameters.isFaceDetectionEnabled());
     }
 #endif
-    int8_t mCurReprocCount = job->reprocCount;
-    if ((m_parent->isLongshotEnabled()
-            && (!(m_parent->mParameters.getQuadraCfa())|| (mCurReprocCount == 2)))
+    if ((m_parent->isLongshotEnabled())
             && (!m_parent->isCaptureShutterEnabled())
             && (!m_parent->mCACDoneReceived)) {
         // play shutter sound for longshot
@@ -1348,6 +1346,7 @@ int32_t QCameraPostProcessor::processPPData(mm_camera_super_buf_t *frame)
     }
     m_parent->mCACDoneReceived = FALSE;
 
+    int8_t mCurReprocCount = job->reprocCount;
     int8_t mCurChannelIndex = job->ppChannelIndex;
     if ( mCurReprocCount > 1 ) {
         //In case of pp 2nd pass, we can release input of 2nd pass

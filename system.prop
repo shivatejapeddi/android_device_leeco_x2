@@ -51,19 +51,9 @@ persist.data.tcp_rst_drop=true
 # IMS
 service.qti.ims.enabled=1
 persist.dbg.ims_volte_enable=0
-persist.radio.cs_srv_type=0
-persist.radio.calls.on.ims=1
-persist.radio.jbims=true
-persist.dbg.volte_avail_ovr=1
-persist.dbg.vt_avail_ovr=1
-persist.radio.NO_STAPA=1
-persist.radio.VT_HYBRID_ENABLE=1
-net.lte.volte_call_capable=true
-persist.rcs.supported=1
-persist.radio.domain.ps=false
-persist.radio.VT_ENABLE=1
-persist.radio.REVERSE_QMI=0
-persist.radio.ROTATION_ENABLE=1
+persist.dbg.volte_avail_ovr=0
+persist.dbg.vt_avail_ovr=0
+persist.dbg.wfc_avail_ovr=0
 
 # GPS
 persist.gps.qc_nlp_in_use=1
@@ -290,3 +280,6 @@ persist.sys.le_fast_chrg_enable=1
 
 # Google Assistant
 ro.opa.eligible_device=true
+
+# ParanoidHub
+ro.pa.device=x2

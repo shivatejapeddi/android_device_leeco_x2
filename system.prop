@@ -280,6 +280,3 @@ persist.sys.le_fast_chrg_enable=1
 
 # Google Assistant
 ro.opa.eligible_device=true
-
-# ParanoidHub
-ro.pa.device=x2

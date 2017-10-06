@@ -143,14 +143,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Snap \
     libstlport \
-    libqomx_core \
-    libmmcamera_interface \
-    libmmjpeg_interface
+    camera.msm8996
 
-# Shims
 PRODUCT_PACKAGES += \
     libcamera_shim \
-    qcamera-daemon_shim
+    qcamera-daemon_shim \
+    libshims_cameraservice
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \

@@ -68,22 +68,22 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/thermal-engine.conf:system/etc/thermal-engine.conf
 
 # Thermal
-PRODUCT_PACKAGES += \
-    thermal.msm8996
+#PRODUCT_PACKAGES += \
+#    thermal.msm8996
 
 # VR
-PRODUCT_PACKAGES += \
-    vr.msm8996
+#PRODUCT_PACKAGES += \
+#    vr.msm8996
 
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml
+#PRODUCT_COPY_FILES += \
+#    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml
 
 # Power
-PRODUCT_PACKAGES += \
-    power.msm8996
+#PRODUCT_PACKAGES += \
+#    power.msm8996
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/powerhint.xml:system/etc/powerhint.xml
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_PATH)/configs/powerhint.xml:system/etc/powerhint.xml
 
 # QMI
 PRODUCT_PACKAGES += \

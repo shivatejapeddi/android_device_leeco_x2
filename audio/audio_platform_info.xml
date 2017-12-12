@@ -28,7 +28,7 @@
     <acdb_ids>
         <device name="SND_DEVICE_OUT_SPEAKER" acdb_id="14" />
         <device name="SND_DEVICE_OUT_VOICE_SPEAKER" acdb_id="14" />
-        <device name="SND_DEVICE_OUT_SPEAKER_PROTECTED" acdb_id="14" />
+        <device name="SND_DEVICE_OUT_SPEAKER_PROTECTED" acdb_id="124" />
         <device name="SND_DEVICE_OUT_VOICE_HEADPHONES" acdb_id="26" />
         <device name="SND_DEVICE_IN_HANDSET_MIC" acdb_id="41"/>
         <device name="SND_DEVICE_IN_HANDSET_MIC_AEC" acdb_id="41"/>
@@ -37,16 +37,10 @@
         <device name="SND_DEVICE_IN_HANDSET_DMIC" acdb_id="41"/>
         <device name="SND_DEVICE_IN_HANDSET_DMIC_AEC" acdb_id="41"/>
         <device name="SND_DEVICE_IN_HANDSET_DMIC_AEC_NS" acdb_id="41" />
-	<device name="SND_DEVICE_IN_SPEAKER_MIC" acdb_id="43"/>
-	<device name="SND_DEVICE_IN_SPEAKER_MIC_AEC" acdb_id="43"/>
-	<device name="SND_DEVICE_IN_SPEAKER_DMIC" acdb_id="43"/>
-        <device name="SND_DEVICE_IN_SPEAKER_DMIC_AEC_NS" acdb_id="43" />
-        <device name="SND_DEVICE_IN_HEADSET_MIC_FLUENCE" acdb_id="16" />
         <device name="SND_DEVICE_IN_VOICE_HEADSET_MIC" acdb_id="16" />
-        <device name="SND_DEVICE_IN_VOICE_FLUENCE_DMIC_AANC" acdb_id="41"/>
         <device name="SND_DEVICE_IN_HEADSET_MIC" acdb_id="8" />
-        <device name="SND_DEVICE_IN_CAMCORDER_MIC" acdb_id="43"/>
-        <device name="SND_DEVICE_IN_CAMCORDER_STEREO_DMIC" acdb_id="43"/>
+        <device name="SND_DEVICE_IN_USB_HEADSET_MIC" acdb_id="52"/>
+        <device name="SND_DEVICE_IN_AANC_HANDSET_MIC" acdb_id="41"/>
         <device name="SND_DEVICE_IN_AUDIO_REC_MIC" acdb_id="41"/>
 	<device name="SND_DEVICE_IN_VOICE_REC_MIC" acdb_id="41"/>
         <device name="SND_DEVICE_IN_VOICE_REC_MIC_NS" acdb_id="41"/>
@@ -91,9 +85,8 @@
         <device name="SND_DEVICE_IN_HANDSET_MIC" alias="handset-dmic-endfire" />
         <device name="SND_DEVICE_IN_HANDSET_DMIC" alias="handset-dmic-endfire" />
         <!-- <device name="SND_DEVICE_IN_SPEAKER_MIC" alias="speaker-dmic-endfire" /> -->
-        <device name="SND_DEVICE_IN_SPEAKER_DMIC" alias="speaker-dmic" />
         <device name="SND_DEVICE_IN_HEADSET_MIC" alias="voice-headset-mic" />
-        <!-- <device name="SND_DEVICE_IN_VOICE_SPEAKER_MIC" alias="speaker-dmic-endfire" /> -->
+        <device name="SND_DEVICE_IN_VOICE_SPEAKER_MIC" alias="speaker-dmic-endfire" />
         <device name="SND_DEVICE_IN_VOICE_HEADSET_MIC" alias="voice-headset-mic" />
         <device name="SND_DEVICE_IN_CAMCORDER_MIC" alias="camcorder-mic" />
         <device name="SND_DEVICE_IN_VOICE_DMIC" alias="voice-dmic-ef" />

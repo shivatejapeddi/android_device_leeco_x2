@@ -1,5 +1,5 @@
-# Copyright (C) 2013-2016, The CyanogenMod Project
-# Copyright (C) 2017, The LineageOS Project
+# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2017-2018 The The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,16 +29,17 @@ $(call inherit-product, vendor/aosp/common.mk)
 # Device identifier. This must come after all inclusions.
 PRODUCT_NAME := aosp_x2
 PRODUCT_DEVICE := x2
-PRODUCT_BRAND := leeco
-PRODUCT_MODEL := x2
-PRODUCT_MANUFACTURER := leeco
-PRODUCT_GMS_CLIENTID_BASE := android-letv
-TARGET_VENDOR_PRODUCT_NAME := x2
+PRODUCT_MANUFACTURER := LeEco
+PRODUCT_BRAND := LeEco
+
+PRODUCT_GMS_CLIENTID_BASE := android-leeco
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT=Letv/LeMax2_WW/le_x2:6.0.1/FGXOSOP5801910121S/letv10120105:user/release-keys \
-    PRIVATE_BUILD_DESC="le_x2-user 6.0.1 FGXOSOP5801910121S eng.letv.20161012.010150.wechatpay release-keys"
+    TARGET_DEVICE=le_x2 \
+    PRODUCT_NAME=LeMax2_WW \
+    PRIVATE_BUILD_DESC="le_x2-user 6.0.1 FKXOSOP5801910311S eng.letv.20161031.012138.wechatpay release-keys"
 
+BUILD_FINGERPRINT := LeEco/LeMax2_WW/le_x2:6.0.1/FKXOSOP5801910311S/letv10310125:user/release-keys
 
 TARGET_VENDOR := leeco
 

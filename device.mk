@@ -47,9 +47,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/mixer_paths_tasha.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_tasha.xml \
     $(LOCAL_PATH)/audio/sound_trigger_mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths.xml
 
-# GoogleCamera
-PRODUCT_PACKAGES += \
-    GoogleCamera
+# Lights
+
 
 # Keylayouts
 PRODUCT_COPY_FILES += \

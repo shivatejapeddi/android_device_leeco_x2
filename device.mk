@@ -48,8 +48,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/sound_trigger_mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths.xml
 
 # GoogleCamera
-PRODUCT_PACKAGES += \
-    GoogleCamera
+#PRODUCT_PACKAGES += \
+#    GoogleCamera
 
 # Keylayouts
 PRODUCT_COPY_FILES += \

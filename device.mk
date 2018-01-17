@@ -56,14 +56,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/atmel_mxt_T100_touchscreen.kl:system/usr/keylayout/atmel_mxt_T100_touchscreen.kl \
     $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl
 
-# AR Core
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.config.calibration_cad=/system/etc/calibration_cad.xml
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/calibration_cad.xml:system/etc/calibration_cad.xml
-
-# Lights
+# Display xml
 PRODUCT_PACKAGES += \
     qdcm_calib_data_le_x2_mdss_dsi_sharp_qhd_dualdsi_cmd.xml \
     qdcm_calib_data_le_x2_mdss_dsi_truly_qhd_dualdsi_cmd_pvt.xml \

@@ -35,6 +35,8 @@ on init
     chown media media /sys/devices/virtual/typec/typec_device/supported_dev
     chown media media /sys/module/cyccg/parameters/typec_headset_with_analog
 
+    export LD_SHIM_LIBS "/system/vendor/lib/libmmcamera_ppeiscore.so|libshims_camera.so:/system/bin/mm-qcamera-daemon|libshims_qcamera-daemon.so"
+
 on boot
     # sleep_sign used by DebugUtils APP
     chown system system /sys/class/leds/blue/sleep_sign

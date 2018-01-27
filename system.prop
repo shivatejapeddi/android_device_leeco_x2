@@ -11,6 +11,24 @@ ro.config.le_hardware_version=HW_1.0.0
 ro.le.mtpname=Le Max2
 persist.sys.le_fast_chrg_enable=1
 
+persist.sys.media.use-awesome=1
+sys.keep_app_1=com.bel.android.dspmanager
+ro.audio.samplerate=48000
+ro.audio.pcm.samplerate=48000
+af.resampler.quality=255
+af.resample=52000
+persist.audio.vr.enable=false
+persist.audio.handset.mic=analog
+persist.audio.lowlatency.rec=false
+persist.audio.dualmic.config=false
+
+ro.audio.flinger_standbytime_ms=300
+
+# Camera
+persist.camera.stats.test=5
+
+qcom.hw.aac.encoder=true
+
 # Fingerprint
 persist.qfp=true
 persist.qfp.fd_enabled=1

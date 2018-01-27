@@ -26,6 +26,8 @@
 #
 
 on init
+    export LD_SHIM_LIBS "/system/vendor/lib/libmmcamera_ppeiscore.so|libshims_camera.so:/system/bin/mm-qcamera-daemon|libshims_qcamera-daemon.so"
+
     # to create a link for /data/fastplay
     symlink /data/fastplay /video
 
@@ -34,8 +36,6 @@ on init
     chown media media /sys/module/snd_soc_wcd_mbhc/parameters/headset_swap_backmic
     chown media media /sys/devices/virtual/typec/typec_device/supported_dev
     chown media media /sys/module/cyccg/parameters/typec_headset_with_analog
-
-    export LD_SHIM_LIBS "/system/vendor/lib/libmmcamera_ppeiscore.so|libshims_camera.so:/system/bin/mm-qcamera-daemon|libshims_qcamera-daemon.so"
 
 on boot
     # sleep_sign used by DebugUtils APP

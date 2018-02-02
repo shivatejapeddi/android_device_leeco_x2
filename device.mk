@@ -49,7 +49,7 @@ PRODUCT_COPY_FILES += \
 
 # GoogleCamera
 #PRODUCT_PACKAGES += \
-#    GoogleCamera
+  camera.msm8996
 
 # Keylayouts
 PRODUCT_COPY_FILES += \

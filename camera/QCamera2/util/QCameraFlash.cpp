@@ -240,7 +240,7 @@ int32_t QCameraFlash::initFlash(const int camera_id)
 int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode)
 {
     int32_t retVal = 0;
-    struct msm_flash_cfg_data_t cfg;
+    char buffer[16];
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
         LOGE("Invalid camera id: %d", camera_id);
@@ -254,19 +254,18 @@ int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode)
         LOGE("called for uninited flash: %d", camera_id);
         retVal = -EINVAL;
     }  else {
-        memset(&cfg, 0, sizeof(struct msm_flash_cfg_data_t));
-        for (int i = 0; i < MAX_LED_TRIGGERS; i++)
-            cfg.flash_current[i] = QCAMERA_TORCH_CURRENT_VALUE;
-        cfg.cfg_type = mode ? CFG_FLASH_LOW: CFG_FLASH_OFF;
+        if (mode) {
+            int bytes = snprintf(buffer, sizeof(buffer), "70");
+            retVal = write(m_flashFds[camera_id], buffer, (size_t)bytes);
+        } else {
+            int bytes = snprintf(buffer, sizeof(buffer), "0");
+            retVal = write(m_flashFds[camera_id], buffer, (size_t)bytes);
+        }
 
-        retVal = ioctl(m_flashFds[camera_id],
-                        VIDIOC_MSM_FLASH_CFG,
-                        &cfg);
         if (retVal < 0) {
             LOGE("Unable to change flash mode to %d for camera id: %d",
                      mode, camera_id);
-        } else
-        {
+        } else {
             m_flashOn[camera_id] = mode;
         }
     }

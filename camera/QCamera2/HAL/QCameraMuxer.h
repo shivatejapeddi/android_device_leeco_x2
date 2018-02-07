@@ -254,7 +254,8 @@ private:
     int setupLogicalCameras();
     int cameraDeviceOpen(int camera_id, struct hw_device_t **hw_device);
     int getNumberOfCameras();
-    int getCameraInfo(int camera_id, struct camera_info *info);
+    int getCameraInfo(int camera_id, struct camera_info *info,
+            cam_sync_type_t *p_cam_type);
     int32_t setCallbacks(const camera_module_callbacks_t *callbacks);
     int32_t setDataCallback(camera_data_callback data_cb);
     int32_t setMemoryCallback(camera_request_memory get_memory);

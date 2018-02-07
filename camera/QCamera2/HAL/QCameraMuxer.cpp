@@ -220,12 +220,13 @@ int QCameraMuxer::get_camera_info(int camera_id, struct camera_info *info)
 {
     int rc = NO_ERROR;
     LOGH("E");
+    cam_sync_type_t type;
     if ((camera_id < 0) || (camera_id >= gMuxer->getNumberOfCameras())) {
         LOGE("Camera id %d not found!", camera_id);
         return -ENODEV;
     }
     if(info) {
-        rc = gMuxer->getCameraInfo(camera_id, info);
+        rc = gMuxer->getCameraInfo(camera_id, info, &type);
     }
     LOGH("X, rc: %d", rc);
     return rc;
@@ -1904,9 +1905,8 @@ int QCameraMuxer::getNumberOfCameras()
  *              NO_ERROR  -- success
  *              none-zero failure code
  *==========================================================================*/
-
-int QCameraMuxer::getCameraInfo(int camera_id, struct camera_info *info)
-
+int QCameraMuxer::getCameraInfo(int camera_id,
+        struct camera_info *info, __unused cam_sync_type_t *p_cam_type)
 {
     int rc = NO_ERROR;
     LOGH("E, camera_id = %d", camera_id);

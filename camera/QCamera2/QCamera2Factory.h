@@ -1,7 +1,4 @@
 /* Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
-=======
-/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
->>>>>>> 3f3e593... msm8956-common: QCamera2: Add HAL support for flashlight
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -66,7 +63,7 @@ private:
                 struct hw_device_t **hw_device);
     static int openLegacy(
             int32_t cameraId, uint32_t halVersion, struct hw_device_t** hw_device);
-    static int setTorchMode(const char* camera_id, bool on);
+    int setTorchMode(const char* camera_id, bool on);
 public:
     static struct hw_module_methods_t mModuleMethods;
 

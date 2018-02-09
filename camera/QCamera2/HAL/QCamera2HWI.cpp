@@ -37,6 +37,7 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "util/QCameraFlash.h"
 #include "gralloc_priv.h"
 #include "native_handle.h"
 
@@ -1845,6 +1846,7 @@ int QCamera2HardwareInterface::openCamera(struct hw_device_t **hw_device)
  *==========================================================================*/
 int QCamera2HardwareInterface::openCamera()
 {
+    size_t i;
     int32_t rc = NO_ERROR;
     char value[PROPERTY_VALUE_MAX];
 

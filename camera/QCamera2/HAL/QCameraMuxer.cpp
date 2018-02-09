@@ -245,7 +245,7 @@ int QCameraMuxer::get_camera_info(int camera_id, struct camera_info *info)
  *              NO_ERROR  : success
  *              other: non-zero failure code
  *==========================================================================*/
-int QCameraMuxer::set_callbacks(__unused const camera_module_callbacks_t *callbacks)
+int QCameraMuxer::set_callbacks(const camera_module_callbacks_t *callbacks)
 {
     // Not implemented
     return NO_ERROR;
@@ -267,7 +267,7 @@ int QCameraMuxer::set_callbacks(__unused const camera_module_callbacks_t *callba
  *              other: non-zero failure code
  *==========================================================================*/
 int QCameraMuxer::camera_device_open(
-        __unused const struct hw_module_t *module, const char *id,
+        const struct hw_module_t *module, const char *id,
         struct hw_device_t **hw_device)
 {
     int rc = NO_ERROR;
@@ -298,8 +298,8 @@ int QCameraMuxer::camera_device_open(
  *              BAD_VALUE : Invalid Camera ID
  *              other: non-zero failure code
  *==========================================================================*/
-int QCameraMuxer::open_legacy(__unused const struct hw_module_t* module,
-        const char* id, __unused uint32_t halVersion, struct hw_device_t** hw_device)
+int QCameraMuxer::open_legacy(const struct hw_module_t* module,
+        const char* id, uint32_t halVersion, struct hw_device_t** hw_device)
 {
     int rc = NO_ERROR;
     LOGH("id= %d", atoi(id));
@@ -1906,11 +1906,11 @@ int QCameraMuxer::getNumberOfCameras()
  *              none-zero failure code
  *==========================================================================*/
 int QCameraMuxer::getCameraInfo(int camera_id,
-        struct camera_info *info, __unused cam_sync_type_t *p_cam_type)
+        struct camera_info *info, cam_sync_type_t *p_cam_type)
 {
     int rc = NO_ERROR;
     LOGH("E, camera_id = %d", camera_id);
-    //cam_sync_type_t cam_type = CAM_TYPE_MAIN;
+    cam_sync_type_t cam_type = CAM_TYPE_MAIN;
 
     if (!m_nLogicalCameras || (camera_id >= m_nLogicalCameras) ||
             !info || (camera_id < 0)) {

@@ -606,7 +606,6 @@ int QCamera2Factory::setTorchMode(const char* camera_id, bool on)
         }
     }
 
-    LOGD("X, retVal = %d", retVal);
     return retVal;
 }
 

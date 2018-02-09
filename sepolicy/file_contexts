@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # We have a couple of non-standard NV partitions
 /dev/block/bootdevice/by-name/oem_dycnvbk                       u:object_r:modem_efs_partition_device:s0
 /dev/block/bootdevice/by-name/oem_stanvbk                       u:object_r:modem_efs_partition_device:s0
@@ -33,3 +34,11 @@
 /system/bin/yep_qmi_server                                      u:object_r:yep_qmi_server_exec:s0
 
 /data/data/org.simalliance.openmobileapi.service/files(/.*)? u:object_r:dalvikcache_data_file:s0
+=======
+# Data files
+/data/fpc(/.*)?                       u:object_r:fpc_data_file:s0
+/data/misc/stargate(/.*)?             u:object_r:qfp-daemon_data_file:s0
+
+# Persist files
+/persist/qc_senseid(/.*)?             u:object_r:persist_qc_senseid_file:s0
+>>>>>>> 962be51... x2: sepolicy: re-add fingerprint policies

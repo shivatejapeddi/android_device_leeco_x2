@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 allow servicemanager ifaa_daemon:dir { r_dir_perms };
 allow servicemanager ifaa_daemon:file { r_file_perms };
 allow servicemanager ifaa_daemon:process  { getattr };
@@ -9,3 +10,8 @@ allow servicemanager goodix:process { getattr };
 allow servicemanager fidoca:dir { r_dir_perms };
 allow servicemanager fidoca:file { r_file_perms };
 allow servicemanager fidoca:process  { getattr };
+=======
+allow servicemanager qfp-daemon:dir search;
+allow servicemanager qfp-daemon:file { open read };
+allow servicemanager qfp-daemon:process getattr;
+>>>>>>> 962be51... x2: sepolicy: re-add fingerprint policies

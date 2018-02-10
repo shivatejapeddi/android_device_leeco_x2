@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -27,20 +27,23 @@
 *
 */
 
-// Camera dependencies
 #include "QCamera2Factory.h"
 #include "HAL3/QCamera3VendorTags.h"
 
 static hw_module_t camera_common = {
     tag: HARDWARE_MODULE_TAG,
+#ifdef FLASHLIGHT_CONTROL
     module_api_version: CAMERA_MODULE_API_VERSION_2_4,
+#else
+    module_api_version: CAMERA_MODULE_API_VERSION_2_3,
+#endif
     hal_api_version: HARDWARE_HAL_API_VERSION,
     id: CAMERA_HARDWARE_MODULE_ID,
     name: "QCamera Module",
     author: "Qualcomm Innovation Center Inc",
     methods: &qcamera::QCamera2Factory::mModuleMethods,
     dso: NULL,
-    reserved:  {0}
+    reserved:  {0},
 };
 
 camera_module_t HAL_MODULE_INFO_SYM = {
@@ -50,7 +53,13 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     set_callbacks: qcamera::QCamera2Factory::set_callbacks,
     get_vendor_tag_ops: qcamera::QCamera3VendorTags::get_vendor_tag_ops,
     open_legacy: qcamera::QCamera2Factory::open_legacy,
+#ifndef USE_L_MR1
+#ifdef FLASHLIGHT_CONTROL
     set_torch_mode: qcamera::QCamera2Factory::set_torch_mode,
+#else
+    set_torch_mode: NULL,
+#endif
     init : NULL,
+#endif
     reserved: {0}
 };

@@ -37,6 +37,7 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "util/QCameraFlash.h"
 #include "gralloc_priv.h"
 #include "native_handle.h"
 

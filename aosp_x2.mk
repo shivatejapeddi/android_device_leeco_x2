@@ -24,8 +24,7 @@ $(call inherit-product, device/leeco/x2/device.mk)
 TARGET_ARCH := arm64
 TARGET_DENSITY := xxxhdpi
 TARGET_BOOT_ANIMATION_RES := 1440
-TARGET_INCLUDE_ARCORE := true
-$(call inherit-product, vendor/aosp/config/common_full_phone.mk)
+$(call inherit-product, vendor/aosp/common.mk)
 
 # Device identifier. This must come after all inclusions.
 PRODUCT_NAME := aosp_x2
@@ -37,5 +36,3 @@ PRODUCT_GMS_CLIENTID_BASE := android-letv
 TARGET_VENDOR_PRODUCT_NAME := x2
 
 TARGET_VENDOR := leeco
-
-CUSTOM_BUILD_TYPE=OFFICIAL

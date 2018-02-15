@@ -2264,8 +2264,7 @@ int QCamera2HardwareInterface::closeCamera()
     }
 
     if (QCameraFlash::getInstance().releaseFlashFromCamera(mCameraId) != 0) {
-        CDBG("%s: Failed to release flash for camera id: %d",
-                __func__,		
+        LOGD("Failed to release flash for camera id: %d",
                 mCameraId);
     }
 
@@ -10326,3 +10325,4 @@ bool QCamera2HardwareInterface::isLowPowerMode()
 }
 
 }; // namespace qcamera
+

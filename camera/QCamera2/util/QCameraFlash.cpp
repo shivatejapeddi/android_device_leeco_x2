@@ -168,8 +168,7 @@ int32_t QCameraFlash::initFlash(const int camera_id)
                 camera_id);
         retVal = -EBUSY;
     } else if (m_flashFds[camera_id] >= 0) {
-        CDBG("%s: Flash is already inited for camera id: %d",
-                __func__,
+        LOGD("Flash is already inited for camera id: %d",
                 camera_id);
     } else {
         m_flashFds[camera_id] = open(FLASHLIGHT_CONTROL_PATH, O_RDWR | O_NONBLOCK);
@@ -203,7 +202,7 @@ int32_t QCameraFlash::initFlash(const int camera_id)
         }
     }
 
-    CDBG("%s: X, retVal = %d", __func__, retVal);
+    LOGD("%s: X, retVal = %d", __func__, retVal);
     return retVal;
 }
 
@@ -231,8 +230,7 @@ int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode)
         ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         retVal = -EINVAL;
     } else if (mode == m_flashOn[camera_id]) {
-        CDBG("%s: flash %d is already in requested state: %d",
-                __func__,
+        LOGD("Flash is already inited for camera id: %d",
                 camera_id,
                 mode);
         retVal = -EALREADY;
@@ -327,8 +325,7 @@ int32_t QCameraFlash::reserveFlashForCamera(const int camera_id)
         ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         retVal = -EINVAL;
     } else if (m_cameraOpen[camera_id]) {
-        CDBG("%s: Flash already reserved for camera id: %d",
-                __func__,
+        LOGD("Flash is already inited for camera id: %d",
                 camera_id);
     } else {
         if (m_flashOn[camera_id]) {
@@ -338,7 +335,7 @@ int32_t QCameraFlash::reserveFlashForCamera(const int camera_id)
         m_cameraOpen[camera_id] = true;
 
         if (camera_id != FLASHLIGHT_CONTROL_ID) {
-            CDBG("%s: Suppressing callback "
+            LOGD("%s: Suppressing callback "
                     "because no flash exists for camera id: %d",
                     __func__,
                     camera_id);
@@ -381,14 +378,13 @@ int32_t QCameraFlash::releaseFlashFromCamera(const int camera_id)
         ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         retVal = -EINVAL;
     } else if (!m_cameraOpen[camera_id]) {
-        CDBG("%s: Flash not reserved for camera id: %d",
-                __func__,
+        LOGD("Flash is already inited for camera id: %d",
                 camera_id);
     } else {
         m_cameraOpen[camera_id] = false;
 
         if (camera_id != FLASHLIGHT_CONTROL_ID) {
-            CDBG("%s: Suppressing callback "
+            LOGD("%s: Suppressing callback "
                     "because no flash exists for camera id: %d",
                     __func__,
                     camera_id);

@@ -840,8 +840,7 @@ int QCamera3HardwareInterface::closeCamera()
         mExifParams.debug_params = NULL;
     }
     if (QCameraFlash::getInstance().releaseFlashFromCamera(mCameraId) != 0) {
-        CDBG("%s: Failed to release flash for camera id: %d",
-                __func__,		
+        LOGW("Failed to release flash for camera id: %d",
                 mCameraId);
     }
     mState = CLOSED;
@@ -10558,3 +10557,4 @@ const cam_related_system_calibration_data_t *QCamera3HardwareInterface::getRelat
         &(gCamCapability[mCameraId]->related_cam_calibration);
 }
 }; //end namespace qcamera
+

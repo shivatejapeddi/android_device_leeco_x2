@@ -26,16 +26,20 @@
 * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 */
+#define LOG_TAG "QCameraFlash"
 
 #include <stdio.h>
 #include <fcntl.h>
 #include <linux/media.h>
 #include <media/msmb_camera.h>
 #include <media/msm_cam_sensor.h>
-#include <utils/Log.h>
 
 #include "HAL3/QCamera3HWI.h"
 #include "QCameraFlash.h"
+
+extern "C" {
+#include "mm_camera_dbg.h"
+}
 
 #define STRING_LENGTH_OF_64_BIT_NUMBER 21
 
@@ -57,6 +61,8 @@
 #ifndef FLASHLIGHT_CURRENT_VALUE2
     #define FLASHLIGHT_CURRENT_VALUE2 QCAMERA_TORCH_CURRENT_VALUE
 #endif
+
+volatile uint32_t gCamHal3LogLevel = 4;
 
 namespace qcamera {
 

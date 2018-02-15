@@ -697,8 +697,9 @@ int QCamera3HardwareInterface::openCamera()
 
     rc = QCameraFlash::getInstance().reserveFlashForCamera(mCameraId);
     if (rc < 0) {
-        LOGE("Failed to reserve flash for camera id: %d",
-                mCameraId);
+        ALOGE("%s: Failed to reserve flash for camera id: %d",
+               __func__,		
+               mCameraId);
         return UNKNOWN_ERROR;
     }
 
@@ -839,7 +840,8 @@ int QCamera3HardwareInterface::closeCamera()
         mExifParams.debug_params = NULL;
     }
     if (QCameraFlash::getInstance().releaseFlashFromCamera(mCameraId) != 0) {
-        LOGW("Failed to release flash for camera id: %d",
+        CDBG("%s: Failed to release flash for camera id: %d",
+                __func__,		
                 mCameraId);
     }
     mState = CLOSED;

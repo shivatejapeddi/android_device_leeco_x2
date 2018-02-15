@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -27,24 +27,36 @@
 *
 */
 
-#define LOG_TAG "QCameraFlash"
-
-// System dependencies
 #include <stdio.h>
 #include <fcntl.h>
+#include <linux/media.h>
+#include <media/msmb_camera.h>
 #include <media/msm_cam_sensor.h>
+#include <utils/Log.h>
 
-// Camera dependencies
 #include "HAL3/QCamera3HWI.h"
 #include "QCameraFlash.h"
 
-extern "C" {
-#include "mm_camera_dbg.h"
-}
-
 #define STRING_LENGTH_OF_64_BIT_NUMBER 21
 
-volatile uint32_t gCamHal3LogLevel = 4;
+#ifndef FLASHLIGHT_CONTROL_ID
+    #define FLASHLIGHT_CONTROL_ID -1
+#endif
+
+#ifndef FLASHLIGHT_CONTROL_PATH
+    #define FLASHLIGHT_CONTROL_PATH ""
+    #define FLASHLIGHT_CONTROL_ID -1
+#endif
+
+#ifndef FLASHLIGHT_CURRENT_VALUE0
+    #define FLASHLIGHT_CURRENT_VALUE0 QCAMERA_TORCH_CURRENT_VALUE
+#endif
+#ifndef FLASHLIGHT_CURRENT_VALUE1
+    #define FLASHLIGHT_CURRENT_VALUE1 QCAMERA_TORCH_CURRENT_VALUE
+#endif
+#ifndef FLASHLIGHT_CURRENT_VALUE2
+    #define FLASHLIGHT_CURRENT_VALUE2 QCAMERA_TORCH_CURRENT_VALUE
+#endif
 
 namespace qcamera {
 
@@ -93,12 +105,11 @@ QCameraFlash::QCameraFlash() : m_callbacks(NULL)
 QCameraFlash::~QCameraFlash()
 {
     for (int pos = 0; pos < MM_CAMERA_MAX_NUM_SENSORS; pos++) {
-        if (m_flashFds[pos] >= 0)
-            {
-                setFlashMode(pos, false);
-                close(m_flashFds[pos]);
-                m_flashFds[pos] = -1;
-            }
+        if (m_flashFds[pos] >= 0) {
+            setFlashMode(pos, false);
+            close(m_flashFds[pos]);
+            m_flashFds[pos] = -1;
+        }
     }
 }
 
@@ -140,38 +151,59 @@ int32_t QCameraFlash::registerCallbacks(
 int32_t QCameraFlash::initFlash(const int camera_id)
 {
     int32_t retVal = 0;
-    char flashPath[QCAMERA_MAX_FILEPATH_LENGTH] = "/sys/class/leds/torch-light0/brightness";
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
-        LOGE("Invalid camera id: %d", camera_id);
+        ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         return -EINVAL;
     }
 
-    if (camera_id != 0) {
-        LOGE("No flash available for camera id: %d",
+    if (camera_id != FLASHLIGHT_CONTROL_ID) {
+        ALOGE("%s: No flash available for camera id: %d",
+                __func__,
                 camera_id);
         retVal = -EINVAL;
     } else if (m_cameraOpen[camera_id]) {
-        LOGE("Camera in use for camera id: %d",
+        ALOGE("%s: Camera in use for camera id: %d",
+                __func__,
                 camera_id);
         retVal = -EBUSY;
     } else if (m_flashFds[camera_id] >= 0) {
-        LOGD("Flash is already inited for camera id: %d",
+        CDBG("%s: Flash is already inited for camera id: %d",
+                __func__,
                 camera_id);
     } else {
-        m_flashFds[camera_id] = open(flashPath, O_RDWR);
+        m_flashFds[camera_id] = open(FLASHLIGHT_CONTROL_PATH, O_RDWR | O_NONBLOCK);
 
         if (m_flashFds[camera_id] < 0) {
-            LOGE("Unable to open node '%s'",
-                    flashPath);
+            ALOGE("%s: Unable to open node '%s'",
+                    __func__,
+                    FLASHLIGHT_CONTROL_PATH);
             retVal = -EBUSY;
-        }
+        } else {
+            struct msm_flash_cfg_data_t cfg;
+            struct msm_flash_init_info_t init_info;
+            memset(&cfg, 0, sizeof(struct msm_flash_cfg_data_t));
+            memset(&init_info, 0, sizeof(struct msm_flash_init_info_t));
+            init_info.flash_driver_type = FLASH_DRIVER_DEFAULT;
+            cfg.cfg.flash_init_info = &init_info;
+            cfg.cfg_type = CFG_FLASH_INIT;
+            retVal = ioctl(m_flashFds[camera_id],
+                    VIDIOC_MSM_FLASH_CFG,
+                    &cfg);
+            if (retVal < 0) {
+                ALOGE("%s: Unable to init flash for camera id: %d",
+                        __func__,
+                        camera_id);
+                close(m_flashFds[camera_id]);
+                m_flashFds[camera_id] = -1;
+            }
 
-        /* wait for PMIC to init */
-        usleep(5000);
+            /* wait for PMIC to init */
+            usleep(5000);
+        }
     }
 
-    LOGD("X, retVal = %d", retVal);
+    CDBG("%s: X, retVal = %d", __func__, retVal);
     return retVal;
 }
 
@@ -194,34 +226,36 @@ int32_t QCameraFlash::initFlash(const int camera_id)
 int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode)
 {
     int32_t retVal = 0;
-    char buffer[16];
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
-        LOGE("Invalid camera id: %d", camera_id);
+        ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         retVal = -EINVAL;
     } else if (mode == m_flashOn[camera_id]) {
-        LOGD("flash %d is already in requested state: %d",
+        CDBG("%s: flash %d is already in requested state: %d",
+                __func__,
                 camera_id,
                 mode);
         retVal = -EALREADY;
     } else if (m_flashFds[camera_id] < 0) {
-        LOGE("called for uninited flash: %d", camera_id);
+        ALOGE("%s: called for uninited flash: %d", __func__, camera_id);
         retVal = -EINVAL;
     }  else {
-        if (mode) {
-            int bytes = snprintf(buffer, sizeof(buffer), "70");
-            retVal = write(m_flashFds[camera_id], buffer, (size_t)bytes);
-        } else {
-            int bytes = snprintf(buffer, sizeof(buffer), "0");
-            retVal = write(m_flashFds[camera_id], buffer, (size_t)bytes);
-        }
+        struct msm_flash_cfg_data_t cfg;
 
-        if (retVal < 0) {
-            LOGE("Unable to change flash mode to %d for camera id: %d",
-                     mode, camera_id);
-        } else {
+        memset(&cfg, 0, sizeof(struct msm_flash_cfg_data_t));
+        cfg.flash_current[0] = FLASHLIGHT_CURRENT_VALUE0;
+        cfg.flash_current[1] = FLASHLIGHT_CURRENT_VALUE1;
+        cfg.flash_current[2] = FLASHLIGHT_CURRENT_VALUE2;
+        cfg.cfg_type = mode ? CFG_FLASH_LOW: CFG_FLASH_OFF;
+
+        retVal = ioctl(m_flashFds[camera_id],
+                        VIDIOC_MSM_FLASH_CFG,
+                        &cfg);
+        if (retVal < 0)
+            ALOGE("%s: Unable to change flash mode to %d for camera id: %d",
+                    __func__, mode, camera_id);
+        else
             m_flashOn[camera_id] = mode;
-        }
     }
     return retVal;
 }
@@ -245,13 +279,25 @@ int32_t QCameraFlash::deinitFlash(const int camera_id)
     int32_t retVal = 0;
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
-        LOGE("Invalid camera id: %d", camera_id);
+        ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         retVal = -EINVAL;
     } else if (m_flashFds[camera_id] < 0) {
-        LOGE("called deinitFlash for uninited flash");
+        ALOGE("%s: called deinitFlash for uninited flash", __func__);
         retVal = -EINVAL;
     } else {
         setFlashMode(camera_id, false);
+
+        struct msm_flash_cfg_data_t cfg;
+        cfg.cfg_type = CFG_FLASH_RELEASE;
+        retVal = ioctl(m_flashFds[camera_id],
+                VIDIOC_MSM_FLASH_CFG,
+                &cfg);
+        if (retVal < 0) {
+            ALOGE("%s: Failed to release flash for camera id: %d",
+                    __func__,
+                    camera_id);
+        }
+
         close(m_flashFds[camera_id]);
         m_flashFds[camera_id] = -1;
     }
@@ -278,10 +324,11 @@ int32_t QCameraFlash::reserveFlashForCamera(const int camera_id)
     int32_t retVal = 0;
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
-        LOGE("Invalid camera id: %d", camera_id);
+        ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         retVal = -EINVAL;
     } else if (m_cameraOpen[camera_id]) {
-        LOGD("Flash already reserved for camera id: %d",
+        CDBG("%s: Flash already reserved for camera id: %d",
+                __func__,
                 camera_id);
     } else {
         if (m_flashOn[camera_id]) {
@@ -290,14 +337,15 @@ int32_t QCameraFlash::reserveFlashForCamera(const int camera_id)
         }
         m_cameraOpen[camera_id] = true;
 
-        if (m_callbacks == NULL ||
-                m_callbacks->torch_mode_status_change == NULL) {
-            LOGE("Callback is not defined!");
-            retVal = -ENOSYS;
-        } else if (camera_id != 0) {
-            LOGD("Suppressing callback "
+        if (camera_id != FLASHLIGHT_CONTROL_ID) {
+            CDBG("%s: Suppressing callback "
                     "because no flash exists for camera id: %d",
+                    __func__,
                     camera_id);
+        } else if (m_callbacks == NULL ||
+                   m_callbacks->torch_mode_status_change == NULL) {
+            ALOGE("%s: Callback is not defined!", __func__);
+            retVal = -ENOSYS;
         } else {
             char cameraIdStr[STRING_LENGTH_OF_64_BIT_NUMBER];
             snprintf(cameraIdStr, STRING_LENGTH_OF_64_BIT_NUMBER,
@@ -330,22 +378,24 @@ int32_t QCameraFlash::releaseFlashFromCamera(const int camera_id)
     int32_t retVal = 0;
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
-        LOGE("Invalid camera id: %d", camera_id);
+        ALOGE("%s: Invalid camera id: %d", __func__, camera_id);
         retVal = -EINVAL;
     } else if (!m_cameraOpen[camera_id]) {
-        LOGD("Flash not reserved for camera id: %d",
+        CDBG("%s: Flash not reserved for camera id: %d",
+                __func__,
                 camera_id);
     } else {
         m_cameraOpen[camera_id] = false;
 
-        if (m_callbacks == NULL ||
-                m_callbacks->torch_mode_status_change == NULL) {
-            LOGE("Callback is not defined!");
-            retVal = -ENOSYS;
-        } else if (camera_id != 0) {
-            LOGD("Suppressing callback "
+        if (camera_id != FLASHLIGHT_CONTROL_ID) {
+            CDBG("%s: Suppressing callback "
                     "because no flash exists for camera id: %d",
+                    __func__,
                     camera_id);
+        } else if (m_callbacks == NULL ||
+                   m_callbacks->torch_mode_status_change == NULL) {
+            ALOGE("%s: Callback is not defined!", __func__);
+            retVal = -ENOSYS;
         } else {
             char cameraIdStr[STRING_LENGTH_OF_64_BIT_NUMBER];
             snprintf(cameraIdStr, STRING_LENGTH_OF_64_BIT_NUMBER,

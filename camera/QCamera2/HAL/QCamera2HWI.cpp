@@ -1856,8 +1856,9 @@ int QCamera2HardwareInterface::openCamera()
 
     rc = QCameraFlash::getInstance().reserveFlashForCamera(mCameraId);
     if (rc < 0) {
-        LOGE("Failed to reserve flash for camera id: %d",
-                mCameraId);
+        ALOGE("%s: Failed to reserve flash for camera id: %d",
+                __func__,
+           		mCameraId);
         return UNKNOWN_ERROR;
     }
 
@@ -2263,7 +2264,8 @@ int QCamera2HardwareInterface::closeCamera()
     }
 
     if (QCameraFlash::getInstance().releaseFlashFromCamera(mCameraId) != 0) {
-        LOGD("Failed to release flash for camera id: %d",
+        CDBG("%s: Failed to release flash for camera id: %d",
+                __func__,		
                 mCameraId);
     }
 

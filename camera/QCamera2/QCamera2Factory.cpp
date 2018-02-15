@@ -352,15 +352,12 @@ int QCamera2Factory::getCameraInfo(int camera_id, struct camera_info *info)
         return NO_INIT;
     }
 
-    LOGI("Camera id %d API version %d",
-            camera_id, mHalDescriptors[camera_id].device_version);
-
     // Need ANDROID_FLASH_INFO_AVAILABLE property for flashlight widget to
     // work and so get the static data regardless of HAL version
     rc = QCamera3HardwareInterface::getCamInfo(
             mHalDescriptors[camera_id].cameraId, info);
     if (mHalDescriptors[camera_id].device_version ==
-            CAMERA_DEVICE_API_VERSION_1_0) {
+        	CAMERA_DEVICE_API_VERSION_1_0) {
         info->device_version = CAMERA_DEVICE_API_VERSION_1_0;
     }
     return rc;
@@ -386,7 +383,7 @@ int QCamera2Factory::setCallbacks(const camera_module_callbacks_t *callbacks)
 
     rc = QCameraFlash::getInstance().registerCallbacks(callbacks);
     if (rc != 0) {
-        LOGE("Failed to register callbacks with flash module!");
+        ALOGE("%s : Failed to register callbacks with flash module!", __func__);
     }
 
     return rc;

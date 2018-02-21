@@ -34,10 +34,6 @@
 #define __CAMLIST_H
 
 #include <stddef.h>
-<<<<<<< HEAD
-=======
-// System dependency
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include <stdlib.h>
 #include <string.h>
 

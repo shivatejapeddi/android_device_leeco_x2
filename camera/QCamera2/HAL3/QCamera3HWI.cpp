@@ -36,16 +36,11 @@
 #include <camera/CameraMetadata.h>
 #include <stdio.h>
 #include <stdlib.h>
-<<<<<<< HEAD
 #include <fcntl.h>
 #include <stdint.h>
 #include <qdMetaData.h>
 #include <utils/Log.h>
 #include <utils/Errors.h>
-=======
-#include "utils/Timers.h"
-#include "sys/ioctl.h"
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include <sync/sync.h>
 #include <gralloc_priv.h>
 #include "util/QCameraFlash.h"

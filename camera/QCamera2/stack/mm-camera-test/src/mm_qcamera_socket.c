@@ -26,16 +26,6 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-<<<<<<< HEAD
-=======
-
-// System dependencies
-#include <errno.h>
-#include <sys/socket.h>
-#include <fcntl.h>
-
-// Camera dependencies
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include "mm_qcamera_socket.h"
 #include "mm_qcamera_commands.h"
 #include "mm_qcamera_dbg.h"

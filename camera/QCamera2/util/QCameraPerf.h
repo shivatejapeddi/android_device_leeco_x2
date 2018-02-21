@@ -32,14 +32,8 @@
 
 #include <dlfcn.h>
 #include <utils/Mutex.h>
-<<<<<<< HEAD
 #include <utils/List.h>
 #include <hardware/power.h>
-=======
-
-// Camera dependencies
-#include "hardware/power.h"
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 
 typedef enum {
     ALL_CORES_ONLINE = 0x7FE,

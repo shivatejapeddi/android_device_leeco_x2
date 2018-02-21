@@ -31,7 +31,6 @@
 //#define LOG_NDEBUG 0
 #include <fcntl.h>
 #include <stdlib.h>
-<<<<<<< HEAD
 #include <cstdlib>
 #include <stdio.h>
 #include <string.h>
@@ -42,12 +41,6 @@
 #include <utils/Log.h>
 #include <utils/Errors.h>
 #include <cutils/properties.h>
-=======
-#include "hardware/gralloc.h"
-#include <utils/Timers.h>
-
-// Camera dependencies
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include "QCamera3Channel.h"
 #include "QCamera3HWI.h"
 

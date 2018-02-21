@@ -10,6 +10,7 @@ LOCAL_SRC_FILES := \
         util/QCameraBufferMaps.cpp \
         util/QCameraFlash.cpp \
         util/QCameraPerf.cpp \
+        util/QCameraDisplay.cpp \
         QCamera2Hal.cpp \
         QCamera2Factory.cpp
 
@@ -24,20 +25,12 @@ LOCAL_SRC_FILES += \
         HAL3/QCamera3CropRegionMapper.cpp \
         HAL3/QCamera3StreamMem.cpp
 
-LOCAL_CFLAGS := -Wall -Wextra -Werror
-
 #HAL 1.0 source
-
-ifeq ($(TARGET_SUPPORT_HAL1),false)
-LOCAL_CFLAGS += -DQCAMERA_HAL3_SUPPORT
-else
-LOCAL_CFLAGS += -DQCAMERA_HAL1_SUPPORT
 LOCAL_SRC_FILES += \
         HAL/QCamera2HWI.cpp \
         HAL/QCameraMuxer.cpp \
         HAL/QCameraMem.cpp \
         HAL/QCameraStateMachine.cpp \
-        util/QCameraDisplay.cpp \
         HAL/QCameraChannel.cpp \
         HAL/QCameraStream.cpp \
         HAL/QCameraPostProc.cpp \
@@ -45,7 +38,8 @@ LOCAL_SRC_FILES += \
         HAL/QCameraParametersIntf.cpp \
         HAL/QCameraParameters.cpp \
         HAL/QCameraThermalAdapter.cpp
-endif
+
+LOCAL_CFLAGS := -Wall -Wextra -Werror
 
 LOCAL_CFLAGS += -DHAS_MULTIMEDIA_HINTS -D_ANDROID_
 
@@ -53,7 +47,6 @@ ifeq ($(TARGET_USES_AOSP),true)
 LOCAL_CFLAGS += -DVANILLA_HAL
 endif
 
-LOCAL_CFLAGS += -std=c++11 -std=gnu++0x
 #HAL 1.0 Flags
 LOCAL_CFLAGS += -DDEFAULT_DENOISE_MODE_ON -DHAL3 -DQCAMERA_REDEFINE_LOG
 

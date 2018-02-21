@@ -30,23 +30,7 @@
 #ifndef __QCAMERA3_CHANNEL_H__
 #define __QCAMERA3_CHANNEL_H__
 
-<<<<<<< HEAD
 #include <hardware/camera3.h>
-=======
-// System dependencies
-#include <utils/List.h>
-#include <utils/Mutex.h>
-#include <utils/Vector.h>
-#include "gralloc_priv.h"
-
-// Camera dependencies
-#include "cam_intf.h"
-#include "cam_types.h"
-#include "hardware/camera3.h"
-#include "QCamera3HALHeader.h"
-#include "QCamera3Mem.h"
-#include "QCamera3PostProc.h"
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include "QCamera3Stream.h"
 #include "QCamera3Mem.h"
 #include "QCamera3StreamMem.h"

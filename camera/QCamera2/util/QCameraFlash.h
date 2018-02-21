@@ -30,12 +30,7 @@
 #ifndef __QCAMERA_FLASH_H__
 #define __QCAMERA_FLASH_H__
 
-<<<<<<< HEAD
 #include <hardware/camera_common.h>
-=======
-// Camera dependencies
-#include "hardware/camera_common.h"
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 
 extern "C" {
 #include <mm_camera_interface.h>

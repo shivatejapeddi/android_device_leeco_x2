@@ -30,14 +30,9 @@
 #ifndef __QCAMERA2FACTORY_H__
 #define __QCAMERA2FACTORY_H__
 
-<<<<<<< HEAD
 #include <hardware/camera.h>
 #include <system/camera.h>
 #include <hardware/camera3.h>
-=======
-// Camera dependencies
-#include "hardware/camera_common.h"
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 
 namespace qcamera {
 

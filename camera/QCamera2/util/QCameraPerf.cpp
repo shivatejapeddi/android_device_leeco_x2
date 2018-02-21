@@ -31,13 +31,7 @@
 
 #include <cutils/properties.h>
 #include <stdlib.h>
-<<<<<<< HEAD
 #include <utils/Log.h>
-=======
-#include <dlfcn.h>
-#include <utils/Timers.h>
-// Camera dependencies
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include "QCameraPerf.h"
 #include "QCameraTrace.h"
 

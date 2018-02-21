@@ -29,18 +29,10 @@
 #ifndef __QCAMERA_HALHEADER_H__
 #define __QCAMERA_HALHEADER_H__
 
-<<<<<<< HEAD
 extern "C" {
 #include <mm_camera_interface.h>
 #include <mm_jpeg_interface.h>
 }
-=======
-// System dependencies
-#include "hardware/gralloc.h"
-
-// Camera dependencies
-#include "cam_types.h"
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 
 using namespace android;
 

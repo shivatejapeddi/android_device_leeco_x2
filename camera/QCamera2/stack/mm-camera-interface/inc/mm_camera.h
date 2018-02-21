@@ -32,12 +32,6 @@
 
 #include <cam_semaphore.h>
 
-<<<<<<< HEAD
-=======
-// Camera dependencies
-#include "hardware/camera_common.h"
-#include "cam_semaphore.h"
->>>>>>> 68478ce... msm8996-common: QCamera2:HAL : HAL1 Removal during Compile time
 #include "mm_camera_interface.h"
 #include <hardware/camera.h>
 #include <utils/Timers.h>

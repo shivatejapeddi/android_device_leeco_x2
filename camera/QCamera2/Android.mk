@@ -24,7 +24,15 @@ LOCAL_SRC_FILES += \
         HAL3/QCamera3CropRegionMapper.cpp \
         HAL3/QCamera3StreamMem.cpp
 
+LOCAL_CFLAGS := -Wall -Wextra -Werror
+
 #HAL 1.0 source
+
+ifeq ($(TARGET_SUPPORT_HAL1),false)
+LOCAL_CFLAGS += -DQCAMERA_HAL3_SUPPORT
+else
+LOCAL_CFLAGS += -DQCAMERA_HAL1_SUPPORT
+
 LOCAL_SRC_FILES += \
         HAL/QCamera2HWI.cpp \
         HAL/QCameraMuxer.cpp \
@@ -36,8 +44,7 @@ LOCAL_SRC_FILES += \
         HAL/QCamera2HWICallbacks.cpp \
         HAL/QCameraParameters.cpp \
         HAL/QCameraThermalAdapter.cpp
-
-LOCAL_CFLAGS := -Wall -Wextra -Werror
+endif
 
 LOCAL_CFLAGS += -DHAS_MULTIMEDIA_HINTS
 
@@ -45,6 +52,7 @@ ifeq ($(TARGET_USES_AOSP),true)
 LOCAL_CFLAGS += -DVANILLA_HAL
 endif
 
+LOCAL_CFLAGS += -std=c++11 -std=gnu++0x
 #HAL 1.0 Flags
 LOCAL_CFLAGS += -DDEFAULT_DENOISE_MODE_ON -DHAL3
 

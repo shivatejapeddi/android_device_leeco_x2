@@ -438,6 +438,9 @@ vendor/lib/libmmcamera_isp_sub_module.so
 
 # Display calibration
 vendor/lib/libdisp-aba.so
+-etc/qdcm_calib_data_le_x2_mdss_dsi_sharp_qhd_dualdsi_cmd.xml
+-etc/qdcm_calib_data_le_x2_mdss_dsi_truly_qhd_dualdsi_cmd_pvt.xml
+-etc/qdcm_calib_data_mdss_dsi_sharp_qhd_dualdsi_cmd.xml
 
 #DRM
 etc/firmware/widevine.b00

@@ -47,15 +47,3 @@ persist.loc.nlp_name=com.qualcomm.location
 
 # Screen Density
 ro.sf.lcd_density=560
-
-# Build.prop tweaks
-setprop media.stagefright.enable-player true
-setprop media.stagefright.enable-scan true
-setprop media.stagefright.enable-http true
-setprop media.stagefright.enable-record false
-setprop media.stagefright.enable-aac true
-setprop media.stagefright.enable-qcp true
-setprop persist.camera.capture.animate 1
-setprop persist.camera.tintless disable
-setprop persist.camera.qcom.misc 1
-setprop persist.hwc.dynamicfps 60

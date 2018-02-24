@@ -3640,7 +3640,6 @@ int QCamera3HardwareInterface::processCaptureRequest(
             goto error_exit;
         }
 
-/*
         //update settings from app here
         if (meta.exists(QCAMERA3_DUALCAM_LINK_ENABLE)) {
             mIsDeviceLinked = meta.find(QCAMERA3_DUALCAM_LINK_ENABLE).data.u8[0];
@@ -3697,7 +3696,6 @@ int QCamera3HardwareInterface::processCaptureRequest(
                 goto error_exit;
             }
         }
-*/
 
         //Then start them.
         LOGH("Start META Channel");

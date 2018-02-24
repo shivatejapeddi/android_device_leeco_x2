@@ -21,5 +21,5 @@ set -e
 export DEVICE=x2
 export VENDOR=leeco
 
-# Call the common extractor
+# Run the common extractor
 ../msm8996-common/setup-makefiles.sh $@

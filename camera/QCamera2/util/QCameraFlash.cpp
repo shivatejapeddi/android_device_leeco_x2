@@ -44,9 +44,6 @@ extern "C" {
 
 #define STRING_LENGTH_OF_64_BIT_NUMBER 21
 
-#define FLASH_PATH_FIRST "/sys/class/leds/torch-light0/brightness"
-#define FLASH_PATH_SECOND "/sys/class/leds/torch-light1/brightness"
-
 volatile uint32_t gCamHal3LogLevel = 4;
 
 namespace qcamera {
@@ -80,8 +77,7 @@ QCameraFlash::QCameraFlash() : m_callbacks(NULL)
     memset(&m_flashOn, 0, sizeof(m_flashOn));
     memset(&m_cameraOpen, 0, sizeof(m_cameraOpen));
     for (int pos = 0; pos < MM_CAMERA_MAX_NUM_SENSORS; pos++) {
-        m_flashFds[pos].first = -1;
-        m_flashFds[pos].second = -1;
+        m_flashFds[pos] = -1;
     }
 }
 
@@ -97,18 +93,12 @@ QCameraFlash::QCameraFlash() : m_callbacks(NULL)
 QCameraFlash::~QCameraFlash()
 {
     for (int pos = 0; pos < MM_CAMERA_MAX_NUM_SENSORS; pos++) {
-        if (m_flashFds[pos].first >= 0)
-        {
-            setFlashMode(pos, false, LED_FIRST);
-            close(m_flashFds[pos].first);
-            m_flashFds[pos].first = -1;
-        }
-        if (m_flashFds[pos].second >= 0)
-        {
-            setFlashMode(pos, false, LED_SECOND);
-            close(m_flashFds[pos].second);
-            m_flashFds[pos].second = -1;
-        }
+        if (m_flashFds[pos] >= 0)
+            {
+                setFlashMode(pos, false);
+                close(m_flashFds[pos]);
+                m_flashFds[pos] = -1;
+            }
     }
 }
 
@@ -150,6 +140,7 @@ int32_t QCameraFlash::registerCallbacks(
 int32_t QCameraFlash::initFlash(const int camera_id)
 {
     int32_t retVal = 0;
+    char flashPath[QCAMERA_MAX_FILEPATH_LENGTH] = "/sys/class/leds/torch-light0/brightness";
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
         LOGE("Invalid camera id: %d", camera_id);
@@ -164,38 +155,21 @@ int32_t QCameraFlash::initFlash(const int camera_id)
         LOGE("Camera in use for camera id: %d",
                 camera_id);
         retVal = -EBUSY;
-    }
-
-    if (retVal < 0) {
-        return retVal;
-    }
-
-    if (m_flashFds[camera_id].first >= 0) {
-        LOGD("First flash led is already inited for camera id: %d",
+    } else if (m_flashFds[camera_id] >= 0) {
+        LOGD("Flash is already inited for camera id: %d",
                 camera_id);
     } else {
-        m_flashFds[camera_id].first = open(FLASH_PATH_FIRST, O_RDWR);
-        if (m_flashFds[camera_id].first < 0) {
+        m_flashFds[camera_id] = open(flashPath, O_RDWR);
+
+        if (m_flashFds[camera_id] < 0) {
             LOGE("Unable to open node '%s'",
-                    FLASH_PATH_FIRST);
+                    flashPath);
             retVal = -EBUSY;
         }
-    }
 
-    if (m_flashFds[camera_id].second >= 0) {
-        LOGD("Second flash led is already inited for camera id: %d",
-                camera_id);
-    } else {
-        m_flashFds[camera_id].second = open(FLASH_PATH_SECOND, O_RDWR);
-        if (m_flashFds[camera_id].second < 0) {
-            LOGE("Unable to open node '%s'",
-                    FLASH_PATH_SECOND);
-            retVal = -EBUSY;
-        }
+        /* wait for PMIC to init */
+        usleep(5000);
     }
-
-    /* wait for PMIC to init */
-    usleep(5000);
 
     LOGD("X, retVal = %d", retVal);
     return retVal;
@@ -211,14 +185,13 @@ int32_t QCameraFlash::initFlash(const int camera_id)
  * PARAMETERS :
  *   @camera_id  : Camera id of the flash
  *   @on         : Whether to turn flash on (true) or off (false)
- *   @flashLed   : LED identyfier
  *
  * RETURN     :
  *   0        : success
  *   -EINVAL  : No camera present at camera_id, or it is not inited.
  *   -EALREADY: Flash is already in requested state
  *==========================================================================*/
-int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode, flashLed led)
+int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode)
 {
     int32_t retVal = 0;
     char buffer[16];
@@ -231,51 +204,23 @@ int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode, flashLe
                 camera_id,
                 mode);
         retVal = -EALREADY;
-    }
-
-    if (retVal < 0) {
-        return retVal;
-    }
-
-    if (led == LED_FIRST || led == LED_DUAL) {
-        if (m_flashFds[camera_id].first < 0) {
-            LOGE("called for uninited first flash: %d", camera_id);
-            retVal = -EINVAL;
+    } else if (m_flashFds[camera_id] < 0) {
+        LOGE("called for uninited flash: %d", camera_id);
+        retVal = -EINVAL;
+    }  else {
+        if (mode) {
+            int bytes = snprintf(buffer, sizeof(buffer), "70");
+            retVal = write(m_flashFds[camera_id], buffer, (size_t)bytes);
         } else {
-            if (mode) {
-                int bytes = snprintf(buffer, sizeof(buffer), "70");
-                retVal = write(m_flashFds[camera_id].first, buffer, (size_t)bytes);
-            } else {
-                int bytes = snprintf(buffer, sizeof(buffer), "0");
-                retVal = write(m_flashFds[camera_id].first, buffer, (size_t)bytes);
-            }
-
-            if (retVal < 0) {
-                LOGE("Unable to change first flash mode to %d for camera id: %d",
-                         mode, camera_id);
-            } else {
-                m_flashOn[camera_id] = mode;
-            }
+            int bytes = snprintf(buffer, sizeof(buffer), "0");
+            retVal = write(m_flashFds[camera_id], buffer, (size_t)bytes);
         }
-    }
 
-    if (led == LED_SECOND || led == LED_DUAL) {
-        if (m_flashFds[camera_id].second < 0) {
-            LOGE("called for uninited second flash: %d", camera_id);
-            retVal = -EINVAL;
+        if (retVal < 0) {
+            LOGE("Unable to change flash mode to %d for camera id: %d",
+                     mode, camera_id);
         } else {
-            if (mode) {
-                int bytes = snprintf(buffer, sizeof(buffer), "70");
-                retVal = write(m_flashFds[camera_id].second, buffer, (size_t)bytes);
-            } else {
-                int bytes = snprintf(buffer, sizeof(buffer), "0");
-                retVal = write(m_flashFds[camera_id].second, buffer, (size_t)bytes);
-            }
-
-            if (retVal < 0) {
-                LOGE("Unable to change second flash led mode to %d for camera id: %d",
-                         mode, camera_id);
-            }
+            m_flashOn[camera_id] = mode;
         }
     }
     return retVal;
@@ -301,25 +246,14 @@ int32_t QCameraFlash::deinitFlash(const int camera_id)
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
         LOGE("Invalid camera id: %d", camera_id);
-        return -EINVAL;
-    }
-
-    if (m_flashFds[camera_id].first < 0) {
-        LOGE("called deinitFlash for uninited first flash");
+        retVal = -EINVAL;
+    } else if (m_flashFds[camera_id] < 0) {
+        LOGE("called deinitFlash for uninited flash");
         retVal = -EINVAL;
     } else {
-        setFlashMode(camera_id, false, LED_FIRST);
-        close(m_flashFds[camera_id].first);
-        m_flashFds[camera_id].first = -1;
-    }
-
-    if (m_flashFds[camera_id].second < 0) {
-        LOGE("called deinitFlash for uninited second flash");
-        retVal = -EINVAL;
-    } else {
-        setFlashMode(camera_id, false, LED_SECOND);
-        close(m_flashFds[camera_id].second);
-        m_flashFds[camera_id].second = -1;
+        setFlashMode(camera_id, false);
+        close(m_flashFds[camera_id]);
+        m_flashFds[camera_id] = -1;
     }
 
     return retVal;
@@ -351,7 +285,7 @@ int32_t QCameraFlash::reserveFlashForCamera(const int camera_id)
                 camera_id);
     } else {
         if (m_flashOn[camera_id]) {
-            setFlashMode(camera_id, false, LED_DUAL);
+            setFlashMode(camera_id, false);
             deinitFlash(camera_id);
         }
         m_cameraOpen[camera_id] = true;

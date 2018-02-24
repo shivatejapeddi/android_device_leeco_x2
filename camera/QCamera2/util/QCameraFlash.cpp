@@ -221,7 +221,6 @@ int32_t QCameraFlash::initFlash(const int camera_id)
 int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode, flashLed led)
 {
     int32_t retVal = 0;
-    int32_t count = 0;
     char buffer[16];
 
     if (camera_id < 0 || camera_id >= MM_CAMERA_MAX_NUM_SENSORS) {
@@ -245,13 +244,13 @@ int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode, flashLe
         } else {
             if (mode) {
                 int bytes = snprintf(buffer, sizeof(buffer), "70");
-                count = write(m_flashFds[camera_id].first, buffer, (size_t)bytes);
+                retVal = write(m_flashFds[camera_id].first, buffer, (size_t)bytes);
             } else {
                 int bytes = snprintf(buffer, sizeof(buffer), "0");
-                count = write(m_flashFds[camera_id].first, buffer, (size_t)bytes);
+                retVal = write(m_flashFds[camera_id].first, buffer, (size_t)bytes);
             }
 
-            if (count <= 0) {
+            if (retVal < 0) {
                 LOGE("Unable to change first flash mode to %d for camera id: %d",
                          mode, camera_id);
             } else {
@@ -267,13 +266,13 @@ int32_t QCameraFlash::setFlashMode(const int camera_id, const bool mode, flashLe
         } else {
             if (mode) {
                 int bytes = snprintf(buffer, sizeof(buffer), "70");
-                count = write(m_flashFds[camera_id].second, buffer, (size_t)bytes);
+                retVal = write(m_flashFds[camera_id].second, buffer, (size_t)bytes);
             } else {
                 int bytes = snprintf(buffer, sizeof(buffer), "0");
-                count = write(m_flashFds[camera_id].second, buffer, (size_t)bytes);
+                retVal = write(m_flashFds[camera_id].second, buffer, (size_t)bytes);
             }
 
-            if (count <= 0) {
+            if (retVal < 0) {
                 LOGE("Unable to change second flash led mode to %d for camera id: %d",
                          mode, camera_id);
             }

@@ -736,14 +736,14 @@ typedef struct {
     /* common between HAL1 and HAL3 */
     INCLUDE(CAM_INTF_META_HISTOGRAM,                    cam_hist_stats_t,               1);
     INCLUDE(CAM_INTF_META_FACE_DETECTION,               cam_face_detection_data_t,      1);
-    INCLUDE(CAM_INTF_META_FACE_RECOG,                   cam_face_recog_data_t,          1);
-    INCLUDE(CAM_INTF_META_FACE_BLINK,                   cam_face_blink_data_t,          1);
-    INCLUDE(CAM_INTF_META_FACE_GAZE,                    cam_face_gaze_data_t,           1);
-    INCLUDE(CAM_INTF_META_FACE_SMILE,                   cam_face_smile_data_t,          1);
-    INCLUDE(CAM_INTF_META_FACE_LANDMARK,                cam_face_landmarks_data_t,      1);
-    INCLUDE(CAM_INTF_META_FACE_CONTOUR,                 cam_face_contour_data_t,        1);
+    //INCLUDE(CAM_INTF_META_FACE_RECOG,                   cam_face_recog_data_t,          1);
+    //INCLUDE(CAM_INTF_META_FACE_BLINK,                   cam_face_blink_data_t,          1);
+    //INCLUDE(CAM_INTF_META_FACE_GAZE,                    cam_face_gaze_data_t,           1);
+    //INCLUDE(CAM_INTF_META_FACE_SMILE,                   cam_face_smile_data_t,          1);
+    //INCLUDE(CAM_INTF_META_FACE_LANDMARK,                cam_face_landmarks_data_t,      1);
+    //INCLUDE(CAM_INTF_META_FACE_CONTOUR,                 cam_face_contour_data_t,        1);
     INCLUDE(CAM_INTF_META_AUTOFOCUS_DATA,               cam_auto_focus_data_t,          1);
-    INCLUDE(CAM_INTF_META_CDS_DATA,                     cam_cds_data_t,                 1);
+    //INCLUDE(CAM_INTF_META_CDS_DATA,                     cam_cds_data_t,                 1);
     INCLUDE(CAM_INTF_PARM_UPDATE_DEBUG_LEVEL,           uint32_t,                       1);
 
     /* Specific to HAl1 */
@@ -799,7 +799,7 @@ typedef struct {
     INCLUDE(CAM_INTF_META_LENS_STATE,                   cam_af_lens_state_t,         1);
     INCLUDE(CAM_INTF_META_LENS_OPT_STAB_MODE,           uint32_t,                    1);
     //INCLUDE(CAM_INTF_META_VIDEO_STAB_MODE,              uint32_t,                    1);
-    INCLUDE(CAM_INTF_META_LENS_FOCUS_STATE,             uint32_t,                    1);
+    // INCLUDE(CAM_INTF_META_LENS_FOCUS_STATE,             uint32_t,                    1);
     INCLUDE(CAM_INTF_META_NOISE_REDUCTION_MODE,         uint32_t,                    1);
     INCLUDE(CAM_INTF_META_NOISE_REDUCTION_STRENGTH,     uint32_t,                    1);
     INCLUDE(CAM_INTF_META_SCALER_CROP_REGION,           cam_crop_region_t,           1);
@@ -924,7 +924,7 @@ typedef struct {
     INCLUDE(CAM_INTF_PARM_STATS_AF_PAAF,                uint32_t,                    1);
     INCLUDE(CAM_INTF_PARM_FOCUS_BRACKETING,             cam_af_bracketing_t,         1);
     INCLUDE(CAM_INTF_PARM_FLASH_BRACKETING,             cam_flash_bracketing_t,      1);
-    INCLUDE(CAM_INTF_META_TOUCH_AE_RESULT,              int32_t,                     1); // LeEco
+    //INCLUDE(CAM_INTF_META_TOUCH_AE_RESULT,              int32_t,                     1); // LeEco
     INCLUDE(CAM_INTF_META_JPEG_GPS_COORDINATES,         double,                      3);
     INCLUDE(CAM_INTF_META_JPEG_GPS_PROC_METHODS,        uint8_t,                     GPS_PROCESSING_METHOD_SIZE);
     INCLUDE(CAM_INTF_META_JPEG_GPS_TIMESTAMP,           int64_t,                     1);
@@ -940,21 +940,21 @@ typedef struct {
     INCLUDE(CAM_INTF_PARM_CAC,                          cam_aberration_mode_t,       1);
     INCLUDE(CAM_INTF_META_NEUTRAL_COL_POINT,            cam_neutral_col_point_t,     1);
     INCLUDE(CAM_INTF_PARM_ROTATION,                     cam_rotation_info_t,         1);
-    INCLUDE(CAM_INTF_PARM_HW_DATA_OVERWRITE,            cam_hw_data_overwrite_t,     1);
+    //INCLUDE(CAM_INTF_PARM_HW_DATA_OVERWRITE,            cam_hw_data_overwrite_t,     1);
     INCLUDE(CAM_INTF_META_IMGLIB,                       cam_intf_meta_imglib_t,      1);
     INCLUDE(CAM_INTF_PARM_CAPTURE_FRAME_CONFIG,         cam_capture_frame_config_t,  1);
     INCLUDE(CAM_INTF_PARM_CUSTOM,                       custom_parm_buffer_t,        1);
     INCLUDE(CAM_INTF_PARM_FLIP,                         int32_t,                     1);
-    INCLUDE(CAM_INTF_META_USE_AV_TIMER,                 uint8_t,                     1);
-    INCLUDE(CAM_INTF_META_EFFECTIVE_EXPOSURE_FACTOR,    float,                       1);
-    INCLUDE(CAM_INTF_META_LDAF_EXIF,                    uint32_t,                    2);
-    INCLUDE(CAM_INTF_META_BLACK_LEVEL_SOURCE_PATTERN,   cam_black_level_metadata_t,  1);
-    INCLUDE(CAM_INTF_META_BLACK_LEVEL_APPLIED_PATTERN,  cam_black_level_metadata_t,  1);
+    //INCLUDE(CAM_INTF_META_USE_AV_TIMER,                 uint8_t,                     1);
+    //INCLUDE(CAM_INTF_META_EFFECTIVE_EXPOSURE_FACTOR,    float,                       1);
+    //INCLUDE(CAM_INTF_META_LDAF_EXIF,                    uint32_t,                    2);
+    //INCLUDE(CAM_INTF_META_BLACK_LEVEL_SOURCE_PATTERN,   cam_black_level_metadata_t,  1);
+    //INCLUDE(CAM_INTF_META_BLACK_LEVEL_APPLIED_PATTERN,  cam_black_level_metadata_t,  1);
     INCLUDE(CAM_INTF_META_LOW_LIGHT,                    cam_low_light_mode_t,        1);
     INCLUDE(CAM_INTF_META_IMG_DYN_FEAT,                 cam_dyn_img_data_t,          1);
-    INCLUDE(CAM_INTF_PARM_MANUAL_CAPTURE_TYPE,          cam_manual_capture_type,     1);
+    //INCLUDE(CAM_INTF_PARM_MANUAL_CAPTURE_TYPE,          cam_manual_capture_type,     1);
     INCLUDE(CAM_INTF_AF_STATE_TRANSITION,               uint8_t,                     1);
-    INCLUDE(CAM_INTF_PARM_INITIAL_EXPOSURE_INDEX,       uint32_t,                    1);
+    //INCLUDE(CAM_INTF_PARM_INITIAL_EXPOSURE_INDEX,       uint32_t,                    1);
 } metadata_data_t;
 
 /* Update clear_metadata_buffer() function when a new is_xxx_valid is added to

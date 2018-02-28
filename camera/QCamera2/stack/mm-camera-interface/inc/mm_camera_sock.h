@@ -35,6 +35,8 @@
 #include <sys/uio.h>
 #include <sys/un.h>
 
+#include "cam_types.h"
+
 typedef enum {
     MM_CAMERA_SOCK_TYPE_UDP,
     MM_CAMERA_SOCK_TYPE_TCP,
@@ -52,6 +54,13 @@ int mm_camera_socket_sendmsg(
   void *msg,
   size_t buf_size,
   int sendfd);
+
+int mm_camera_socket_bundle_sendmsg(
+  int fd,
+  void *msg,
+  size_t buf_size,
+  int sendfds[CAM_MAX_NUM_BUFS_PER_STREAM],
+  int num_fds);
 
 int mm_camera_socket_recvmsg(
   int fd,

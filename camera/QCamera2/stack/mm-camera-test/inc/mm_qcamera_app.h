@@ -50,6 +50,7 @@
 #define MM_APP_MAX_DUMP_FRAME_NUM 1000
 
 #define PREVIEW_BUF_NUM 7
+#define SNAPSHOT_BUF_NUM 10
 #define VIDEO_BUF_NUM 7
 #define ISP_PIX_BUF_NUM 9
 #define STATS_BUF_NUM 4
@@ -57,18 +58,18 @@
 #define CAPTURE_BUF_NUM 5
 
 #define DEFAULT_PREVIEW_FORMAT    CAM_FORMAT_YUV_420_NV21
-#define DEFAULT_PREVIEW_WIDTH     640
-#define DEFAULT_PREVIEW_HEIGHT    480
+#define DEFAULT_PREVIEW_WIDTH     1280
+#define DEFAULT_PREVIEW_HEIGHT    960
 #define DEFAULT_PREVIEW_PADDING   CAM_PAD_TO_WORD
 #define DEFAULT_VIDEO_FORMAT      CAM_FORMAT_YUV_420_NV12
 #define DEFAULT_VIDEO_WIDTH       800
 #define DEFAULT_VIDEO_HEIGHT      480
 #define DEFAULT_VIDEO_PADDING     CAM_PAD_TO_2K
 #define DEFAULT_SNAPSHOT_FORMAT   CAM_FORMAT_YUV_420_NV21
-#define DEFAULT_RAW_FORMAT        CAM_FORMAT_BAYER_QCOM_RAW_10BPP_GBRG
+#define DEFAULT_RAW_FORMAT        CAM_FORMAT_BAYER_MIPI_RAW_10BPP_GBRG
 
-#define DEFAULT_SNAPSHOT_WIDTH    1024
-#define DEFAULT_SNAPSHOT_HEIGHT   768
+#define DEFAULT_SNAPSHOT_WIDTH    4160
+#define DEFAULT_SNAPSHOT_HEIGHT   3120
 #define DEFAULT_SNAPSHOT_PADDING  CAM_PAD_TO_WORD
 
 #define DEFAULT_OV_FORMAT         MDP_Y_CRCB_H2V2
@@ -248,7 +249,6 @@ typedef struct {
     mm_camera_stream_t *reproc_stream;
     metadata_buffer_t *metadata;
     int8_t is_chromatix_reload;
-    tune_chromatix_t tune_data;
 } mm_camera_test_obj_t;
 
 typedef struct {
@@ -256,8 +256,10 @@ typedef struct {
   void* ptr_jpeg;
 
   uint8_t (*get_num_of_cameras) ();
-  mm_camera_vtbl_t *(*mm_camera_open) (uint8_t camera_idx);
-  uint32_t (*jpeg_open) (mm_jpeg_ops_t *ops, mm_dimension picture_size);
+  int32_t (*mm_camera_open) (uint8_t camera_idx, mm_camera_vtbl_t **camera_vtbl);
+  uint32_t (*jpeg_open)(mm_jpeg_ops_t *ops, mm_jpeg_mpo_ops_t *mpo_ops,
+                   mm_dimension picture_size,
+                   cam_jpeg_metadata_t *jpeg_metadata);
 
 } hal_interface_lib_t;
 
@@ -351,6 +353,9 @@ typedef struct {
 
 extern int mm_app_unit_test_entry(mm_camera_app_t *cam_app);
 extern int mm_app_dual_test_entry(mm_camera_app_t *cam_app);
+extern int setmetainfoCommand(mm_camera_test_obj_t *test_obj,
+                              cam_stream_size_info_t *value);
+
 extern void mm_app_dump_frame(mm_camera_buf_def_t *frame,
                               char *name,
                               char *ext,

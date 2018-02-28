@@ -15,7 +15,7 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
 LOCAL_CFLAGS += -DUSE_ION
 endif
 
-LOCAL_CFLAGS += -D_ANDROID_
+LOCAL_CFLAGS += -D_ANDROID_ -DQCAMERA_REDEFINE_LOG
 
 LOCAL_SRC_FILES:= \
         src/mm_qcamera_main_menu.c \
@@ -36,7 +36,8 @@ LOCAL_C_INCLUDES+= \
         frameworks/native/include/media/openmax \
         $(LOCAL_PATH)/../common \
         $(LOCAL_PATH)/../../../mm-image-codec/qexif \
-        $(LOCAL_PATH)/../../../mm-image-codec/qomx_core
+        $(LOCAL_PATH)/../../../mm-image-codec/qomx_core \
+        $(LOCAL_PATH)/../mm-camera-interface/inc \
 
 LOCAL_C_INCLUDES+= $(kernel_includes)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
@@ -54,7 +55,7 @@ else ifeq ($(TARGET_BOARD_PLATFORM),msm8994)
         LOCAL_CFLAGS += -DCAMERA_ION_FALLBACK_HEAP_ID=ION_IOMMU_HEAP_ID
         LOCAL_CFLAGS += -DCAMERA_GRALLOC_CACHING_ID=0
         LOCAL_CFLAGS += -DNUM_RECORDING_BUFFERS=9
-else ifeq ($(TARGET_BOARD_PLATFORM),msm8916 msm8952)
+else ifeq ($(TARGET_BOARD_PLATFORM),msm8916 msm8952 msm8937 titanium)
         LOCAL_CFLAGS += -DCAMERA_ION_FALLBACK_HEAP_ID=ION_IOMMU_HEAP_ID
         LOCAL_CFLAGS += -DCAMERA_GRALLOC_CACHING_ID=0
         LOCAL_CFLAGS += -DNUM_RECORDING_BUFFERS=9
@@ -89,6 +90,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 
 LOCAL_MODULE:= mm-qcamera-app
+LOCAL_CLANG := false
 
 include $(BUILD_EXECUTABLE)
 
@@ -105,7 +107,7 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
 LOCAL_CFLAGS += -DUSE_ION
 endif
 
-LOCAL_CFLAGS += -D_ANDROID_
+LOCAL_CFLAGS += -D_ANDROID_ -DQCAMERA_REDEFINE_LOG
 
 LOCAL_SRC_FILES:= \
         src/mm_qcamera_main_menu.c \
@@ -126,7 +128,8 @@ LOCAL_C_INCLUDES+= \
         frameworks/native/include/media/openmax \
         $(LOCAL_PATH)/../common \
         $(LOCAL_PATH)/../../../mm-image-codec/qexif \
-        $(LOCAL_PATH)/../../../mm-image-codec/qomx_core
+        $(LOCAL_PATH)/../../../mm-image-codec/qomx_core \
+        $(LOCAL_PATH)/../mm-camera-interface/inc \
 
 LOCAL_C_INCLUDES+= $(kernel_includes)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
@@ -144,7 +147,7 @@ else ifeq ($(TARGET_BOARD_PLATFORM),msm8994)
         LOCAL_CFLAGS += -DCAMERA_ION_FALLBACK_HEAP_ID=ION_IOMMU_HEAP_ID
         LOCAL_CFLAGS += -DCAMERA_GRALLOC_CACHING_ID=0
         LOCAL_CFLAGS += -DNUM_RECORDING_BUFFERS=9
-else ifeq ($(TARGET_BOARD_PLATFORM),msm8916 msm8952)
+else ifeq ($(TARGET_BOARD_PLATFORM),msm8916 msm8952 msm8937 titanium)
         LOCAL_CFLAGS += -DCAMERA_ION_FALLBACK_HEAP_ID=ION_IOMMU_HEAP_ID
         LOCAL_CFLAGS += -DCAMERA_GRALLOC_CACHING_ID=0
         LOCAL_CFLAGS += -DNUM_RECORDING_BUFFERS=9
@@ -179,4 +182,8 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 
 LOCAL_MODULE:= libmm-qcamera
+LOCAL_CLANG := false
+
 include $(BUILD_SHARED_LIBRARY)
+
+LOCAL_PATH := $(OLD_LOCAL_PATH)

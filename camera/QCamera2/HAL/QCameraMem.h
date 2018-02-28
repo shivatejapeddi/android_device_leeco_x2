@@ -34,6 +34,7 @@
 #include <utils/Mutex.h>
 #include <utils/List.h>
 #include <qdMetaData.h>
+#include <utils/Timers.h>
 
 extern "C" {
 #include <sys/types.h>
@@ -44,6 +45,16 @@ extern "C" {
 namespace qcamera {
 
 class QCameraMemoryPool;
+
+//OFFSET, SIZE, USAGE, TIMESTAMP, FORMAT
+#define VIDEO_METADATA_NUM_INTS          5
+
+enum QCameraMemType {
+    QCAMERA_MEM_TYPE_DEFAULT      = 0,
+    QCAMERA_MEM_TYPE_SECURE       = 1,
+    QCAMERA_MEM_TYPE_BATCH        = (1 << 1),
+    QCAMERA_MEM_TYPE_COMPRESSED   = (1 << 2),
+};
 
 // Base class for all memory types. Abstract.
 class QCameraMemory {
@@ -64,6 +75,8 @@ public:
     int getFd(uint32_t index) const;
     ssize_t getSize(uint32_t index) const;
     uint8_t getCnt() const;
+    virtual uint8_t getMappable() const;
+    virtual uint8_t checkIfAllBuffersMapped() const;
 
     virtual int allocate(uint8_t count, size_t size, uint32_t is_secure) = 0;
     virtual void deallocate() = 0;
@@ -78,8 +91,9 @@ public:
     QCameraMemory(bool cached,
                   QCameraMemoryPool *pool = NULL,
                   cam_stream_type_t streamType = CAM_STREAM_TYPE_DEFAULT,
-                  cam_stream_buf_type buf_Type = CAM_STREAM_BUF_TYPE_MPLANE);
+                  QCameraMemType buf_Type = QCAMERA_MEM_TYPE_DEFAULT);
     virtual ~QCameraMemory();
+    virtual void reset();
 
     void getBufDef(const cam_frame_len_offset_t &offset,
             mm_camera_buf_def_t &bufDef, uint32_t index) const;
@@ -88,9 +102,6 @@ public:
             mm_camera_buf_def_t &bufDef, uint32_t index,
             const cam_frame_len_offset_t &plane_offset,
             mm_camera_buf_def_t *planebufDef, QCameraMemory *bufs) const;
-
-    void traceLogAllocStart(size_t size, int count, const char *allocName);
-    void traceLogAllocEnd(size_t size);
 
 protected:
 
@@ -118,7 +129,7 @@ protected:
     struct QCameraMemInfo mMemInfo[MM_CAMERA_MAX_NUM_FRAMES];
     QCameraMemoryPool *mMemoryPool;
     cam_stream_type_t mStreamType;
-    cam_stream_buf_type mBufType;
+    QCameraMemType mBufType;
 };
 
 class QCameraMemoryPool {
@@ -165,6 +176,14 @@ private:
     void *mPtr[MM_CAMERA_MAX_NUM_FRAMES];
 };
 
+class QCameraMetadataStreamMemory : public QCameraHeapMemory {
+public:
+    QCameraMetadataStreamMemory(bool cached);
+    virtual ~QCameraMetadataStreamMemory();
+
+    virtual int getRegFlags(uint8_t *regFlags) const;
+};
+
 // Externel heap memory is used for memories shared with
 // framework. They are allocated from /dev/ion or gralloc.
 class QCameraStreamMemory : public QCameraMemory {
@@ -195,7 +214,7 @@ protected:
 class QCameraVideoMemory : public QCameraStreamMemory {
 public:
     QCameraVideoMemory(camera_request_memory getMemory, bool cached,
-            cam_stream_buf_type bufType = CAM_STREAM_BUF_TYPE_MPLANE);
+            QCameraMemType bufType = QCAMERA_MEM_TYPE_DEFAULT);
     virtual ~QCameraVideoMemory();
 
     virtual int allocate(uint8_t count, size_t size, uint32_t is_secure);
@@ -203,12 +222,16 @@ public:
     virtual void deallocate();
     virtual camera_memory_t *getMemory(uint32_t index, bool metadata) const;
     virtual int getMatchBufIndex(const void *opaque, bool metadata) const;
-    int allocateMeta(uint8_t buf_cnt);
+    int allocateMeta(uint8_t buf_cnt, int numFDs, int numInts);
     void deallocateMeta();
-
+    void setVideoInfo(int usage, cam_format_t format);
+    int getUsage(){return mUsage;};
+    int getFormat(){return mFormat;};
+    int convCamtoOMXFormat(cam_format_t format);
 private:
     camera_memory_t *mMetadata[MM_CAMERA_MAX_NUM_FRAMES];
     uint8_t mMetaBufCount;
+    int mUsage, mFormat;
 };
 
 
@@ -231,6 +254,9 @@ public:
     virtual camera_memory_t *getMemory(uint32_t index, bool metadata) const;
     virtual int getMatchBufIndex(const void *opaque, bool metadata) const;
     virtual void *getPtr(uint32_t index) const;
+    virtual void setMappable(uint8_t mappable);
+    virtual uint8_t getMappable() const;
+    virtual uint8_t checkIfAllBuffersMapped() const;
 
     void setWindowInfo(preview_stream_ops_t *window, int width, int height,
         int stride, int scanline, int format, int maxFPS, int usage = 0);
@@ -239,6 +265,8 @@ public:
     // Returns the buffer index of the dequeued buffer.
     int displayBuffer(uint32_t index);
     void setMaxFPS(int maxFPS);
+    int32_t enqueueBuffer(uint32_t index, nsecs_t timeStamp = 0);
+    int32_t dequeueBuffer();
 
 private:
     buffer_handle_t *mBufferHandle[MM_CAMERA_MAX_NUM_FRAMES];
@@ -250,6 +278,9 @@ private:
     camera_memory_t *mCameraMemory[MM_CAMERA_MAX_NUM_FRAMES];
     int mMinUndequeuedBuffers;
     enum ColorSpace_t mColorSpace;
+    uint8_t mMappableBuffers;
+    pthread_mutex_t mLock;
+    uint8_t mEnqueuedBuffers;
 };
 
 }; // namespace qcamera

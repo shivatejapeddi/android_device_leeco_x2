@@ -1334,6 +1334,13 @@
         <path name="low-latency-record bt-sco" />
     </path>
 
+    <path name="afe-proxy-playback afe-proxy">
+    </path>
+
+    <path name="afe-proxy-record afe-proxy">
+    </path>
+
+
     <path name="low-latency-record usb-headset-mic">
         <ctl name="MultiMedia5 Mixer AFE_PCM_TX" value="1" />
     </path>

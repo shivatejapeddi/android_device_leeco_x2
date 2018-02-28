@@ -927,11 +927,7 @@ typedef struct {
     INCLUDE(CAM_INTF_META_LOW_LIGHT,                    cam_low_light_mode_t,        1);
     INCLUDE(CAM_INTF_META_IMG_DYN_FEAT,                 cam_dyn_img_data_t,          1);
     INCLUDE(CAM_INTF_AF_STATE_TRANSITION,               uint8_t,                     1);
-
 } metadata_data_t;
-} parm_data_t;
-
-typedef parm_data_t metadata_data_t;
 
 /* Update clear_metadata_buffer() function when a new is_xxx_valid is added to
  * or removed from this structure */

@@ -1898,13 +1898,7 @@ typedef enum {
     CAM_INTF_AF_STATE_TRANSITION,
     /* Whether EIS is enabled */
     CAM_INTF_META_VIDEO_STAB_MODE,
-    CAM_INTF_PARM_MAX
     CAM_INTF_PARM_MAX /* 199 */
-    CAM_INTF_BUF_DIVERT_INFO, /* 190 */
-    /* Special event to request stream frames*/
-    CAM_INTF_PARM_REQUEST_FRAMES,
-
-    CAM_INTF_PARM_MAX /* 192 */
 
 } cam_intf_parm_type_t;
 

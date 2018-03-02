@@ -47,7 +47,7 @@
 
 namespace qcamera {
 
-extern volatile uint32_t gCamHalLogLevel = 1;
+extern volatile uint32_t gCamHalLogLevel;
 
 /*===========================================================================
  * FUNCTION   : QCameraPerfLock constructor

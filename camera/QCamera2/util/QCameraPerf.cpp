@@ -32,6 +32,7 @@
 #include <cutils/properties.h>
 #include <stdlib.h>
 #include <utils/Log.h>
+#include <utils/Timers.h>
 #include "QCameraPerf.h"
 
 #ifdef CDBG
@@ -44,10 +45,9 @@
 #endif //#ifdef CDBG_HIGH
 #define CDBG_HIGH(fmt, args...) ALOGD_IF(gCamHalLogLevel >= 1, fmt, ##args)
 
-
 namespace qcamera {
 
-extern volatile uint32_t gCamHalLogLevel;
+extern volatile uint32_t gCamHalLogLevel = 1;
 
 /*===========================================================================
  * FUNCTION   : QCameraPerfLock constructor

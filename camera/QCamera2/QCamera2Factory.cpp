@@ -33,15 +33,15 @@
 #include <stdlib.h>
 #include <utils/Log.h>
 #include <utils/Errors.h>
+#include <cutils/properties.h>
 
 #ifdef QCAMERA_HAL1_SUPPORT
-#include "camera.h"
+#include "hardware/camera.h"
 #include "HAL/QCamera2HWI.h"
 #include "QCameraMuxer.h"
 #endif
 
 #include <hardware/camera3.h>
-#include "HAL/QCamera2HWI.h"
 #include "HAL3/QCamera3HWI.h"
 #include "util/QCameraFlash.h"
 #include "QCamera2Factory.h"
@@ -72,19 +72,19 @@ volatile uint32_t gKpiDebugLevel = 1;
  *==========================================================================*/
 QCamera2Factory::QCamera2Factory()
 {
-    camera_info info;
-    mHalDescriptors = NULL;
-    mCallbacks = NULL;
-    mNumOfCameras = get_num_of_cameras();
-    int bDualCamera = 0;
-    char prop[PROPERTY_VALUE_MAX];
-    property_get("persist.camera.HAL3.enabled", prop, "1");
-    int isHAL3Enabled = atoi(prop);
-
+     camera_info info;
+     mHalDescriptors = NULL;
+     mCallbacks = NULL;
+     mNumOfCameras = get_num_of_cameras();
+     int bDualCamera = 0;
+     char propDefault[PROPERTY_VALUE_MAX];
+     char prop[PROPERTY_VALUE_MAX];
+     property_get("persist.camera.HAL3.enabled", prop, "1");
+     int isHAL3Enabled = atoi(prop);
 #ifndef QCAMERA_HAL1_SUPPORT
     isHAL3Enabled = 1;
 #endif
-	
+
     // Signifies whether system has to enable dual camera mode
     property_get("persist.camera.dual.camera", prop, "0");
     bDualCamera = atoi(prop);
@@ -344,11 +344,15 @@ int QCamera2Factory::getCameraInfo(int camera_id, struct camera_info *info)
             CAMERA_DEVICE_API_VERSION_3_0 ) {
         rc = QCamera3HardwareInterface::getCamInfo(
                 mHalDescriptors[camera_id].cameraId, info);
-    } else if (mHalDescriptors[camera_id].device_version ==
+    }
+#ifdef QCAMERA_HAL1_SUPPORT
+	else if (mHalDescriptors[camera_id].device_version ==
             CAMERA_DEVICE_API_VERSION_1_0) {
         rc = QCamera2HardwareInterface::getCapabilities(
                 mHalDescriptors[camera_id].cameraId, info, &cam_type);
-    } else {
+    }
+#endif
+	else {
         ALOGE("%s: Device version for camera id %d invalid %d",
               __func__,
               camera_id,

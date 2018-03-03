@@ -1921,6 +1921,10 @@ typedef enum {
     CAM_INTF_PARM_WB_MANUAL,
     /* Offline Data Overwrite */
     CAM_INTF_PARM_HW_DATA_OVERWRITE,
+    LEECO_RESERVED_PARAM_1,
+    LEECO_RESERVED_PARAM_2,
+    LEECO_RESERVED_PARAM_3,
+    LEECO_RESERVED_PARAM_4,
     /* IMG LIB reprocess debug section */
     CAM_INTF_META_IMGLIB, /* cam_intf_meta_imglib_t */ /* 180 */
     /* OEM specific parameters */

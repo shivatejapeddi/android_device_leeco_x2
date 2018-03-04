@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -325,6 +325,9 @@ const char QCameraParameters::VALUE_ON[] = "on";
 const char QCameraParameters::VALUE_TRUE[] = "true";
 const char QCameraParameters::VALUE_FALSE[] = "false";
 
+const char QCameraParameters::VALUE_FAST[] = "fast";
+const char QCameraParameters::VALUE_HIGH_QUALITY[] = "high-quality";
+
 const char QCameraParameters::KEY_QC_SHARPNESS[] = "sharpness";
 const char QCameraParameters::KEY_QC_MIN_SHARPNESS[] = "min-sharpness";
 const char QCameraParameters::KEY_QC_MAX_SHARPNESS[] = "max-sharpness";
@@ -428,6 +431,8 @@ const char QCameraParameters::KEY_QC_EXP_TIME_PRIORITY[] = "exp-time-priority";
 const char QCameraParameters::KEY_QC_USER_SETTING[] = "user-setting";
 const char QCameraParameters::KEY_QC_WB_CCT_MODE[] = "color-temperature";
 const char QCameraParameters::KEY_QC_WB_GAIN_MODE[] = "rbgb-gains";
+const char QCameraParameters::KEY_QC_NOISE_REDUCTION_MODE[] = "noise-reduction-mode";
+const char QCameraParameters::KEY_QC_NOISE_REDUCTION_MODE_VALUES[] = "noise-reduction-mode-values";
 
 #ifdef TARGET_TS_MAKEUP
 const char QCameraParameters::KEY_TS_MAKEUP[] = "tsmakeup";
@@ -767,10 +772,34 @@ const QCameraParameters::QCameraMap<int>
     { VIDEO_ROTATION_270, 270 }
 };
 
+const QCameraParameters::QCameraMap<int>
+        QCameraParameters::NOISE_REDUCTION_MODES_MAP[] = {
+    { VALUE_OFF, 0 },
+    { VALUE_FAST,  1 },
+    { VALUE_HIGH_QUALITY,  2 }
+};
+
 #define DEFAULT_CAMERA_AREA "(0, 0, 0, 0, 0)"
 #define DATA_PTR(MEM_OBJ,INDEX) MEM_OBJ->getPtr( INDEX )
 #define TOTAL_RAM_SIZE_512MB 536870912
 #define PARAM_MAP_SIZE(MAP) (sizeof(MAP)/sizeof(MAP[0]))
+
+/*===========================================================================
+ * FUNCTION   : isOEMFeat1PropEnabled
+ *
+ * DESCRIPTION: inline function to check from property if custom feature
+ *            is enabled
+ *
+ * PARAMETERS : none
+ *
+ * RETURN     : boolean true/false
+ *==========================================================================*/
+static inline bool isOEMFeat1PropEnabled()
+{
+    char value[PROPERTY_VALUE_MAX];
+    property_get("persist.camera.imglib.oemfeat1", value, "0");
+    return atoi(value) > 0 ? true : false;
+}
 
 /*===========================================================================
  * FUNCTION   : QCameraParameters
@@ -840,6 +869,7 @@ QCameraParameters::QCameraParameters()
       m_SelectedScene(CAM_SCENE_MODE_MAX),
       m_bSeeMoreOn(false),
       m_bStillMoreOn(false),
+      m_bHighQualityNoiseReductionMode(false),
       m_bHfrMode(false),
       m_bSensorHDREnabled(false),
       m_bRdiMode(false),
@@ -855,7 +885,10 @@ QCameraParameters::QCameraParameters()
       mCds_mode(CAM_CDS_MODE_OFF),
       m_LLCaptureEnabled(FALSE),
       m_LowLightLevel(CAM_LOW_LIGHT_OFF),
-      m_bLtmForSeeMoreEnabled(false)
+      m_bLtmForSeeMoreEnabled(false),
+      m_expTime(0),
+      m_isoValue(0),
+      m_ManualCaptureMode(CAM_MANUAL_CAPTURE_TYPE_OFF)
 {
     char value[PROPERTY_VALUE_MAX];
     // TODO: may move to parameter instead of sysprop
@@ -894,6 +927,7 @@ QCameraParameters::QCameraParameters()
     mRotation = 0;
     mJpegRotation = 0;
     mVideoBatchSize = 0;
+    m_bOEMFeatEnabled = isOEMFeat1PropEnabled();
 }
 
 /*===========================================================================
@@ -959,6 +993,7 @@ QCameraParameters::QCameraParameters(const String8 &params)
     m_SelectedScene(CAM_SCENE_MODE_MAX),
     m_bSeeMoreOn(false),
     m_bStillMoreOn(false),
+    m_bHighQualityNoiseReductionMode(false),
     m_bHfrMode(false),
     m_bSensorHDREnabled(false),
     m_bRdiMode(false),
@@ -975,7 +1010,10 @@ QCameraParameters::QCameraParameters(const String8 &params)
     mParmEffect(CAM_EFFECT_MODE_OFF),
     m_LLCaptureEnabled(FALSE),
     m_LowLightLevel(CAM_LOW_LIGHT_OFF),
-    m_bLtmForSeeMoreEnabled(false)
+    m_bLtmForSeeMoreEnabled(false),
+    m_expTime(0),
+    m_isoValue(0),
+    m_ManualCaptureMode(CAM_MANUAL_CAPTURE_TYPE_OFF)
 {
     memset(&m_LiveSnapshotSize, 0, sizeof(m_LiveSnapshotSize));
     memset(&m_default_fps_range, 0, sizeof(m_default_fps_range));
@@ -990,6 +1028,7 @@ QCameraParameters::QCameraParameters(const String8 &params)
     mJpegRotation = 0;
     mBufBatchCnt = 0;
     mVideoBatchSize = 0;
+    m_bOEMFeatEnabled = isOEMFeat1PropEnabled();
 }
 
 /*===========================================================================
@@ -2977,7 +3016,18 @@ int32_t  QCameraParameters::setISOValue(const QCameraParameters& params)
 {
     const char *str = params.get(KEY_QC_ISO_MODE);
     const char *prev_str = get(KEY_QC_ISO_MODE);
-    if (str != NULL) {
+
+    if(getManualCaptureMode()) {
+        char iso_val[PROPERTY_VALUE_MAX];
+
+        property_get("persist.camera.iso", iso_val, "");
+        if (strlen(iso_val) > 0) {
+            if (prev_str == NULL ||
+                    strcmp(iso_val, prev_str) != 0) {
+                return setISOValue(iso_val);
+            }
+        }
+    } else if (str != NULL) {
         if (prev_str == NULL ||
             strcmp(str, prev_str) != 0) {
             return setISOValue(str);
@@ -3049,6 +3099,16 @@ int32_t  QCameraParameters::setExposureTime(const QCameraParameters& params)
         if (prev_str == NULL ||
                 strcmp(str, prev_str) != 0) {
             return setExposureTime(str);
+        }
+    } else if(getManualCaptureMode()) {
+        char expTime[PROPERTY_VALUE_MAX];
+
+        property_get("persist.camera.exposure.time", expTime, "");
+        if (strlen(expTime) > 0) {
+            if (prev_str == NULL ||
+                    strcmp(expTime, prev_str) != 0) {
+                return setExposureTime(expTime);
+            }
         }
     }
 
@@ -3392,7 +3452,8 @@ int32_t QCameraParameters::setMeteringAreas(const QCameraParameters& params)
 
         const char *prev_str = get(KEY_METERING_AREAS);
         if (prev_str == NULL ||
-            strcmp(str, prev_str) != 0) {
+            strcmp(str, prev_str) != 0 ||
+            (m_bNeedRestart == true)) {
             return setMeteringAreas(str);
         }
     }
@@ -3790,6 +3851,36 @@ int32_t QCameraParameters::setSeeMore(const QCameraParameters& params)
 }
 
 /*===========================================================================
+ * FUNCTION   : setNoiseReductionMode
+ *
+ * DESCRIPTION: set noise reduction mode from user setting
+ *
+ * PARAMETERS :
+ *   @params  : user setting parameters
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setNoiseReductionMode(const QCameraParameters& params)
+{
+    if ((m_pCapability->qcom_supported_feature_mask & CAM_QTI_FEATURE_SW_TNR) == 0) {
+        LOGD("SW TNR is not supported");
+        return NO_ERROR;
+    }
+    const char *str = params.get(KEY_QC_NOISE_REDUCTION_MODE);
+    const char *prev_str = get(KEY_QC_NOISE_REDUCTION_MODE);
+    LOGH("str =%s & prev_str =%s", str, prev_str);
+    if (str != NULL) {
+        if (prev_str == NULL || strcmp(str, prev_str) != 0) {
+            m_bNeedRestart = true;
+            return setNoiseReductionMode(str);
+        }
+    }
+    return NO_ERROR;
+}
+
+/*===========================================================================
  * FUNCTION   : setStillMore
  *
  * DESCRIPTION: set stillmore from user setting
@@ -4090,6 +4181,46 @@ int32_t QCameraParameters::setZslMode(const QCameraParameters& params)
         if (!m_bZslMode) {
             // Force ZSL mode to ON
             set(KEY_QC_ZSL, VALUE_ON);
+            setZslMode(TRUE);
+            LOGH("ZSL Mode forced to be enabled");
+        }
+    } else if (str_val != NULL) {
+        if (prev_val == NULL || strcmp(str_val, prev_val) != 0) {
+            int32_t value = lookupAttr(ON_OFF_MODES_MAP, PARAM_MAP_SIZE(ON_OFF_MODES_MAP),
+                    str_val);
+            if (value != NAME_NOT_FOUND) {
+                set(KEY_QC_ZSL, str_val);
+                rc = setZslMode(value);
+                // ZSL mode changed, need restart preview
+                m_bNeedRestart = true;
+            } else {
+                LOGE("Invalid ZSL mode value: %s", str_val);
+                rc = BAD_VALUE;
+            }
+        }
+    }
+    return rc;
+}
+
+/*===========================================================================
+ * FUNCTION   : setZslMode
+ *
+ * DESCRIPTION: set ZSL mode from user setting
+ *
+ * PARAMETERS :
+ *   @value  : ZSL mode value
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setZslMode(bool value)
+{
+    int32_t rc = NO_ERROR;
+    if(m_bForceZslMode) {
+        if (!m_bZslMode) {
+            // Force ZSL mode to ON
+            set(KEY_QC_ZSL, VALUE_ON);
             m_bZslMode_new = true;
             m_bZslMode = true;
             m_bNeedRestart = true;
@@ -4099,31 +4230,51 @@ int32_t QCameraParameters::setZslMode(const QCameraParameters& params)
                 rc = BAD_VALUE;
             }
 
-            LOGI("%s: ZSL Mode forced to be enabled");
+            LOGI("ZSL Mode forced to be enabled");
         }
-    } else if (str_val != NULL) {
-        if (prev_val == NULL || strcmp(str_val, prev_val) != 0) {
-            int32_t value = lookupAttr(ON_OFF_MODES_MAP, PARAM_MAP_SIZE(ON_OFF_MODES_MAP),
-                    str_val);
-            if (value != NAME_NOT_FOUND) {
-                set(KEY_QC_ZSL, str_val);
-                m_bZslMode_new = (value > 0)? true : false;
-
-                // ZSL mode changed, need restart preview
-                m_bNeedRestart = true;
-                LOGI("ZSL Mode  -> %s", m_bZslMode_new ? "Enabled" : "Disabled");
-
-                if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_ZSL_MODE, value)) {
-                    rc = BAD_VALUE;
-                }
-            } else {
-                LOGE("Invalid ZSL mode value: %s", str_val);
-                rc = BAD_VALUE;
-            }
+    } else {
+        LOGI("ZSL Mode  -> %s", m_bZslMode_new ? "Enabled" : "Disabled");
+        m_bZslMode_new = (value > 0)? true : false;
+        if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_ZSL_MODE, value)) {
+            rc = BAD_VALUE;
         }
     }
+    LOGH("enabled: %d rc = %d", m_bZslMode_new, rc);
+    return rc;
+}
 
-    LOGH("enabled: %d", m_bZslMode_new);
+/*===========================================================================
+ * FUNCTION   : updateZSLModeValue
+ *
+ * DESCRIPTION: update zsl mode value locally and to daemon
+ *
+ * PARAMETERS :
+ *   @value   : zsl mode value
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::updateZSLModeValue(bool value)
+{
+    int32_t rc = NO_ERROR;
+    if(initBatchUpdate(m_pParamBuf) < 0 ) {
+        LOGE("Failed to initialize group update table");
+        return BAD_TYPE;
+    }
+
+    rc = setZslMode(value);
+    if (rc != NO_ERROR) {
+        LOGE("Failed to ZSL value");
+        return rc;
+    }
+
+    rc = commitSetBatch();
+    if (rc != NO_ERROR) {
+        LOGE("Failed to update recording hint");
+        return rc;
+    }
+
     return rc;
 }
 
@@ -4761,7 +4912,7 @@ int32_t QCameraParameters::checkFeatureConcurrency()
         advancedFeatEnableBit |= CAM_QCOM_FEATURE_REFOCUS;
     }
 
-    if (m_bLongshotEnabled && advancedFeatEnableBit) {
+   if (m_bLongshotEnabled && advancedFeatEnableBit) {
         LOGE("Failed Longshot mode bit 0x%x",
                     advancedFeatEnableBit);
         rc = BAD_TYPE;
@@ -4902,6 +5053,8 @@ int32_t QCameraParameters::updateParameters(const String8& p,
     if ((rc = setSeeMore(params)))                      final_rc = rc;
     if ((rc = setStillMore(params)))                    final_rc = rc;
     if ((rc = setCustomParams(params)))                 final_rc = rc;
+    if ((rc = setNoiseReductionMode(params)))           final_rc = rc;
+
     if ((rc = setLongshotParam(params)))                final_rc = rc;
 
     setVideoBatchSize();
@@ -5090,7 +5243,8 @@ int32_t QCameraParameters::initDefaultParameters()
     // Set default preview format
     CameraParameters::setPreviewFormat(PIXEL_FORMAT_YUV420SP);
 
-    // Set default Video Format
+    // Set default Video Format as OPAQUE
+    // Internally both Video and Camera subsystems use NV21_VENUS
     set(KEY_VIDEO_FRAME_FORMAT, PIXEL_FORMAT_ANDROID_OPAQUE);
 
     // Set supported picture formats
@@ -5630,6 +5784,15 @@ int32_t QCameraParameters::initDefaultParameters()
         setStillMore(STILL_MORE_OFF);
     }
 
+    //Set Noise Reduction mode
+    if (m_pCapability->qcom_supported_feature_mask &
+            CAM_QTI_FEATURE_SW_TNR) {
+        String8 noiseReductionModesValues = createValuesStringFromMap(
+                NOISE_REDUCTION_MODES_MAP, PARAM_MAP_SIZE(NOISE_REDUCTION_MODES_MAP));
+        set(KEY_QC_NOISE_REDUCTION_MODE_VALUES, noiseReductionModesValues);
+        setNoiseReductionMode(VALUE_OFF);
+    }
+
     //Set Scene Detection
     set(KEY_QC_SUPPORTED_SCENE_DETECT, onOffValues);
     setSceneDetect(VALUE_OFF);
@@ -5680,11 +5843,14 @@ int32_t QCameraParameters::initDefaultParameters()
     property_get("persist.camera.zsl.mode", value, "0");
     int32_t zsl_mode = atoi(value);
     if((zsl_mode == 1) ||
-       (m_relCamSyncInfo.sync_control == CAM_SYNC_RELATED_SENSORS_ON)) {
-        LOGH("Forcing Camera to ZSL mode enabled");
+            (m_bZslMode == true) ||
+            (m_relCamSyncInfo.sync_control == CAM_SYNC_RELATED_SENSORS_ON)) {
+        LOGH("%d: Forcing Camera to ZSL mode enabled");
         set(KEY_QC_ZSL, VALUE_ON);
         m_bForceZslMode = true;
         m_bZslMode = true;
+        int32_t value = m_bForceZslMode;
+        ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_ZSL_MODE, value);
     }
     m_bZslMode_new = m_bZslMode;
 
@@ -5788,6 +5954,13 @@ int32_t QCameraParameters::initDefaultParameters()
     //Setup dual-camera
     setDcrf();
 
+    // For Aux Camera of dual camera Mode,
+    // by default set no display mode
+    if (m_relCamSyncInfo.mode == CAM_MODE_SECONDARY) {
+        set(KEY_QC_NO_DISPLAY_MODE, 1);
+        m_bNoDisplayMode = true;
+    }
+
     cam_dimension_t pic_dim;
     pic_dim.width = 0;
     pic_dim.height = 0;
@@ -5807,6 +5980,8 @@ int32_t QCameraParameters::initDefaultParameters()
     LOGD("max pic size = %d %d", pic_dim.width,
             pic_dim.height);
     setMaxPicSize(pic_dim);
+
+    setManualCaptureMode(CAM_MANUAL_CAPTURE_TYPE_OFF);
 
     return rc;
 }
@@ -6590,11 +6765,10 @@ int32_t QCameraParameters::setSensorSnapshotHDR(const char *snapshotHDR)
 
             if (zzhdr_enable && (value != CAM_SENSOR_HDR_OFF)) {
                 value = CAM_SENSOR_HDR_ZIGZAG;
-                LOGH("Overriding to ZZ HDR Mode");
+                LOGH("%s: Overriding to ZZ HDR Mode", __func__);
             }
 
-            if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_SENSOR_HDR,
-              (cam_sensor_hdr_type_t)value)) {
+            if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_SENSOR_HDR, (cam_sensor_hdr_type_t)value)) {
                 return BAD_VALUE;
             }
             return NO_ERROR;
@@ -6631,19 +6805,19 @@ int32_t QCameraParameters::setVideoHDR(const char *videoHDR)
             uint8_t use_zzhdr_video = (uint8_t)atoi(zz_prop);
 
             if (use_zzhdr_video) {
-                LOGH("Using ZZ HDR for video mode");
+                LOGH("%s: Using ZZ HDR for video mode", __func__);
                 if (value)
                     value = CAM_SENSOR_HDR_ZIGZAG;
                 else
                     value = CAM_SENSOR_HDR_OFF;
-                LOGH("Overriding to sensor HDR Mode to:%d", value);
+                LOGH("%s: Overriding to sensor HDR Mode to:%d", __func__, value);
                 if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_SENSOR_HDR, (cam_sensor_hdr_type_t) value)) {
-                    LOGE("Override to sensor HDR mode for video HDR failed");
+                    ALOGE("%s: Override to sensor HDR mode for video HDR failed", __func__);
                     return BAD_VALUE;
                 }
                 updateParamEntry(KEY_QC_VIDEO_HDR, videoHDR);
             } else {
-                LOGH("Setting Video HDR %s", videoHDR);
+                LOGH("%s: Setting Video HDR %s", __func__, videoHDR);
                 updateParamEntry(KEY_QC_VIDEO_HDR, videoHDR);
                 if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_VIDEO_HDR, value)) {
                     return BAD_VALUE;
@@ -6800,9 +6974,14 @@ int32_t  QCameraParameters::setISOValue(const char *isoValue)
             memset(&iso_settings, 0, sizeof(cam_intf_parm_manual_3a_t));
             iso_settings.previewOnly = FALSE;
             iso_settings.value = value;
+            if (getManualCaptureMode() != CAM_MANUAL_CAPTURE_TYPE_OFF) {
+                iso_settings.previewOnly = TRUE;
+            }
+
             if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_ISO, iso_settings)) {
                 return BAD_VALUE;
             }
+            m_isoValue = value;
             return NO_ERROR;
         }
     }
@@ -6876,12 +7055,38 @@ int32_t  QCameraParameters::setExposureTime(const char *expTimeStr)
 
             cam_intf_parm_manual_3a_t exp_settings;
             memset(&exp_settings, 0, sizeof(cam_intf_parm_manual_3a_t));
-            exp_settings.previewOnly = FALSE;
-            exp_settings.value = expTimeNs;
+            if (getManualCaptureMode() != CAM_MANUAL_CAPTURE_TYPE_OFF) {
+                exp_settings.previewOnly = TRUE;
+                if (expTimeMs < QCAMERA_MAX_EXP_TIME_LEVEL1) {
+                    exp_settings.value = expTimeNs;
+                } else {
+                    exp_settings.value =
+                            (int64_t)(QCAMERA_MAX_EXP_TIME_LEVEL1*1000000L);
+                }
+            } else {
+                exp_settings.previewOnly = FALSE;
+                exp_settings.value = expTimeNs;
+            }
+
+            //Based on exposure values we can decide the capture type here
+            if (getManualCaptureMode() != CAM_MANUAL_CAPTURE_TYPE_OFF) {
+                if (expTimeMs < QCAMERA_MAX_EXP_TIME_LEVEL1) {
+                    setManualCaptureMode(CAM_MANUAL_CAPTURE_TYPE_1);
+                } else if (expTimeMs < QCAMERA_MAX_EXP_TIME_LEVEL2) {
+                    setManualCaptureMode(CAM_MANUAL_CAPTURE_TYPE_2);
+                } else if (expTimeMs < QCAMERA_MAX_EXP_TIME_LEVEL4) {
+                    setManualCaptureMode(CAM_MANUAL_CAPTURE_TYPE_3);
+                } else {
+                    setManualCaptureMode(CAM_MANUAL_CAPTURE_TYPE_OFF);
+                }
+            }
+
             if (ADD_SET_PARAM_ENTRY_TO_BATCH(m_pParamBuf, CAM_INTF_PARM_EXPOSURE_TIME,
                     exp_settings)) {
                 return BAD_VALUE;
             }
+            m_expTime = expTimeNs;
+
             return NO_ERROR;
         }
     }
@@ -7187,17 +7392,55 @@ int32_t QCameraParameters::configureLowLight(cam_capture_frame_config_t &frame_c
     int32_t rc = NO_ERROR;
     uint32_t i = 0;
 
-    rc = setCDSMode(CAM_CDS_MODE_OFF, false);
-    if (rc != NO_ERROR) {
-        LOGE("Failed to configure csd mode");
-        return rc;
-    }
-
     frame_config.num_batch = 1;
     frame_config.configs[0].num_frames = getNumOfSnapshots();
     frame_config.configs[0].type = CAM_CAPTURE_LOW_LIGHT;
     frame_config.configs[0].low_light_mode = CAM_LOW_LIGHT_ON;
     LOGH("Snapshot Count: %d", frame_config.configs[0].num_frames);
+    return rc;
+}
+
+/*===========================================================================
+ * FUNCTION   : configureManualCapture
+ *
+ * DESCRIPTION: configure manual capture.
+ *
+ * PARAMETERS :
+ *    @frame_config : output configaration structure to fill in.
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::configureManualCapture(cam_capture_frame_config_t &frame_config)
+{
+    int32_t rc = NO_ERROR;
+    uint32_t i = 0;
+
+    LOGD("E");
+    if (getManualCaptureMode()) {
+        frame_config.num_batch = 1;
+        for (i = 0; i < frame_config.num_batch; i++) {
+            frame_config.configs[i].num_frames = getNumOfSnapshots();
+            frame_config.configs[i].type = CAM_CAPTURE_MANUAL_3A;
+            if (m_expTime != 0) {
+                frame_config.configs[i].manual_3A_mode.exp_mode = CAM_SETTINGS_TYPE_ON;
+                frame_config.configs[i].manual_3A_mode.exp_time = m_expTime;
+            } else {
+                frame_config.configs[i].manual_3A_mode.exp_mode = CAM_SETTINGS_TYPE_AUTO;
+                frame_config.configs[i].manual_3A_mode.exp_time = 0;
+            }
+
+            if (m_isoValue != 0) {
+                frame_config.configs[i].manual_3A_mode.iso_mode = CAM_SETTINGS_TYPE_ON;
+                frame_config.configs[i].manual_3A_mode.iso_value = m_isoValue;
+            } else {
+                frame_config.configs[i].manual_3A_mode.iso_mode = CAM_SETTINGS_TYPE_AUTO;
+                frame_config.configs[i].manual_3A_mode.iso_value = 0;
+            }
+        }
+    }
+    LOGD("X: batch cnt = %d", frame_config.num_batch);
     return rc;
 }
 
@@ -7228,7 +7471,8 @@ int32_t QCameraParameters::configFrameCapture(bool commitSettings)
     }
 
     if (isHDREnabled() || m_bAeBracketingEnabled || m_bAFBracketingOn ||
-          m_bOptiZoomOn || m_bReFocusOn || m_LowLightLevel) {
+          m_bOptiZoomOn || m_bReFocusOn || m_LowLightLevel
+          || getManualCaptureMode()) {
         value = CAM_FLASH_MODE_OFF;
     } else if (isChromaFlashEnabled()) {
         value = CAM_FLASH_MODE_ON;
@@ -7245,6 +7489,13 @@ int32_t QCameraParameters::configFrameCapture(bool commitSettings)
     } else if (m_LowLightLevel) {
         configureLowLight (m_captureFrameConfig);
 
+        //Added reset capture type as a last batch for back-end to restore settings.
+        int32_t batch_count = m_captureFrameConfig.num_batch;
+        m_captureFrameConfig.configs[batch_count].type = CAM_CAPTURE_RESET;
+        m_captureFrameConfig.configs[batch_count].num_frames = 0;
+        m_captureFrameConfig.num_batch++;
+    } else if (getManualCaptureMode() >= CAM_MANUAL_CAPTURE_TYPE_2){
+        rc = configureManualCapture (m_captureFrameConfig);
         //Added reset capture type as a last batch for back-end to restore settings.
         int32_t batch_count = m_captureFrameConfig.num_batch;
         m_captureFrameConfig.configs[batch_count].type = CAM_CAPTURE_RESET;
@@ -8259,11 +8510,11 @@ bool QCameraParameters::isSupportedSensorHdrSize(const QCameraParameters& params
 
             if (req_w == m_pCapability->zzhdr_sizes_tbl[i].width &&
                     req_h == m_pCapability->zzhdr_sizes_tbl[i].height) {
-                LOGD("Found match for %d x %d",req_w, req_h);
+                LOGD("%s: Found match for %d x %d", __func__, req_w, req_h);
                 return true;
             }
         }
-        LOGH("%s: %d x %d is not supported for zzhdr mode", req_w, req_h);
+        LOGH("%s: %d x %d is not supported for zzhdr mode", __func__, req_w, req_h);
         return false;
     }
 
@@ -8540,6 +8791,36 @@ bool QCameraParameters::isOptiZoomEnabled()
     }
 
     return false;
+}
+
+/*===========================================================================
+ * FUNCTION   : setNoiseReductionMode
+ *
+ * DESCRIPTION: set noise reduction mode
+ *
+ * PARAMETERS :
+ *   @noiseReductionModeStr : noise reduction mode
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setNoiseReductionMode(const char *noiseReductionModeStr)
+{
+    LOGH("noiseReductionModeStr = %s", noiseReductionModeStr);
+    if (noiseReductionModeStr != NULL) {
+        int value = lookupAttr(NOISE_REDUCTION_MODES_MAP, PARAM_MAP_SIZE(NOISE_REDUCTION_MODES_MAP),
+                noiseReductionModeStr);
+        if (value != NAME_NOT_FOUND) {
+            m_bHighQualityNoiseReductionMode =
+                    !strncmp(VALUE_HIGH_QUALITY, noiseReductionModeStr, strlen(VALUE_HIGH_QUALITY));
+            updateParamEntry(KEY_QC_NOISE_REDUCTION_MODE, noiseReductionModeStr);
+            return NO_ERROR;
+        }
+    }
+    LOGE("Invalid noise reduction mode value: %s",
+            (noiseReductionModeStr == NULL) ? "NULL" : noiseReductionModeStr);
+    return BAD_VALUE;
 }
 
 /*===========================================================================
@@ -9367,8 +9648,8 @@ int32_t QCameraParameters::getStreamFormat(cam_stream_type_t streamType,
             if (getRecordingHintValue() == true &&
                     video.width == preview.width &&
                     video.height == preview.height &&
-                    mPreviewFormat == CAM_FORMAT_YUV_420_NV12) {
-                format = CAM_FORMAT_YUV_420_NV12_VENUS;
+                    mPreviewFormat == CAM_FORMAT_YUV_420_NV21) {
+                format = CAM_FORMAT_YUV_420_NV21_VENUS;
             } else
 #endif
             format = mPreviewFormat;
@@ -9416,13 +9697,13 @@ int32_t QCameraParameters::getStreamFormat(cam_stream_type_t streamType,
             if (pFormat == 1) {
                 format = CAM_FORMAT_YUV_420_NV12_UBWC;
             } else {
-                format = CAM_FORMAT_YUV_420_NV12_VENUS;
+                format = CAM_FORMAT_YUV_420_NV21_VENUS;
             }
         } else {
 #if VENUS_PRESENT
-            format = CAM_FORMAT_YUV_420_NV12_VENUS;
+            format = CAM_FORMAT_YUV_420_NV21_VENUS;
 #else
-            format = CAM_FORMAT_YUV_420_NV12;
+            format = CAM_FORMAT_YUV_420_NV21;
 #endif
         }
         break;
@@ -10841,7 +11122,19 @@ int32_t QCameraParameters::setFrameSkip(enum msm_vfe_frame_skip_pattern pattern)
 int32_t QCameraParameters::updateRAW(cam_dimension_t max_dim)
 {
     int32_t rc = NO_ERROR;
-    cam_dimension_t raw_dim;
+    cam_dimension_t raw_dim, pic_dim;
+
+    // If offline raw is enabled, check the dimensions from Picture size since snapshot
+    // stream is not added but final JPEG is required of snapshot size
+    if (getofflineRAW()) {
+        getStreamDimension(CAM_STREAM_TYPE_SNAPSHOT, pic_dim);
+        if (pic_dim.width > max_dim.width) {
+            max_dim.width = pic_dim.width;
+        }
+        if (pic_dim.height > max_dim.height) {
+            max_dim.height = pic_dim.height;
+        }
+    }
 
     if (max_dim.width == 0 || max_dim.height == 0) {
         max_dim = m_pCapability->raw_dim[0];
@@ -12270,9 +12563,20 @@ bool QCameraParameters::setStreamConfigure(bool isCapture,
             stream_config_info.num_streams++;
         }
     }
-    if (raw_yuv && !raw_capture && (isZSLMode() ||
-            (getofflineRAW() && isCapture && !getRecordingHintValue()))) {
+
+    if ((!raw_capture) && ((getofflineRAW() && !getRecordingHintValue())
+            || (raw_yuv))) {
         cam_dimension_t max_dim = {0,0};
+        // Find the Maximum dimension admong all the streams
+        for (uint32_t j = 0; j < stream_config_info.num_streams; j++) {
+            if (stream_config_info.stream_sizes[j].width > max_dim.width) {
+                max_dim.width = stream_config_info.stream_sizes[j].width;
+            }
+            if (stream_config_info.stream_sizes[j].height > max_dim.height) {
+                max_dim.height = stream_config_info.stream_sizes[j].height;
+            }
+        }
+        LOGH("Max Dimension = %d X %d", max_dim.width, max_dim.height);
         updateRAW(max_dim);
         stream_config_info.type[stream_config_info.num_streams] =
                 CAM_STREAM_TYPE_RAW;
@@ -12436,6 +12740,8 @@ uint8_t QCameraParameters::getNumOfExtraBuffersForImageProc()
         } else {
             numOfBufs += m_pCapability->stillmore_settings_need.burst_count - 1;
         }
+    } else if (isOEMFeatEnabled()) {
+        numOfBufs += 1;
     }
 
     return (uint8_t)(numOfBufs * getBurstNum());
@@ -12641,26 +12947,33 @@ int32_t QCameraParameters::updateDebugLevel()
  *
  * DESCRIPTION: Function to decide Offline RAW feature.
  *
- * PARAMETERS : none
+ * PARAMETERS :
+ *  @raw_value: offline raw value to set.
  *
  * RETURN     : none
  *==========================================================================*/
-void QCameraParameters::setOfflineRAW()
+void QCameraParameters::setOfflineRAW(bool raw_value)
 {
-   char value[PROPERTY_VALUE_MAX];
-   bool raw_yuv = false;
-   bool offlineRaw = false;
+    char value[PROPERTY_VALUE_MAX];
+    bool raw_yuv = false;
+    bool offlineRaw = false;
 
-   property_get("persist.camera.raw_yuv", value, "0");
-   raw_yuv = atoi(value) > 0 ? true : false;
-   property_get("persist.camera.offlineraw", value, "0");
-   offlineRaw = atoi(value) > 0 ? true : false;
-   if((raw_yuv || isRdiMode()) && offlineRaw){
-       mOfflineRAW = true;
-   }else{
-       mOfflineRAW = false;
-   }
-   LOGH("Offline Raw %d", mOfflineRAW);
+    if (raw_value) {
+        mOfflineRAW = true;
+        LOGH("Offline Raw  %d", mOfflineRAW);
+        return;
+    }
+
+    property_get("persist.camera.raw_yuv", value, "0");
+    raw_yuv = atoi(value) > 0 ? true : false;
+    property_get("persist.camera.offlineraw", value, "0");
+    offlineRaw = atoi(value) > 0 ? true : false;
+    if ((raw_yuv || isRdiMode()) && offlineRaw) {
+        mOfflineRAW = true;
+    } else {
+        mOfflineRAW = false;
+    }
+    LOGH("Offline Raw  %d", mOfflineRAW);
 }
 
 /*===========================================================================
@@ -12689,6 +13002,12 @@ int32_t QCameraParameters::updatePpFeatureMask(cam_stream_type_t stream_type) {
             (stream_type == CAM_STREAM_TYPE_PREVIEW && getRecordingHintValue() &&
             isPreviewSeeMoreRequired()))) {
        feature_mask |= CAM_QCOM_FEATURE_LLVD;
+    }
+
+    if (isHighQualityNoiseReductionMode() &&
+            ((stream_type == CAM_STREAM_TYPE_VIDEO) ||
+            (stream_type == CAM_STREAM_TYPE_PREVIEW && getRecordingHintValue()))) {
+        feature_mask |= CAM_QTI_FEATURE_SW_TNR;
     }
 
     // Do not enable feature mask for ZSL/non-ZSL/liveshot snapshot except for 4K2k case
@@ -12750,15 +13069,18 @@ int32_t QCameraParameters::updatePpFeatureMask(cam_stream_type_t stream_type) {
     feature_mask |= config.feature_mask;
 
     // Dual Camera scenarios
-    // all feature masks are disabled for preview and analysis streams
-    // for aux session
+    // all feature masks are disabled for preview and analysis streams for aux session
     // all required feature masks for aux session preview and analysis streams need
     // to be enabled explicitly here
+    ///@note When aux camera is of bayer type, keep pp mask as is or we'd run
+    ///      into stream mapping problems. YUV sensor is marked as interleaved and has
+    ///      preferred mapping setup so we don't see any mapping issues.
     if (m_relCamSyncInfo.sync_control == CAM_SYNC_RELATED_SENSORS_ON) {
         if (((CAM_STREAM_TYPE_ANALYSIS == stream_type) ||
                 (CAM_STREAM_TYPE_PREVIEW == stream_type)) &&
-                (m_relCamSyncInfo.mode == CAM_MODE_SECONDARY)) {
-            LOGH("%s: Disabling all pp feature masks for aux preview and "
+                (m_relCamSyncInfo.mode == CAM_MODE_SECONDARY) &&
+                (m_pCapability->sensor_type.sens_type == CAM_SENSOR_YUV)) {
+            LOGH("Disabling all pp feature masks for aux preview and "
                     "analysis streams");
             feature_mask = 0;
         }
@@ -12826,6 +13148,27 @@ int32_t QCameraParameters::getStreamPpMask(cam_stream_type_t stream_type,
 }
 
 /*===========================================================================
+ * FUNCTION   : isMultiPassReprocessing
+ *
+ * DESCRIPTION: Read setprop to enable/disable multipass
+ *
+ * PARAMETERS : none
+ *
+ * RETURN     : TRUE  -- If enabled
+ *              FALSE  -- disabled
+ *==========================================================================*/
+bool QCameraParameters::isMultiPassReprocessing()
+{
+    char value[PROPERTY_VALUE_MAX];
+    int multpass = 0;
+
+    property_get("persist.camera.multi_pass", value, "0");
+    multpass = atoi(value);
+
+    return (multpass == 0)? FALSE : TRUE;
+}
+
+/*===========================================================================
  * FUNCTION   : setReprocCount
  *
  * DESCRIPTION: Set total reprocessing pass count
@@ -12837,19 +13180,21 @@ int32_t QCameraParameters::getStreamPpMask(cam_stream_type_t stream_type,
 void QCameraParameters::setReprocCount()
 {
     mTotalPPCount = 1; //Default reprocessing Pass count
-    char value[PROPERTY_VALUE_MAX];
-    int multpass = 0;
 
-    property_get("persist.camera.multi_pass", value, "0");
-    multpass = atoi(value);
-    if ( multpass == 0 ) {
+    if (getManualCaptureMode() >=
+            CAM_MANUAL_CAPTURE_TYPE_3) {
+        LOGD("Additional post processing enabled for manual capture");
+        mTotalPPCount++;
+    }
+
+    if (!isMultiPassReprocessing()) {
         return;
     }
 
     if ((getZoomLevel() != 0)
             && (getBurstCountForAdvancedCapture()
             == getNumOfSnapshots())) {
-        LOGW("Zoom Present. Need 2nd pass for post processing");
+        LOGD("2 Pass postprocessing enabled");
         mTotalPPCount++;
     }
 }
@@ -13231,7 +13576,7 @@ uint8_t QCameraParameters::getNumOfExtraBuffersForVideo()
 {
     uint8_t numOfBufs = 0;
 
-    if (isSeeMoreEnabled()) {
+    if (isSeeMoreEnabled() || isHighQualityNoiseReductionMode()) {
         numOfBufs = 1;
     }
 
@@ -13252,7 +13597,8 @@ uint8_t QCameraParameters::getNumOfExtraBuffersForPreview()
 {
     uint8_t numOfBufs = 0;
 
-    if (isSeeMoreEnabled() && !isZSLMode() && getRecordingHintValue()) {
+    if ((isSeeMoreEnabled() || isHighQualityNoiseReductionMode())
+            && !isZSLMode() && getRecordingHintValue()) {
         numOfBufs = 1;
     }
 
@@ -13406,6 +13752,49 @@ bool QCameraParameters::isFDInVideoEnabled()
 
     LOGD("FD in Video enabled : %d", fdvideo);
     return fdvideo;
+}
+
+/*===========================================================================
+ * FUNCTION   : setManualCaptureMode
+ *
+ * DESCRIPTION: Function to set Manual capture modes
+ *
+ * PARAMETERS :
+ *   @mode : Capture mode configured
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setManualCaptureMode(QCameraManualCaptureModes mode)
+{
+    int32_t rc = NO_ERROR;
+    char value[PROPERTY_VALUE_MAX];
+    int8_t count = 0;
+
+    property_get("persist.camera.manual.capture", value, "0");
+    count = atoi(value);
+
+    if (count) {
+        if (mode == CAM_MANUAL_CAPTURE_TYPE_OFF) {
+            m_ManualCaptureMode = CAM_MANUAL_CAPTURE_TYPE_1;
+        } else {
+            m_ManualCaptureMode = mode;
+        }
+    } else {
+        m_ManualCaptureMode = CAM_MANUAL_CAPTURE_TYPE_OFF;
+    }
+
+    if (m_ManualCaptureMode == CAM_MANUAL_CAPTURE_TYPE_2) {
+        setOfflineRAW(FALSE);
+    } else if (m_ManualCaptureMode >= CAM_MANUAL_CAPTURE_TYPE_3) {
+        setOfflineRAW(TRUE);
+    } else {
+        setOfflineRAW(FALSE);
+    }
+    setReprocCount();
+    LOGH("Manual capture mode - %d", m_ManualCaptureMode);
+    return rc;
 }
 
 /*===========================================================================

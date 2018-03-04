@@ -66,7 +66,7 @@
 #define DEFAULT_VIDEO_HEIGHT      480
 #define DEFAULT_VIDEO_PADDING     CAM_PAD_TO_2K
 #define DEFAULT_SNAPSHOT_FORMAT   CAM_FORMAT_YUV_420_NV21
-#define DEFAULT_RAW_FORMAT        CAM_FORMAT_BAYER_QCOM_RAW_10BPP_GBRG
+#define DEFAULT_RAW_FORMAT        CAM_FORMAT_BAYER_MIPI_RAW_10BPP_GBRG
 
 #define DEFAULT_SNAPSHOT_WIDTH    4160
 #define DEFAULT_SNAPSHOT_HEIGHT   3120
@@ -259,7 +259,7 @@ typedef struct {
   int32_t (*mm_camera_open) (uint8_t camera_idx, mm_camera_vtbl_t **camera_vtbl);
   uint32_t (*jpeg_open)(mm_jpeg_ops_t *ops, mm_jpeg_mpo_ops_t *mpo_ops,
                    mm_dimension picture_size,
-                   cam_related_system_calibration_data_t *calibration_data);
+                   cam_jpeg_metadata_t *jpeg_metadata);
 
 } hal_interface_lib_t;
 

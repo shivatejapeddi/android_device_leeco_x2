@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -423,6 +423,10 @@ typedef struct{
     /* Count is K/4 */
     uint8_t optical_black_region_count;
 
+    /* hot pixel */
+    uint8_t hotPixel_mode;
+    uint32_t hotPixel_count;
+    cam_coordinate_type_t hotPixelMap[512];
 } cam_capability_t;
 
 typedef enum {
@@ -546,7 +550,13 @@ typedef struct {
     uint16_t   rotation_flag;
     /* Reserved for future use */
     float      reserved[RELCAM_CALIB_RESERVED_MAX];
-}cam_related_system_calibration_data_t;
+} cam_related_system_calibration_data_t;
+
+typedef struct {
+  uint32_t default_sensor_flip;
+  uint32_t sensor_mount_angle;
+  cam_related_system_calibration_data_t otp_calibration_data;
+} cam_jpeg_metadata_t;
 
 #define IMG_NAME_SIZE 32
 typedef struct {
@@ -558,7 +568,7 @@ typedef struct {
 } cam_stream_img_prop_t;
 
 typedef struct {
-    uint8_t enableStream; /*0  stop and 1-start */
+    uint8_t enableStream; /*0 – stop and 1-start */
 } cam_request_frames;
 
 typedef struct {
@@ -788,6 +798,7 @@ typedef struct {
     INCLUDE(CAM_INTF_META_LENS_FOCUS_RANGE,             float,                       2);
     INCLUDE(CAM_INTF_META_LENS_STATE,                   cam_af_lens_state_t,         1);
     INCLUDE(CAM_INTF_META_LENS_OPT_STAB_MODE,           uint32_t,                    1);
+    INCLUDE(CAM_INTF_META_VIDEO_STAB_MODE,              uint32_t,                    1);
     INCLUDE(CAM_INTF_META_LENS_FOCUS_STATE,             uint32_t,                    1);
     INCLUDE(CAM_INTF_META_NOISE_REDUCTION_MODE,         uint32_t,                    1);
     INCLUDE(CAM_INTF_META_NOISE_REDUCTION_STRENGTH,     uint32_t,                    1);
@@ -892,6 +903,7 @@ typedef struct {
     INCLUDE(CAM_INTF_PARM_BURST_LED_ON_PERIOD,          uint32_t,                    1);
     INCLUDE(CAM_INTF_PARM_LONGSHOT_ENABLE,              int8_t,                      1);
     INCLUDE(CAM_INTF_PARM_TONE_MAP_MODE,                uint32_t,                    1);
+    INCLUDE(CAM_INTF_META_TOUCH_AE_RESULT,              int32_t,                     1);
 
     /* HAL3 specific */
     INCLUDE(CAM_INTF_META_STREAM_INFO,                  cam_stream_size_info_t,      1);
@@ -926,7 +938,7 @@ typedef struct {
     INCLUDE(CAM_INTF_PARM_CAC,                          cam_aberration_mode_t,       1);
     INCLUDE(CAM_INTF_META_NEUTRAL_COL_POINT,            cam_neutral_col_point_t,     1);
     INCLUDE(CAM_INTF_PARM_ROTATION,                     cam_rotation_info_t,         1);
-    //INCLUDE(CAM_INTF_PARM_HW_DATA_OVERWRITE,            cam_hw_data_overwrite_t,     1);
+    INCLUDE(CAM_INTF_PARM_HW_DATA_OVERWRITE,            cam_hw_data_overwrite_t,     1);
     INCLUDE(CAM_INTF_META_IMGLIB,                       cam_intf_meta_imglib_t,      1);
     INCLUDE(CAM_INTF_PARM_CAPTURE_FRAME_CONFIG,         cam_capture_frame_config_t,  1);
     INCLUDE(CAM_INTF_PARM_CUSTOM,                       custom_parm_buffer_t,        1);

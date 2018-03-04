@@ -360,7 +360,7 @@ static void mm_channel_process_stream_buf(mm_camera_cmdcb_t * cmd_cb,
                 break;
             }
             default:
-                LOGW("Error: Invalid command");
+                LOGE("Error: Invalid command");
                 break;
         }
     }
@@ -481,8 +481,11 @@ static void mm_channel_process_stream_buf(mm_camera_cmdcb_t * cmd_cb,
                     for (j = 0; j < info.num_nodes; j++) {
                         if (info.node[j]) {
                             mm_channel_node_qbuf(info.ch_obj[j], info.node[j]);
+                            free(info.node[j]);
                         }
                     }
+                    // we should not use it as matched dual camera frames
+                    info.num_nodes = 0;
                 }
             }
             mm_frame_sync_unlock_queues();
@@ -889,7 +892,7 @@ int32_t mm_channel_fsm_fn_stopped(mm_channel_t *my_obj,
         }
         break;
     default:
-        LOGW("invalid state (%d) for evt (%d)",
+        LOGE("invalid state (%d) for evt (%d)",
                     my_obj->state, evt);
         break;
     }
@@ -1101,7 +1104,7 @@ int32_t mm_channel_fsm_fn_active(mm_channel_t *my_obj,
         }
         break;
      default:
-        LOGW("invalid state (%d) for evt (%d), in(%p), out(%p)",
+        LOGE("invalid state (%d) for evt (%d), in(%p), out(%p)",
                     my_obj->state, evt, in_val, out_val);
         break;
     }
@@ -1133,7 +1136,7 @@ int32_t mm_channel_fsm_fn_paused(mm_channel_t *my_obj,
     int32_t rc = 0;
 
     /* currently we are not supporting pause/resume channel */
-    LOGW("invalid state (%d) for evt (%d), in(%p), out(%p)",
+    LOGE("invalid state (%d) for evt (%d), in(%p), out(%p)",
                 my_obj->state, evt, in_val, out_val);
 
     return rc;
@@ -1172,7 +1175,7 @@ int32_t mm_channel_init(mm_channel_t *my_obj,
     }
 
     LOGD("Launch data poll thread in channel open");
-    snprintf(my_obj->threadName, THREAD_NAME_SIZE, "CAM_dataPoll");
+    snprintf(my_obj->poll_thread[0].threadName, THREAD_NAME_SIZE, "CAM_dataPoll");
     mm_camera_poll_thread_launch(&my_obj->poll_thread[0],
                                  MM_CAMERA_POLL_TYPE_DATA);
 
@@ -2414,7 +2417,9 @@ int32_t mm_channel_handle_metadata(
     }
 
     if ((CAM_STREAM_TYPE_METADATA == stream_obj->stream_info->stream_type) &&
-            (stream_obj->ch_obj == ch_obj)) {
+            ((stream_obj->ch_obj == ch_obj) ||
+            ((stream_obj->linked_stream != NULL) &&
+            (stream_obj->linked_stream->linked_obj == ch_obj)))) {
         const metadata_buffer_t *metadata;
         metadata = (const metadata_buffer_t *)buf_info->buf->buffer;
 

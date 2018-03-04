@@ -45,6 +45,8 @@ using namespace android;
 
 namespace qcamera {
 
+typedef cam_manual_capture_type QCameraManualCaptureModes;
+
 class QCameraAdjustFPS
 {
 public:
@@ -189,6 +191,7 @@ public:
     bool needThumbnailReprocess(uint32_t *pFeatureMask);
     bool isUbiFocusEnabled();
     bool isChromaFlashEnabled();
+    bool isHighQualityNoiseReductionMode();
     bool isTruePortraitEnabled();
     size_t getTPMaxMetaSize();
     bool isSeeMoreEnabled();
@@ -248,6 +251,11 @@ public:
     int8_t getBufBatchCount();
     int8_t getVideoBatchSize();
 
+    int32_t setManualCaptureMode(
+            QCameraManualCaptureModes value = CAM_MANUAL_CAPTURE_TYPE_OFF);
+    QCameraManualCaptureModes getManualCaptureMode();
+    int64_t getExposureTime();
+
     cam_capture_frame_config_t getCaptureFrameConfig();
     void setJpegRotation(int rotation);
     uint32_t getJpegRotation();
@@ -266,6 +274,10 @@ public:
             cam_related_system_calibration_data_t* calib);
     int32_t bundleRelatedCameras(bool sync, uint32_t sessionid);
     bool isFDInVideoEnabled();
+    bool isOEMFeatEnabled();
+
+    int32_t setZslMode(bool value);
+    int32_t updateZSLModeValue(bool value);
 
     bool isReprocScaleEnabled();
     bool isUnderReprocScaling();

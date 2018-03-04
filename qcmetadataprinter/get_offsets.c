@@ -46,6 +46,12 @@ int main() {
 
     PRINT(CAM_INTF_META_HISTOGRAM,    pMetadata);
     PRINT(CAM_INTF_META_FACE_DETECTION,    pMetadata);
+    PRINT(CAM_INTF_META_FACE_RECOG,    pMetadata);
+    PRINT(CAM_INTF_META_FACE_BLINK,    pMetadata);
+    PRINT(CAM_INTF_META_FACE_GAZE,    pMetadata);
+    PRINT(CAM_INTF_META_FACE_SMILE,    pMetadata);
+    PRINT(CAM_INTF_META_FACE_LANDMARK,    pMetadata);
+    PRINT(CAM_INTF_META_FACE_CONTOUR,    pMetadata);
     PRINT(CAM_INTF_META_AUTOFOCUS_DATA,    pMetadata);
     PRINT(CAM_INTF_META_CDS_DATA,    pMetadata);
     PRINT(CAM_INTF_PARM_UPDATE_DEBUG_LEVEL,    pMetadata);

@@ -998,6 +998,10 @@ QCameraMetadataStreamMemory::QCameraMetadataStreamMemory(bool cached)
  *==========================================================================*/
 QCameraMetadataStreamMemory::~QCameraMetadataStreamMemory()
 {
+    if (mBufferCount > 0) {
+        LOGH("%s, buf_cnt > 0, deallocate buffers now.\n", __func__);
+        deallocate();
+    }
 }
 
 /*===========================================================================
@@ -1598,8 +1602,10 @@ int QCameraVideoMemory::convCamtoOMXFormat(cam_format_t format)
             break;
         case CAM_FORMAT_YUV_420_NV12:
         case CAM_FORMAT_YUV_420_NV12_VENUS:
-        case CAM_FORMAT_YUV_420_NV12_UBWC:
             omxFormat = OMX_COLOR_FormatYUV420SemiPlanar;
+            break;
+        case CAM_FORMAT_YUV_420_NV12_UBWC:
+            omxFormat = QOMX_COLOR_FORMATYUV420PackedSemiPlanar32mCompressed;
             break;
         default:
             omxFormat = OMX_COLOR_FormatYUV420SemiPlanar;
@@ -1947,8 +1953,7 @@ int QCameraGrallocMemory::allocate(uint8_t count, size_t /*size*/,
     if (!mWindow) {
         LOGE("Invalid native window");
         ATRACE_END();
-        ret = INVALID_OPERATION;
-        goto end;
+        return INVALID_OPERATION;
     }
 
     // Increment buffer count by min undequeued buffer.
@@ -2026,7 +2031,7 @@ int QCameraGrallocMemory::allocate(uint8_t count, size_t /*size*/,
                 memset(&ion_handle, 0, sizeof(ion_handle));
                 ion_handle.handle = mMemInfo[i].handle;
                 if (ioctl(mMemInfo[i].main_ion_fd, ION_IOC_FREE, &ion_handle) < 0) {
-                   LOGE("ion free failed");
+                    ALOGE("ion free failed");
                 }
                 close(mMemInfo[i].main_ion_fd);
 
@@ -2115,9 +2120,6 @@ int QCameraGrallocMemory::allocate(uint8_t count, size_t /*size*/,
     }
 
 end:
-    if (ret != NO_ERROR) {
-        mMappableBuffers = 0;
-    }
     LOGD("X ");
     ATRACE_END();
     return ret;
@@ -2332,12 +2334,12 @@ uint8_t QCameraGrallocMemory::getMappable() const
  * PARAMETERS : none
  *
  * RETURN     : 1 if all buffers mapped
-                     0 if total buffers not equal to mapped buffers
+ *              0 if total buffers not equal to mapped buffers
  *==========================================================================*/
 uint8_t QCameraGrallocMemory::checkIfAllBuffersMapped() const
 {
     LOGH("mBufferCount: %d, mMappableBuffers: %d",
-           mBufferCount, mMappableBuffers);
+             mBufferCount, mMappableBuffers);
     return (mBufferCount == mMappableBuffers);
 }
 

@@ -54,7 +54,7 @@
 #define MAX_SIZES_CNT 40
 #define MAX_EXP_BRACKETING_LENGTH 32
 #define MAX_ROI 10
-#define MAX_STREAM_NUM_IN_BUNDLE 6
+#define MAX_STREAM_NUM_IN_BUNDLE 8
 #define MAX_NUM_STREAMS          8
 #define CHROMATIX_SIZE 60000
 #define COMMONCHROMATIX_SIZE 45000
@@ -1256,6 +1256,9 @@ typedef enum {
     CAM_AF_SCANNING,
     CAM_AF_FOCUSED,
     CAM_AF_NOT_FOCUSED,
+    CAM_CAF_SCANNING,
+    CAM_CAF_FOCUSED,
+    CAM_CAF_NOT_FOCUSED,
     CAM_AF_INACTIVE
 } cam_autofocus_state_t;
 
@@ -1686,7 +1689,6 @@ typedef enum {
     CAM_INTF_META_FACE_DETECTION,
     /* Whether optical image stabilization is enabled. */
     CAM_INTF_META_LENS_OPT_STAB_MODE,
-
     /* specific to HAl1 */
     CAM_INTF_META_AUTOFOCUS_DATA,
     CAM_INTF_PARM_QUERY_FLASH4SNAP, /* 20 */
@@ -1960,10 +1962,6 @@ typedef enum {
     CAM_INTF_PARM_WB_MANUAL,
     /* Offline Data Overwrite */
     CAM_INTF_PARM_HW_DATA_OVERWRITE,
-    LEECO_RESERVED_PARAM_1,
-    LEECO_RESERVED_PARAM_2,
-    LEECO_RESERVED_PARAM_3,
-    LEECO_RESERVED_PARAM_4,
     /* IMG LIB reprocess debug section */
     CAM_INTF_META_IMGLIB, /* cam_intf_meta_imglib_t */
     /* OEM specific parameters */
@@ -2004,7 +2002,7 @@ typedef enum {
     /*3A low light level information*/
     CAM_INTF_META_LOW_LIGHT,
     /* dynamic feature detection */
-    CAM_INTF_META_IMG_DYN_FEAT,
+    CAM_INTF_META_IMG_DYN_FEAT, /* 200 */
     /*Parameter entry to communicate manual
     capture type*/
     CAM_INTF_PARM_MANUAL_CAPTURE_TYPE,
@@ -2022,7 +2020,11 @@ typedef enum {
     CAM_INTF_META_FACE_LANDMARK, /* 210 */
     /* face contour detection */
     CAM_INTF_META_FACE_CONTOUR,
-    CAM_INTF_PARM_MAX /* 201 */
+    /* Whether EIS is enabled */
+    CAM_INTF_META_VIDEO_STAB_MODE,
+    /* Touch exposure compensation (EV) status */
+    CAM_INTF_META_TOUCH_AE_RESULT,
+    CAM_INTF_PARM_MAX
 } cam_intf_parm_type_t;
 
 typedef struct {
@@ -2251,7 +2253,8 @@ typedef struct {
 #define CAM_QCOM_FEATURE_PP_SUPERSET    (CAM_QCOM_FEATURE_DENOISE2D|CAM_QCOM_FEATURE_CROP|\
                                          CAM_QCOM_FEATURE_ROTATION|CAM_QCOM_FEATURE_SHARPNESS|\
                                          CAM_QCOM_FEATURE_SCALE|CAM_QCOM_FEATURE_CAC|\
-                                         CAM_QCOM_FEATURE_EZTUNE|CAM_QCOM_FEATURE_CPP_TNR)
+                                         CAM_QCOM_FEATURE_EZTUNE|CAM_QCOM_FEATURE_CPP_TNR|\
+                                         CAM_QCOM_FEATURE_LLVD)
 
 #define CAM_QCOM_FEATURE_PP_PASS_1      CAM_QCOM_FEATURE_PP_SUPERSET
 #define CAM_QCOM_FEATURE_PP_PASS_2      CAM_QCOM_FEATURE_SCALE | CAM_QCOM_FEATURE_CROP;

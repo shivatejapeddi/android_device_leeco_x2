@@ -47,6 +47,11 @@ static const char ExifUndefinedPrefix[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 
 #define CAMERA_MIN_BATCH_COUNT           4
 
+#define QCAMERA_MAX_EXP_TIME_LEVEL1      100
+#define QCAMERA_MAX_EXP_TIME_LEVEL2      500
+#define QCAMERA_MAX_EXP_TIME_LEVEL3      1000
+#define QCAMERA_MAX_EXP_TIME_LEVEL4      10000
+
 class QCameraParameters: private CameraParameters
 {
 
@@ -319,6 +324,10 @@ private:
     static const char KEY_QC_STILL_MORE[];
     static const char KEY_QC_SUPPORTED_STILL_MORE_MODES[];
 
+    //Noise reduction mode
+    static const char KEY_QC_NOISE_REDUCTION_MODE[];
+    static const char KEY_QC_NOISE_REDUCTION_MODE_VALUES[];
+
     //Longshot
     static const char KEY_QC_LONGSHOT_SUPPORTED[];
 
@@ -545,6 +554,11 @@ private:
     static const char CDS_MODE_ON[];
     static const char CDS_MODE_AUTO[];
 
+    static const char VALUE_FAST[];
+    static const char VALUE_HIGH_QUALITY[];
+
+    static const char KEY_SELECTED_AUTO_SCENE[];
+
     // Values for Video rotation
     static const char VIDEO_ROTATION_0[];
     static const char VIDEO_ROTATION_90[];
@@ -700,6 +714,7 @@ public:
     bool needThumbnailReprocess(uint32_t *pFeatureMask);
     inline bool isUbiFocusEnabled() {return m_bAFBracketingOn && !m_bReFocusOn;};
     inline bool isChromaFlashEnabled() {return m_bChromaFlashOn;};
+    inline bool isHighQualityNoiseReductionMode() {return m_bHighQualityNoiseReductionMode;};
     inline bool isTruePortraitEnabled() {return m_bTruePortraitOn;};
     inline size_t getTPMaxMetaSize() {
         return m_pCapability->true_portrait_settings_need.meta_max_size;};
@@ -757,6 +772,7 @@ public:
 
     int32_t getParmZoomLevel(){return mParmZoomLevel;};
     int8_t  getReprocCount(){return mTotalPPCount;};
+    bool isMultiPassReprocessing();
     int8_t  getCurPPCount(){return mCurPPCount;};
     void    setReprocCount();
     bool    isPostProcScaling();
@@ -767,6 +783,12 @@ public:
     uint8_t getLongshotStages();
     int8_t  getBufBatchCount() {return mBufBatchCnt;};
     int8_t  getVideoBatchSize() {return mVideoBatchSize;};
+
+    int32_t setManualCaptureMode(
+            QCameraManualCaptureModes value = CAM_MANUAL_CAPTURE_TYPE_OFF);
+    QCameraManualCaptureModes getManualCaptureMode()
+            {return m_ManualCaptureMode;};
+    int64_t getExposureTime() {return m_expTime;};
 
     cam_capture_frame_config_t getCaptureFrameConfig()
             { return m_captureFrameConfig; };
@@ -788,13 +810,16 @@ public:
             cam_related_system_calibration_data_t* calib);
     int32_t bundleRelatedCameras(bool sync, uint32_t sessionid);
     bool isFDInVideoEnabled();
+    bool isOEMFeatEnabled() { return m_bOEMFeatEnabled; }
+
+    int32_t setZslMode(bool value);
+    int32_t updateZSLModeValue(bool value);
 
     bool isReprocScaleEnabled();
     bool isUnderReprocScaling();
     int32_t getPicSizeFromAPK(int &width, int &height);
 
     int32_t checkFeatureConcurrency();
-
 private:
     int32_t setPreviewSize(const QCameraParameters& );
     int32_t setVideoSize(const QCameraParameters& );
@@ -849,6 +874,7 @@ private:
     int32_t setTruePortrait(const QCameraParameters& );
     int32_t setSeeMore(const QCameraParameters& );
     int32_t setStillMore(const QCameraParameters& );
+    int32_t setNoiseReductionMode(const QCameraParameters& );
     int32_t setRedeyeReduction(const QCameraParameters& );
     int32_t setGpsLocation(const QCameraParameters& );
     int32_t setRecordingHint(const QCameraParameters& );
@@ -919,6 +945,7 @@ private:
     int32_t setTruePortrait(const char *truePortraitStr);
     int32_t setSeeMore(const char *SeeMoreStr);
     int32_t setStillMore(const char *StillMoreStr);
+    int32_t setNoiseReductionMode(const char *noiseReductionModeStr);
     int32_t setRedeyeReduction(const char *redeyeStr);
     int32_t setWaveletDenoise(const char *wnrStr);
     int32_t setFaceRecognition(const char *faceRecog, uint32_t maxFaces);
@@ -942,10 +969,10 @@ private:
     void setVideoBatchSize();
     void setDcrf();
     int32_t setStreamPpMask(cam_stream_type_t stream_type, uint32_t pp_mask);
-    void setOfflineRAW();
+    void setOfflineRAW(bool value = 0);
     int32_t configureFlash(cam_capture_frame_config_t &frame_config);
     int32_t configureLowLight(cam_capture_frame_config_t &frame_config);
-
+    int32_t configureManualCapture(cam_capture_frame_config_t &frame_config);
 
     bool isTNRPreviewEnabled() {return m_bTNRPreviewOn;};
     bool isTNRVideoEnabled() {return m_bTNRVideoOn;};
@@ -1019,6 +1046,7 @@ private:
     static const QCameraMap<int> VIDEO_ROTATION_MODES_MAP[];
     static const QCameraMap<int> SEE_MORE_MODES_MAP[];
     static const QCameraMap<int> STILL_MORE_MODES_MAP[];
+    static const QCameraMap<int> NOISE_REDUCTION_MODES_MAP[];
 
     QCameraReprocScaleParam m_reprocScaleParam;
 
@@ -1092,6 +1120,7 @@ private:
     cam_scene_mode_type m_SelectedScene;
     bool m_bSeeMoreOn;
     bool m_bStillMoreOn;
+    bool m_bHighQualityNoiseReductionMode;
     cam_fps_range_t m_hfrFpsRange;
     bool m_bHfrMode;
     bool m_bSensorHDREnabled;             // if HDR is enabled
@@ -1126,6 +1155,10 @@ private:
     bool m_LLCaptureEnabled;
     cam_low_light_mode_t m_LowLightLevel;
     bool m_bLtmForSeeMoreEnabled;
+    int64_t m_expTime;
+    bool m_bOEMFeatEnabled;
+    int32_t m_isoValue;
+    QCameraManualCaptureModes m_ManualCaptureMode;
     cam_dyn_img_data_t m_DynamicImgData;
 };
 

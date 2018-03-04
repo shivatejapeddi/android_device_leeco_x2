@@ -94,6 +94,7 @@ typedef struct {
 #define QCAMERA_DUMP_FRM_THUMBNAIL           (1<<3)
 #define QCAMERA_DUMP_FRM_RAW                 (1<<4)
 #define QCAMERA_DUMP_FRM_JPEG                (1<<5)
+#define QCAMERA_DUMP_FRM_INPUT_REPROCESS     (1<<6)
 
 #define QCAMERA_DUMP_FRM_MASK_ALL    0x000000ff
 
@@ -202,12 +203,16 @@ public:
     static void stop_preview(struct camera_device *);
     static int preview_enabled(struct camera_device *);
     static int store_meta_data_in_buffers(struct camera_device *, int enable);
+    static int restart_start_preview(struct camera_device *);
+    static int restart_stop_preview(struct camera_device *);
+    static int pre_start_recording(struct camera_device *);
     static int start_recording(struct camera_device *);
     static void stop_recording(struct camera_device *);
     static int recording_enabled(struct camera_device *);
     static void release_recording_frame(struct camera_device *, const void *opaque);
     static int auto_focus(struct camera_device *);
     static int cancel_auto_focus(struct camera_device *);
+    static int pre_take_picture(struct camera_device *);
     static int take_picture(struct camera_device *);
     int takeLiveSnapshot_internal();
     int takeBackendPic_internal(bool *JpegMemOpt, char *raw_format);
@@ -215,10 +220,15 @@ public:
     void checkIntPicPending(bool JpegMemOpt, char *raw_format);
     static int cancel_picture(struct camera_device *);
     static int set_parameters(struct camera_device *, const char *parms);
+    static int stop_after_set_params(struct camera_device *);
+    static int commit_params(struct camera_device *);
+    static int restart_after_set_params(struct camera_device *);
     static char* get_parameters(struct camera_device *);
     static void put_parameters(struct camera_device *, char *);
     static int send_command(struct camera_device *,
               int32_t cmd, int32_t arg1, int32_t arg2);
+    static int send_command_restart(struct camera_device *,
+            int32_t cmd, int32_t arg1, int32_t arg2);
     static void release(struct camera_device *);
     static int dump(struct camera_device *, int fd);
     static int close_camera_device(hw_device_t *);
@@ -244,6 +254,9 @@ public:
             cam_sync_related_sensors_event_info_t* info);
     int32_t setMpoComposition(bool enable);
     bool getMpoComposition(void);
+    bool getRecordingHintValue(void);
+    int32_t setRecordingHintValue(int32_t value);
+    bool isPreviewRestartNeeded(void) { return mPreviewRestartNeeded; };
     static int getCapabilities(uint32_t cameraId,
             struct camera_info *info, cam_sync_type_t *cam_type);
     static int initCapabilities(uint32_t cameraId, mm_camera_vtbl_t *cameraHandle);
@@ -297,11 +310,13 @@ private:
     int startPreview();
     int stopPreview();
     int storeMetaDataInBuffers(int enable);
+    int preStartRecording();
     int startRecording();
     int stopRecording();
     int releaseRecordingFrame(const void *opaque);
     int autoFocus();
     int cancelAutoFocus();
+    int preTakePicture();
     int takePicture();
     int stopCaptureChannel(bool destroy);
     int cancelPicture();
@@ -355,7 +370,7 @@ private:
     void debugShowPreviewFPS();
     void dumpJpegToFile(const void *data, size_t size, uint32_t index);
     void dumpFrameToFile(QCameraStream *stream,
-            mm_camera_buf_def_t *frame, uint32_t dump_type);
+            mm_camera_buf_def_t *frame, uint32_t dump_type, const char *misc = NULL);
     void dumpMetadataToFile(QCameraStream *stream,
                             mm_camera_buf_def_t *frame,char *type);
     void releaseSuperBuf(mm_camera_super_buf_t *super_buf);
@@ -364,6 +379,7 @@ private:
     uint32_t getJpegQuality();
     QCameraExif *getExifData();
     cam_sensor_t getSensorType();
+    bool isLowPowerMode();
 
     int32_t processAutoFocusEvent(cam_auto_focus_data_t &focus_data);
     int32_t processZoomEvent(cam_crop_data_t &crop_info);
@@ -402,7 +418,8 @@ private:
     int32_t addRawChannel();
     int32_t addMetaDataChannel();
     int32_t addAnalysisChannel();
-    QCameraReprocessChannel *addReprocChannel(QCameraChannel *pInputChannel);
+    QCameraReprocessChannel *addReprocChannel(QCameraChannel *pInputChannel,
+            int8_t cur_channel_index = 0);
     QCameraReprocessChannel *addOfflineReprocChannel(
                                                 cam_pp_offline_src_config_t &img_config,
                                                 cam_pp_feature_config_t &pp_feature,
@@ -426,6 +443,7 @@ private:
     int32_t setFaceDetection(bool enabled);
     int32_t prepareHardwareForSnapshot(int32_t afNeeded);
     bool needProcessPreviewFrame();
+    bool needSendPreviewCallback();
     bool isNoDisplayMode() {return mParameters.isNoDisplayMode();};
     bool isZSLMode() {return mParameters.isZSLMode();};
     bool isRdiMode() {return mParameters.isRdiMode();};
@@ -459,7 +477,8 @@ private:
     int32_t updateMetadata(metadata_buffer_t *pMetaData);
     void fillFacesData(cam_faces_data_t &faces_data, metadata_buffer_t *metadata);
 
-    int32_t getPPConfig(cam_pp_feature_config_t &pp_config, int curCount);
+    int32_t getPPConfig(cam_pp_feature_config_t &pp_config,
+            int8_t curIndex = 0, bool multipass = FALSE);
     virtual uint32_t scheduleBackgroundTask(BackgroundTask* bgTask);
     virtual int32_t waitForBackgroundTask(uint32_t &taskId);
     bool needDeferred(cam_stream_type_t stream_type);
@@ -499,6 +518,8 @@ private:
                                         void *userdata);
     static void snapshot_channel_cb_routine(mm_camera_super_buf_t *frame,
            void *userdata);
+    static void raw_channel_cb_routine(mm_camera_super_buf_t *frame,
+            void *userdata);
     static void raw_stream_cb_routine(mm_camera_super_buf_t *frame,
                                       QCameraStream *stream,
                                       void *userdata);
@@ -525,13 +546,19 @@ private:
                                    int32_t cbStatus);
     static void getLogLevel();
 
+    int32_t startRAWChannel(QCameraChannel *pChannel);
+    int32_t stopRAWChannel();
+
+    inline bool getNeedRestart() {return m_bNeedRestart;}
+    inline void setNeedRestart(bool needRestart) {m_bNeedRestart = needRestart;}
+
 private:
     camera_device_t   mCameraDevice;
     uint32_t          mCameraId;
     mm_camera_vtbl_t *mCameraHandle;
     bool mCameraOpened;
 
-    cam_related_system_calibration_data_t mRelCamCalibData;
+    cam_jpeg_metadata_t mJpegMetadata;
     bool m_bRelCamCalibValid;
 
     preview_stream_ops_t *mPreviewWindow;
@@ -593,6 +620,8 @@ private:
     bool mIs3ALocked;
     bool mPrepSnapRun;
     int32_t mZoomLevel;
+    // Flag to indicate whether preview restart needed (for dual camera mode)
+    bool mPreviewRestartNeeded;
 
     int mVFrameCount;
     int mVLastFrameCount;
@@ -729,9 +758,10 @@ private:
 
     //QCamera Display Object
     QCameraDisplay mCameraDisplay;
+
+    bool m_bNeedRestart;
     Mutex mMapLock;
     Condition mMapCond;
-
 };
 
 }; // namespace qcamera

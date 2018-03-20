@@ -502,22 +502,14 @@
     <ctl name="MultiMedia8 Mixer AFE_PCM_TX" value="0" />
     <!-- audio record compress end-->
     <!-- listen -->
-    <ctl name="LSM1 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM2 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM3 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM4 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM5 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM6 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM7 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM8 Mixer SLIMBUS_5_TX" value="0" />
-    <ctl name="LSM1 Port" value="None" />
-    <ctl name="LSM2 Port" value="None" />
-    <ctl name="LSM3 Port" value="None" />
-    <ctl name="LSM4 Port" value="None" />
-    <ctl name="LSM5 Port" value="None" />
-    <ctl name="LSM6 Port" value="None" />
-    <ctl name="LSM7 Port" value="None" />
-    <ctl name="LSM8 Port" value="None" />
+    <ctl name="LSM1 MUX" value="None" />
+    <ctl name="LSM2 MUX" value="None" />
+    <ctl name="LSM3 MUX" value="None" />
+    <ctl name="LSM4 MUX" value="None" />
+    <ctl name="LSM5 MUX" value="None" />
+    <ctl name="LSM6 MUX" value="None" />
+    <ctl name="LSM7 MUX" value="None" />
+    <ctl name="LSM8 MUX" value="None" />
     <ctl name="SLIMBUS_5_TX LSM Function" value="None" />
     <!-- listen end-->
 
@@ -631,6 +623,10 @@
     </path>
 
     <path name="low-latency-playback smartpa">
+        <ctl name="TERT_MI2S_RX Audio Mixer MultiMedia5" value="1" />
+    </path>
+
+    <path name="low-latency-playback smartpa-handset">
         <ctl name="TERT_MI2S_RX Audio Mixer MultiMedia5" value="1" />
     </path>
 
@@ -1763,45 +1759,36 @@
     </path>
 
     <path name="listen-voice-wakeup-1">
+        <ctl name="LSM1 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM1 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM1 Mixer SLIMBUS_5_TX" value="1" />
     </path>
-
     <path name="listen-voice-wakeup-2">
+        <ctl name="LSM2 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM2 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM2 Mixer SLIMBUS_5_TX" value="1" />
     </path>
     <path name="listen-voice-wakeup-3">
+        <ctl name="LSM3 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM3 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM3 Mixer SLIMBUS_5_TX" value="1" />
     </path>
     <path name="listen-voice-wakeup-4">
+        <ctl name="LSM4 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM4 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM4 Mixer SLIMBUS_5_TX" value="1" />
     </path>
     <path name="listen-voice-wakeup-5">
+        <ctl name="LSM5 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM5 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM5 Mixer SLIMBUS_5_TX" value="1" />
     </path>
     <path name="listen-voice-wakeup-6">
+        <ctl name="LSM6 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM6 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM6 Mixer SLIMBUS_5_TX" value="1" />
     </path>
     <path name="listen-voice-wakeup-7">
+        <ctl name="LSM7 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM7 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM7 Mixer SLIMBUS_5_TX" value="1" />
     </path>
     <path name="listen-voice-wakeup-8">
+        <ctl name="LSM8 MUX" value="SLIMBUS_5_TX" />
         <ctl name="SLIMBUS_5_TX LSM Function" value="AUDIO" />
-        <ctl name="LSM8 Port" value="SLIMBUS_5_TX" />
-        <ctl name="LSM8 Mixer SLIMBUS_5_TX" value="1" />
     </path>
 
    <path name="spkr-rx-calib">
@@ -2065,7 +2052,7 @@
 
     <path name="handset-mic">
         <path name="adc1" />
-        <ctl name="ADC1 Volume" value="16" />
+        <ctl name="ADC1 Volume" value="4" />
     </path>
 
     <path name="handset-mic-db">
@@ -2104,7 +2091,7 @@
         <ctl name="SLIM_0_RX Channels" value="One" />
         <ctl name="RX INT0_1 MIX1 INP0" value="RX0" />
         <ctl name="RX INT0 DEM MUX" value="CLSH_DSM_OUT" />
-        <ctl name="RX0 Digital Volume" value="95" />
+        <ctl name="RX0 Digital Volume" value="81" />
         <ctl name="ANC Slot" value="6" />
         <ctl name="ADC MUX10" value="AMIC" />
         <ctl name="AMIC MUX10" value="ADC5" />
@@ -2162,6 +2149,7 @@
 
     <path name="voice-handset">
         <path name="handset" />
+        <ctl name="RX0 Digital Volume" value="88" />
     </path>
 
     <path name="voice-handset-tmus">
@@ -2497,7 +2485,7 @@
     </path>
 
     <path name="handset-stereo-dmic-ef">
-        <path name="handset-dmic-endfire" />
+        <path name="speaker-dmic-endfire" />
         <ctl name="ADC1 Volume" value="12" />
         <ctl name="ADC4 Volume" value="12" />
     </path>
@@ -2690,3 +2678,4 @@
     <path name="voice-rx">
     </path>
 </mixer>
+

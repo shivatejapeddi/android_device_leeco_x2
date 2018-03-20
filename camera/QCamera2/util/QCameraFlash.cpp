@@ -44,8 +44,8 @@ extern "C" {
 
 #define STRING_LENGTH_OF_64_BIT_NUMBER 21
 
-#define FLASH_PATH_FIRST "/sys/class/leds/torch-light0/brightness"
-#define FLASH_PATH_SECOND "/sys/class/leds/torch-light1/brightness"
+#define FLASH_PATH_FIRST "/sys/devices/soc/soc:qcom,camera-flash/flashled1"
+#define FLASH_PATH_SECOND "/sys/devices/soc/soc:qcom,camera-flash/flashled2"
 
 volatile uint32_t gCamHal3LogLevel = 4;
 

@@ -72,6 +72,25 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hwui.text_large_cache_width=3072 \
     ro.hwui.text_large_cache_height=4096
 
+# AR Core
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.calibration_cad=/system/etc/calibration_cad.xml
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/calibration_cad.xml:system/etc/calibration_cad.xml
+
+Configs
+PRODUCT_PACKAGES += \
+    qdcm_calib_data_le_x2_mdss_dsi_sharp_qhd_dualdsi_cmd.xml \
+    qdcm_calib_data_le_x2_mdss_dsi_truly_qhd_dualdsi_cmd_pvt.xml \
+    qdcm_calib_data_mdss_dsi_sharp_qhd_dualdsi_cmd.xml
+
+# QMI
+PRODUCT_PACKAGES += \
+    dsi_config.xml \
+    netmgr_config.xml \
+    qmi_config.xml \
+
 # Sensors
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \

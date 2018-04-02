@@ -40,106 +40,114 @@
          /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies -->
     <array name="cpu.speeds.cluster0">
         <value>307200</value> <!-- 307 MHz CPU speed -->
-        <value>422400</value> <!-- 422 MHz CPU speed -->
-        <value>480000</value> <!-- 480 MHz CPU speed -->
-        <value>556800</value> <!-- 556 MHz CPU speed -->
-        <value>652800</value> <!-- 652 MHz CPU speed -->
-        <value>729600</value> <!-- 729 MHz CPU speed -->
+        <value>384000</value> <!-- 384 MHz CPU speed -->
+        <value>460800</value> <!-- 460 MHz CPU speed -->
+        <value>537600</value> <!-- 537 MHz CPU speed -->
+        <value>614400</value> <!-- 614 MHz CPU speed -->
+        <value>691200</value> <!-- 691 MHz CPU speed -->
+        <value>768000</value> <!-- 768 MHz CPU speed -->
         <value>844800</value> <!-- 844 MHz CPU speed -->
-        <value>960000</value> <!-- 960 MHz CPU speed -->
-        <value>1036800</value> <!-- 1036 MHz CPU speed -->
-        <value>1113600</value> <!-- 1113 MHz CPU speed -->
-        <value>1190400</value> <!-- 1190 MHz CPU speed -->
-        <value>1228800</value> <!-- 1228 MHz CPU speed -->
-        <value>1324800</value> <!-- 1324 MHz CPU speed -->
-        <value>1401600</value> <!-- 1401 MHz CPU speed -->
-        <value>1478400</value> <!-- 1478 MHz CPU speed -->
+        <value>902600</value> <!-- 902 MHz CPU speed -->
+        <value>979200</value> <!-- 979 MHz CPU speed -->
+        <value>1056000</value> <!-- 1056 MHz CPU speed -->
+        <value>1132800</value> <!-- 1132 MHz CPU speed -->
+        <value>1209600</value> <!-- 1209 MHz CPU speed -->
+        <value>1286400</value> <!-- 1286 MHz CPU speed -->
+        <value>1363200</value> <!-- 1363 MHz CPU speed -->
+        <value>1440000</value> <!-- 1440 MHz CPU speed -->
+        <value>1516800</value> <!-- 1516 MHz CPU speed -->
         <value>1593600</value> <!-- 1593 MHz CPU speed -->
+        <value>2188800</value> <!-- 2188 MHz CPU speed -->
     </array>
     <!-- Different CPU speeds as reported in
          /sys/devices/system/cpu/cpu2/cpufreq/scaling_available_frequencies -->
     <array name="cpu.speeds.cluster1">
         <value>307200</value> <!-- 307 MHz CPU speed -->
-        <value>403200</value> <!-- 403 MHz CPU speed -->
-        <value>480000</value> <!-- 480 MHz CPU speed -->
-        <value>556800</value> <!-- 556 MHz CPU speed -->
-        <value>652800</value> <!-- 652 MHz CPU speed -->
-        <value>729600</value> <!-- 729 MHz CPU speed -->
-        <value>806400</value> <!-- 806 MHz CPU speed -->
-        <value>883200</value> <!-- 883 MHz CPU speed -->
-        <value>940800</value> <!-- 940 MHz CPU speed -->
-        <value>1036800</value> <!-- 1036 MHz CPU speed -->
-        <value>1113600</value> <!-- 1113 MHz CPU speed -->
-        <value>1190400</value> <!-- 1190 MHz CPU speed -->
-        <value>1248000</value> <!-- 1248 MHz CPU speed -->
-        <value>1324800</value> <!-- 1324 MHz CPU speed -->
-        <value>1401600</value> <!-- 1401 MHz CPU speed -->
-        <value>1478400</value> <!-- 1478 MHz CPU speed -->
-        <value>1555200</value> <!-- 1555 MHz CPU speed -->
-        <value>1632000</value> <!-- 1632 MHz CPU speed -->
-        <value>1708800</value> <!-- 1708 MHz CPU speed -->
-        <value>1785600</value> <!-- 1785 MHz CPU speed -->
+        <value>384000</value> <!-- 384 MHz CPU speed -->
+        <value>460800</value> <!-- 460 MHz CPU speed -->
+        <value>537600</value> <!-- 537 MHz CPU speed -->
+        <value>614400</value> <!-- 614 MHz CPU speed -->
+        <value>691200</value> <!-- 691 MHz CPU speed -->
+        <value>748800</value> <!-- 748 MHz CPU speed -->
+        <value>825600</value> <!-- 825 MHz CPU speed -->
+        <value>902400</value> <!-- 902 MHz CPU speed -->
+        <value>979200</value> <!-- 979 MHz CPU speed -->
+        <value>1056000</value> <!-- 1056 MHz CPU speed -->
+        <value>1132800</value> <!-- 1132 MHz CPU speed -->
+        <value>1209600</value> <!-- 1209 MHz CPU speed -->
+        <value>1286400</value> <!-- 1286 MHz CPU speed -->
+        <value>1363200</value> <!-- 1363 MHz CPU speed -->
+        <value>1440000</value> <!-- 1440 MHz CPU speed -->
+        <value>1516800</value> <!-- 1516 MHz CPU speed -->
+        <value>1593600</value> <!-- 1593 MHz CPU speed -->
+        <value>1670400</value> <!-- 1670 MHz CPU speed -->
+        <value>1747200</value> <!-- 1747 MHz CPU speed -->
         <value>1824000</value> <!-- 1824 MHz CPU speed -->
-        <value>1920000</value> <!-- 1902 MHz CPU speed -->
-        <value>1996800</value> <!-- 1996 MHz CPU speed -->
-        <value>2073600</value> <!-- 2073 MHz CPU speed -->
+        <value>1900800</value> <!-- 1900 MHz CPU speed -->
+        <value>1977600</value> <!-- 1977 MHz CPU speed -->
+        <value>2054400</value> <!-- 2054 MHz CPU speed -->
         <value>2150400</value> <!-- 2150 MHz CPU speed -->
+        <value>2246400</value> <!-- 2246 MHz CPU speed -->
+        <value>2342400</value> <!-- 2342 MHz CPU speed -->
     </array>
     <!-- Additional power used by a CPU from cluster 0 when running at different
          speeds. Currently this measurement also includes cluster cost. -->
     <array name="cpu.active.cluster0">
         <value>84.302</value> <!-- 307 MHz CPU speed -->
-        <value>90.947</value> <!-- 422 MHz CPU speed -->
-        <value>95.165</value> <!-- 480 MHz CPU speed -->
-        <value>97.653</value> <!-- 556 MHz CPU speed -->
-		<value>104.568</value> <!-- 652 MHz CPU speed -->
-        <value>107.659</value> <!-- 729 MHz CPU speed -->
+        <value>87.947</value> <!-- 384 MHz CPU speed -->
+        <value>93.165</value> <!-- 460 MHz CPU speed -->
+        <value>96.653</value> <!-- 537 MHz CPU speed -->
+        <value>101.082</value> <!-- 614 MHz CPU speed -->
+        <value>107.458</value> <!-- 691 MHz CPU speed -->
+        <value>110.659</value> <!-- 768 MHz CPU speed -->
         <value>115.662</value> <!-- 844 MHz CPU speed -->
-        <value>132.040</value> <!-- 960 MHz CPU speed -->
-        <value>140.037</value> <!-- 1036 MHz CPU speed -->
-        <value>152.87</value> <!-- 1113 MHz CPU speed -->
-        <value>153.94</value> <!-- 1190 MHz CPU speed -->
-        <value>163.41</value> <!-- 1228 MHz CPU speed -->
-        <value>179.151</value> <!-- 1324 MHz CPU speed -->
-        <value>196.216</value> <!-- 1401 MHz CPU speed -->
-        <value>201.216</value> <!-- 1478 MHz CPU speed -->
+        <value>117.418</value> <!-- 902 MHz CPU speed -->
+        <value>133.042</value> <!-- 979 MHz CPU speed -->
+        <value>140.037</value> <!-- 1056 MHz CPU speed -->
+        <value>153.133</value> <!-- 1132 MHz CPU speed -->
+        <value>163.144</value> <!-- 1209 MHz CPU speed -->
+        <value>178.151</value> <!-- 1286 MHz CPU speed -->
+        <value>192.194</value> <!-- 1363 MHz CPU speed -->
+        <value>199.216</value> <!-- 1440 MHz CPU speed -->
+        <value>218.015</value> <!-- 1516 MHz CPU speed -->
         <value>238.418</value> <!-- 1593 MHz CPU speed -->
     </array>
     <!-- Additional power used by a CPU from cluster 1 when running at different
          speeds. Currently this measurement also includes cluster cost. -->
     <array name="cpu.active.cluster1">
-	    <value>86.913</value> <!-- 307 MHz CPU speed -->
-        <value>92.690</value> <!-- 403 MHz CPU speed -->
-        <value>95.205</value> <!-- 480 MHz CPU speed -->
-        <value>99.819</value> <!-- 556 MHz CPU speed -->
-        <value>105.335</value> <!-- 652 MHz CPU speed -->
-        <value>111.080</value> <!-- 729 MHz CPU speed -->
-        <value>118.945</value> <!-- 806 MHz CPU speed -->
-        <value>121.945</value> <!-- 883 MHz CPU speed -->
-        <value>132.773</value> <!-- 940 MHz CPU speed -->
-        <value>145.447</value> <!-- 1036 MHz CPU speed -->
-        <value>158.779</value> <!-- 1113 MHz CPU speed -->
-        <value>164.459</value> <!-- 1190 MHz CPU speed -->
-        <value>184.637</value> <!-- 1248 MHz CPU speed -->
-        <value>201.735</value> <!-- 1324 MHz CPU speed -->
-        <value>211.735</value> <!-- 1401 MHz CPU speed -->
-        <value>217.735</value> <!-- 1478 MHz CPU speed -->
-        <value>227.029</value> <!-- 1555 MHz CPU speed -->
-        <value>247.472</value> <!-- 1632 MHz CPU speed -->
-        <value>256.472</value> <!-- 1708 MHz CPU speed -->
-        <value>269.039</value> <!-- 1785 MHz CPU speed -->
+        <value>86.913</value> <!-- 307 MHz CPU speed -->
+        <value>90.690</value> <!-- 384 MHz CPU speed -->
+        <value>94.997</value> <!-- 460 MHz CPU speed -->
+        <value>99.419</value> <!-- 537 MHz CPU speed -->
+        <value>103.335</value> <!-- 614 MHz CPU speed -->
+        <value>109.651</value> <!-- 691 MHz CPU speed -->
+        <value>113.080</value> <!-- 748 MHz CPU speed -->
+        <value>119.471</value> <!-- 825 MHz CPU speed -->
+        <value>123.945</value> <!-- 902 MHz CPU speed -->
+        <value>135.673</value> <!-- 979 MHz CPU speed -->
+        <value>145.747</value> <!-- 1056 MHz CPU speed -->
+        <value>158.779</value> <!-- 1132 MHz CPU speed -->
+        <value>164.459</value> <!-- 1209 MHz CPU speed -->
+        <value>177.707</value> <!-- 1286 MHz CPU speed -->
+        <value>187.637</value> <!-- 1363 MHz CPU speed -->
+        <value>203.735</value> <!-- 1440 MHz CPU speed -->
+        <value>222.029</value> <!-- 1516 MHz CPU speed -->
+        <value>233.814</value> <!-- 1593 MHz CPU speed -->
+        <value>253.472</value> <!-- 1670 MHz CPU speed -->
+        <value>268.039</value> <!-- 1747 MHz CPU speed -->
         <value>291.519</value> <!-- 1824 MHz CPU speed -->
-        <value>304.670</value> <!-- 1902 MHz CPU speed -->
-        <value>331.694</value> <!-- 1996 MHz CPU speed -->
-        <value>365.964</value> <!-- 2073 MHz CPU speed -->
+        <value>304.670</value> <!-- 1900 MHz CPU speed -->
+        <value>330.694</value> <!-- 1977 MHz CPU speed -->
+        <value>357.964</value> <!-- 2054 MHz CPU speed -->
         <value>381.248</value> <!-- 2150 MHz CPU speed -->
     </array>
 
     <!-- Additional power used when screen is turned on at minimum brightness -->
-    <item name="screen.on">178.708</item>
+    <item name="screen.on">149.746</item>
     <!-- Additional power used when screen is at maximum brightness, compared to
          screen at minimum brightness -->
-    <item name="screen.full">240.790</item>
+    <item name="screen.full">185.258</item>
+
     <!-- Average power used by the camera flash module when on -->
     <item name="camera.flashlight">298.498</item>
     <!-- Average power use by the camera subsystem for a typical camera

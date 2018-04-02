@@ -1,4 +1,5 @@
-# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2013-2016, The CyanogenMod Project
+# Copyright (C) 2017, The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,28 +17,29 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from device
+# Inherit from z2_plus device
 $(call inherit-product, device/leeco/x2/device.mk)
 
-# Inherit some common LineageOS stuff.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+# Inherit some common AOSP stuff.
+TARGET_ARCH := arm64
+TARGET_DENSITY := xxxhdpi
+TARGET_BOOT_ANIMATION_RES := 1440
+$(call inherit-product, vendor/aosp/common.mk)
 
-PRODUCT_NAME := lineage_x2
+# Device identifier. This must come after all inclusions.
+PRODUCT_NAME := aosp_x2
 PRODUCT_DEVICE := x2
-PRODUCT_MANUFACTURER := LeMobile
-PRODUCT_BRAND := LeEco
-
+PRODUCT_BRAND := leeco
+PRODUCT_MODEL := x2
+PRODUCT_MANUFACTURER := leeco
 PRODUCT_GMS_CLIENTID_BASE := android-letv
-
-TARGET_VENDOR_PRODUCT_NAME := LeMax2
-TARGET_VENDOR_DEVICE_NAME := le_x2
-PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=le_x2 PRODUCT_NAME=LeMax2
+TARGET_VENDOR_PRODUCT_NAME := x2
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
+    BUILD_FINGERPRINT=Letv/LeMax2_WW/le_x2:6.0.1/FGXOSOP5801910121S/letv10120105:user/release-keys \
     PRIVATE_BUILD_DESC="le_x2-user 6.0.1 FGXOSOP5801910121S eng.letv.20161012.010150.wechatpay release-keys"
 
-BUILD_FINGERPRINT := Letv/LeMax2_WW/le_x2:6.0.1/FGXOSOP5801910121S/letv10120105:user/release-keys
-
-PRODUCT_SYSTEM_PROPERTY_BLACKLIST += ro.product.model
 
 TARGET_VENDOR := leeco
+
+EXTENDED_BUILD_TYPE=OFFICIAL

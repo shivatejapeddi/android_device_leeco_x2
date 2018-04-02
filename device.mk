@@ -85,6 +85,35 @@ PRODUCT_PACKAGES += \
     qdcm_calib_data_le_x2_mdss_dsi_truly_qhd_dualdsi_cmd_pvt.xml \
     qdcm_calib_data_mdss_dsi_sharp_qhd_dualdsi_cmd.xml
 
+# Thermal
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/thermal-engine.conf:system/etc/thermal-engine.conf
+
+# Thermal
+PRODUCT_PACKAGES += \
+    thermal.msm8996
+
+# Lights
+PRODUCT_PACKAGES += \
+    lights.msm8996
+
+# VR
+PRODUCT_PACKAGES += \
+    vr.msm8996 \
+    android.hardware.vr@1.0-impl \
+    android.hardware.vr@1.0-service
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/vendor/etc/permissions/android.hardware.vr.high_performance.xml \
+    $(LOCAL_PATH)/configs/thermal-engine-vr.conf:$(TARGET_COPY_OUT_VENDOR)/etc/thermal-engine-vr.conf
+
+# Power
+#PRODUCT_PACKAGES += \
+#    power.msm8996
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/powerhint.xml:system/etc/powerhint.xml
+
 # QMI
 PRODUCT_PACKAGES += \
     dsi_config.xml \

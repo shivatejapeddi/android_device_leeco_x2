@@ -13,7 +13,7 @@ Shipped Android Version | 6.0
 Storage | 64/128 GB
 Battery | 3100 mAh (non-removable)
 Dimensions | 156.8 x 77.6 x 7.99 mm
-Display | 1440 x 2560 pixels, 5.7" AMOLED
+Display | 1440 x 2560 pixels, 5.7" LCD
 Rear Camera  | 21.0 MP, LED flash
 Front Camera | 8.0 MP
 Release Date | April 2016

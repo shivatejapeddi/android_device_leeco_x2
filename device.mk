@@ -79,7 +79,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/calibration_cad.xml:system/etc/calibration_cad.xml
 
-Configs
+#Configs
 PRODUCT_PACKAGES += \
     qdcm_calib_data_le_x2_mdss_dsi_sharp_qhd_dualdsi_cmd.xml \
     qdcm_calib_data_le_x2_mdss_dsi_truly_qhd_dualdsi_cmd_pvt.xml \

@@ -111,8 +111,8 @@ PRODUCT_COPY_FILES += \
 #PRODUCT_PACKAGES += \
 #    power.msm8996
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/powerhint.xml:system/etc/powerhint.xml
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_PATH)/configs/powerhint.xml:system/etc/powerhint.xml
 
 # QMI
 PRODUCT_PACKAGES += \

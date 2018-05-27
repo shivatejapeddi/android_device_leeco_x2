@@ -571,6 +571,10 @@
         <ctl name="TERT_MI2S_RX Audio Mixer MultiMedia1" value="1" />
     </path>
 
+    <path name="deep-buffer-playback speaker">
+        <path name="deep-buffer-playback" />
+    </path>
+
     <path name="deep-buffer-playback speaker-protected">
         <path name="deep-buffer-playback" />
     </path>
@@ -632,6 +636,10 @@
 
     <path name="low-latency-playback smartpa">
         <ctl name="TERT_MI2S_RX Audio Mixer MultiMedia5" value="1" />
+    </path>
+
+    <path name="low-latency-playback speaker">
+        <path name="low-latency-playback" />
     </path>
 
     <path name="low-latency-playback speaker-protected">
@@ -697,6 +705,10 @@
         <ctl name="TERT_MI2S_RX Audio Mixer MultiMedia3" value="1" />
     </path>
 
+    <path name="audio-ull-playback speaker">
+        <path name="audio-ull-playback" />
+    </path>
+
     <path name="audio-ull-playback speaker-protected">
         <path name="audio-ull-playback smartpa" />
     </path>
@@ -756,6 +768,10 @@
 
     <path name="compress-offload-playback smartpa">
         <ctl name="TERT_MI2S_RX Audio Mixer MultiMedia4" value="1" />
+    </path>
+
+    <path name="compress-offload-playback speaker">
+        <path name="compress-offload-playback" />
     </path>
 
     <path name="compress-offload-playback speaker-protected">
@@ -1360,6 +1376,7 @@
 
     <path name="voicemmode1-call smartpa">
         <ctl name="TERT_MI2S_RX_Voice Mixer VoiceMMode1" value="1" />
+        <ctl name="VOC_EXT_EC MUX" value="TERT_MI2S_TX" />
         <ctl name="VoiceMMode1_Tx Mixer SLIM_0_TX_MMode1" value="1" />
     </path>
 
@@ -1390,6 +1407,7 @@
 
     <path name="voicemmode2-call smartpa">
         <ctl name="TERT_MI2S_RX_Voice Mixer VoiceMMode2" value="1" />
+        <ctl name="VOC_EXT_EC MUX" value="TERT_MI2S_TX" />
         <ctl name="VoiceMMode2_Tx Mixer SLIM_0_TX_MMode2" value="1" />
     </path>
 
@@ -1620,6 +1638,7 @@
 
     <path name="compress-voip-call smartpa">
         <ctl name="TERT_MI2S_RX_Voice Mixer Voip" value="1" />
+        <ctl name="VOC_EXT_EC MUX" value="TERT_MI2S_TX" />
         <ctl name="Voip_Tx Mixer SLIM_0_TX_Voip" value="1" />
     </path>
 
@@ -2142,6 +2161,23 @@
         <ctl name="RX INT2 SPLINE MIX HPHR Switch" value="1" />
     </path>
 
+    <!-- path name="true-native-mode">
+        <ctl name="RX INT1_2 MUX" value="ZERO" />
+        <ctl name="RX INT2_2 MUX" value="ZERO" />
+        <ctl name= "RX INT1_1 MIX1 INP0" value="RX2" />
+        <ctl name= "RX INT2_1 MIX1 INP0" value="RX3" />
+        <ctl name= "RX INT1_1 NATIVE MUX" value="ON" />
+        <ctl name= "RX INT2_1 NATIVE MUX" value="ON" />
+    </path -->
+
+    <!-- path name="hph-highquality-mode">
+        <ctl name="RX HPH Mode" value="CLS_H_LOHIFI" />
+    </path>
+
+    <path name="hph-lowpower-mode">
+        <ctl name="RX HPH Mode" value="CLS_H_LP" />
+    </path -->
+
     <path name="headset-mic">
         <path name="adc2" />
         <ctl name="ADC2 Volume" value="4" />
@@ -2159,7 +2195,7 @@
 
     <path name="voice-handset">
         <path name="handset" />
-        <ctl name="RX0 Digital Volume" value="88" />
+	<ctl name="RX0 Digital Volume" value="88" />
     </path>
 
     <path name="voice-handset-tmus">
@@ -2683,10 +2719,8 @@
     </path>
 
     <path name="voice-tx">
-        <path name="voice-headset-mic" />
     </path>
 
     <path name="voice-rx">
-        <path name="voice-headphones" />
     </path>
 </mixer>

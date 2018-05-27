@@ -200,3 +200,10 @@ service nvm_service /system/bin/nvm_service
 
 on property:sys.boot_completed=1
     start nvm_service
+
+# autofocus fix
+on property:persist.camera.focus_fix=1
+    write /sys/module/msm_actuator/parameters/use_focus_fix 1
+
+on property:persist.camera.focus_fix=0
+    write /sys/module/msm_actuator/parameters/use_focus_fix 0

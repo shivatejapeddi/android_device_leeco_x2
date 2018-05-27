@@ -59,6 +59,9 @@ persist.loc.nlp_name=com.qualcomm.location
 # Screen Density
 ro.sf.lcd_density=560
 
+# Focus Fix
+persist.camera.focus_fix=0 
+
 # Radio
 persist.data.iwlan.enable=true
 persist.radio.multisim.config=dsds

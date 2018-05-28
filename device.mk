@@ -83,8 +83,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/calibration_cad.xml:system/etc/calibration_cad.xml
 
- # Camera
-    GoogleCamera \
+# Camera
+PRODUCT_PACKAGES += \
+   GoogleCamera
 
 # Lights
 PRODUCT_PACKAGES += \

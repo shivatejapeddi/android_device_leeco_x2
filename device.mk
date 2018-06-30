@@ -73,19 +73,19 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hwui.text_large_cache_height=4096
 
 # ARCore
-PRODUCT_PACKAGES += \
-    arcore
+#PRODUCT_PACKAGES += \
+#    arcore
 
 # AR Core
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.config.calibration_cad=/system/etc/calibration_cad.xml
+#PRODUCT_PROPERTY_OVERRIDES += \
+#    ro.config.calibration_cad=/system/etc/calibration_cad.xml
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/calibration_cad.xml:system/etc/calibration_cad.xml
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_PATH)/configs/calibration_cad.xml:system/etc/calibration_cad.xml
 
 # Camera
-PRODUCT_PACKAGES += \
-   GoogleCamera
+#PRODUCT_PACKAGES += \
+#   GoogleCamera
 
 # Lights
 PRODUCT_PACKAGES += \

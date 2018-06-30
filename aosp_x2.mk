@@ -23,9 +23,8 @@ $(call inherit-product, device/leeco/x2/device.mk)
 # Inherit some common AOSP stuff.
 TARGET_ARCH := arm64
 TARGET_DENSITY := xxxhdpi
-TARGET_GAPPS_ARCH := arm64
 TARGET_BOOT_ANIMATION_RES := 1440
-$(call inherit-product, vendor/aosp/config/common_full_phone.mk)
+$(call inherit-product, vendor/aosp/common.mk)
 
 # Device identifier. This must come after all inclusions.
 PRODUCT_NAME := aosp_x2
@@ -44,4 +43,4 @@ BUILD_FINGERPRINT := LeEco/LeMax2_WW/le_x2:6.0.1/FKXOSOP5801910311S/letv10310125
 
 TARGET_VENDOR := leeco
 
-CUSTOM_BUILD_TYPE=OFFICIAL
+EXTENDED_BUILD_TYPE=OFFICIAL

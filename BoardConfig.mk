@@ -48,5 +48,8 @@ BOARD_HARDWARE_CLASS += $(DEVICE_PATH)/lineagehw
 # SELinux
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
+# Properties
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
+
 # inherit from the proprietary version
 -include vendor/leeco/x2/BoardConfigVendor.mk

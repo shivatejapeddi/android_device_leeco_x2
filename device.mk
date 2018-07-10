@@ -34,10 +34,6 @@ PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
 TARGET_SCREEN_HEIGHT := 2560
 TARGET_SCREEN_WIDTH := 1440
 
-# Ramdisk
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,device/leeco/x2/rootdir/root,root)
-
 # Audio configuration files
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info.xml \
@@ -46,8 +42,8 @@ PRODUCT_COPY_FILES += \
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/keylayout/atmel_mxt_T100_touchscreen.kl:(TARGET_COPY_OUT_VENDOR)/usr/keylayout/atmel_mxt_T100_touchscreen.kl \
-    $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:(TARGET_COPY_OUT_VENDOR)/usr/keylayout/synaptics_dsx.kl
+    $(LOCAL_PATH)/keylayout/atmel_mxt_T100_touchscreen.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/atmel_mxt_T100_touchscreen.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/synaptics_dsx.kl
 
 # Dalvik
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -76,9 +72,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
     $(LOCAL_PATH)/sensors/sensor_def_qcomdev.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_def_qcomdev.conf
-	
+
 # Common init scripts
-PRODUCT_PACKAGES += \	
+PRODUCT_PACKAGES += \
     init.device.rc \
     qfp_boot.sh
 

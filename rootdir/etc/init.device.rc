@@ -145,14 +145,14 @@ service ptt_ffbm /system/bin/ptt_socket_app -f -d
     disabled
     oneshot
 
-service wifi_fccutild /system/bin/wifi_fccutild
+service wifi_fccutild /vendor/bin/wifi_fccutild
     user system
     group system inet net_admin
     socket wififccutild_server dgram 0660 system system
     disabled
     oneshot
 
-service qfp-boot /system/bin/sh /system/etc/qfp_boot.sh
+service qfp-boot /vendor/bin/sh /system/etc/qfp_boot.sh
     class late_start
     user root
     group root
@@ -163,7 +163,7 @@ service qfp-daemon /vendor/bin/qfp-daemon
     user system
     group system drmrpc diag input sdcard_rw
 
-service ds_fmc_appd /system/bin/ds_fmc_appd -p "rmnet0" -D
+service ds_fmc_appd /vendor/bin/ds_fmc_appd -p "rmnet0" -D
     class late_start
     group radio wifi inet
     disabled
@@ -173,7 +173,7 @@ service ds_fmc_appd /system/bin/ds_fmc_appd -p "rmnet0" -D
 on property:persist.data.ds_fmc_app.mode=1
     start ds_fmc_appd
 
-service vm_bms /system/bin/vm_bms
+service vm_bms /vendor/bin/vm_bms
     user root
     group root
     disabled
@@ -191,7 +191,7 @@ on property:init.svc.bootanim=running
     write /sys/class/leds/wled/brightness 4095
 
 #set nvm_service
-service nvm_service /system/bin/nvm_service
+service nvm_service /vendor/bin/nvm_service
     class core
     disabled
     oneshot

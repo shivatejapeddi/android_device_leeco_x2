@@ -133,13 +133,13 @@ on post-fs-data
     mkdir /data/misc/stargate/calib_test 0770 system system
     mkdir /data/misc/stargate/database 0770 system system
 
-service ptt_socket_app /system/bin/ptt_socket_app -d
+service ptt_socket_app /vendor/bin/ptt_socket_app -d
     class main
     user root
     group root
     oneshot
 
-service ptt_ffbm /system/bin/ptt_socket_app -f -d
+service ptt_ffbm /vendor/bin/ptt_socket_app -f -d
     user root
     group root
     disabled
@@ -152,7 +152,7 @@ service wifi_fccutild /vendor/bin/wifi_fccutild
     disabled
     oneshot
 
-service qfp-boot /vendor/bin/sh /system/etc/qfp_boot.sh
+service qfp-boot /vendor/bin/sh /vendor/bin/qfp_boot.sh
     class late_start
     user root
     group root
@@ -182,7 +182,7 @@ service vm_bms /vendor/bin/vm_bms
 on property:init.svc.qmuxd=running
     start wifi_mac
 
-service wifi_mac /system/bin/logwrapper /system/bin/set_wifi_mac
+service wifi_mac /vendor/bin/logwrapper /system/bin/set_wifi_mac
     class core
     user root
     oneshot

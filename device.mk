@@ -26,6 +26,9 @@ $(call inherit-product-if-exists, vendor/leeco/x2/x2-vendor.mk)
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
+# Vendor properties
+-include $(LOCAL_PATH)/vendor_prop.mk
+
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxxhdpi

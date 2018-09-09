@@ -40,11 +40,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/mixer_paths_tasha.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_tasha.xml \
     $(LOCAL_PATH)/audio/sound_trigger_mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths.xml
 
-# Keylayouts
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/keylayout/atmel_mxt_T100_touchscreen.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/atmel_mxt_T100_touchscreen.kl \
-    $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/synaptics_dsx.kl
-
 # Dalvik
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapstartsize=16m \
@@ -53,6 +48,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heaptargetutilization=0.75 \
     dalvik.vm.heapminfree=4m \
     dalvik.vm.heapmaxfree=8m
+
+# Fingerprint
+PRODUCT_PACKAGES += \
+    android.hardware.biometrics.fingerprint@2.1-service
+
+# Keylayouts
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/keylayout/atmel_mxt_T100_touchscreen.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/atmel_mxt_T100_touchscreen.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/synaptics_dsx.kl
 
 # Sensors
 PRODUCT_COPY_FILES += \
